@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>obsound — React Studio &amp; Form Validation</title>
+  
+  <!-- Google Fonts: Outfit & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- React 18, ReactDOM & Babel -->
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.4/babel.min.js"></script>
+
+  <style>
+    body {
+      overflow-y: auto !important;
+      height: auto !important;
+      padding-bottom: 100px;
+    }
+    .react-studio-container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: 0 4px 25px rgba(44, 62, 80, 0.04);
+      margin-bottom: 30px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+    .react-input {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+    .react-input:focus {
+      border-color: var(--accent-orange);
+      box-shadow: 0 0 10px rgba(118, 179, 157, 0.2);
+    }
+    .react-input.is-invalid {
+      border-color: #ef4444 !important;
+      background: #fff5f5 !important;
+    }
+    .react-input.is-valid {
+      border-color: #10b981 !important;
+      background: #f0fdf4 !important;
+    }
+    .err-text {
+      color: #dc2626;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .alert-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      font-size: 12px;
+    }
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      overflow-x: auto;
+    }
+    .studio-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .studio-table th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-color);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .studio-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      vertical-align: middle;
+    }
+    .raw-json-box {
+      background: #1e293b;
+      color: #38bdf8;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cybernetic Grid -->
+  <div class="cyber-background"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="index.html" class="logo-area" style="text-decoration: none; display: flex; align-items: baseline; gap: 10px;">
+      <span class="logo-glow"></span>
+      <h1 class="logo-text">obsound</h1>
+      <span class="logo-tagline">connected sounds</span>
+    </a>
+    
+    <nav class="nav-links" style="margin-right: auto; margin-left: 40px;">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="app.html" class="nav-link">Explore Graph</a>
+      <a href="crate.html" class="nav-link">Library</a>
+      <a href="react-studio.html" class="nav-link active">React Studio</a>
+    </nav>
+
+    <div class="status-area">
+      <div class="status-pill live">React 18 Active</div>
+      <a href="app.html" class="btn btn-primary" style="text-decoration: none; padding: 6px 14px; font-size: 12px;">Open Graph &rarr;</a>
+    </div>
+  </header>
+
+  <div id="react-root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo } = React;
+
+    function ReactStudio() {
+      const [tracks, setTracks] = useState(() => {
+        const saved = localStorage.getItem('obsound_crate_tracks');
+        if (saved) {
+          try { return JSON.parse(saved); } catch (e) {}
+        }
+        return [
+          { id: "t_1", title: "Resonance", artist: "HOME", genre: "Synthwave", bpm: 105, year: 2014, url: "https://midwestcollective.bandcamp.com" },
+          { id: "t_2", title: "Floral Shoppe", artist: "Macintosh Plus", genre: "Vaporwave", bpm: 84, year: 2011, url: "https://vektroid.bandcamp.com" },
+          { id: "t_3", title: "Alison", artist: "Slowdive", genre: "Shoegaze", bpm: 112, year: 1993, url: "https://slowdive.bandcamp.com" }
+        ];
+      });
+
+      const [formData, setFormData] = useState({
+        title: "",
+        artist: "",
+        genre: "Synthwave",
+        bpm: "120",
+        year: "2024",
+        url: ""
+      });
+
+      const [errors, setErrors] = useState({});
+      const [submitted, setSubmitted] = useState(false);
+      const [search, setSearch] = useState("");
+
+      useEffect(() => {
+        localStorage.setItem('obsound_crate_tracks', JSON.stringify(tracks));
+      }, [tracks]);
+
+      const validate = (data) => {
+        const errs = {};
+        const curYear = new Date().getFullYear();
+
+        if (!data.title.trim()) errs.title = "Track title is required.";
+        else if (data.title.trim().length < 2) errs.title = "Title must be at least 2 characters.";
+
+        if (!data.artist.trim()) errs.artist = "Artist moniker is required.";
+        else if (data.artist.trim().length < 2) errs.artist = "Artist name must be at least 2 characters.";
+
+        const bpmNum = parseInt(data.bpm, 10);
+        if (isNaN(bpmNum) || bpmNum < 40 || bpmNum > 260) errs.bpm = "BPM must be between 40 and 260.";
+
+        const yrNum = parseInt(data.year, 10);
+        if (isNaN(yrNum) || yrNum < 1970 || yrNum > curYear) errs.year = `Year must be between 1970 and ${curYear}.`;
+
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i;
+        if (!data.url.trim() || !urlPattern.test(data.url.trim())) errs.url = "Valid stream URL required (https://...).";
+
+        return errs;
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const errs = validate(formData);
+        setErrors(errs);
+        if (Object.keys(errs).length > 0) {
+          setSubmitted(true);
+          return;
+        }
+
+        const newTrack = {
+          id: "t_" + Date.now(),
+          title: formData.title.trim(),
+          artist: formData.artist.trim(),
+          genre: formData.genre,
+          bpm: parseInt(formData.bpm, 10),
+          year: parseInt(formData.year, 10),
+          url: formData.url.trim()
+        };
+
+        setTracks([newTrack, ...tracks]);
+        setFormData({ title: "", artist: "", genre: "Synthwave", bpm: "120", year: "2024", url: "" });
+        setErrors({});
+        setSubmitted(false);
+        alert(`Validated & Saved "${newTrack.title}"!`);
+      };
+
+      const fillValid = () => {
+        setFormData({
+          title: "Neon Horizon 2088",
+          artist: "Vector Sector",
+          genre: "Synthwave",
+          bpm: "124",
+          year: "2024",
+          url: "https://vectorsector.bandcamp.com"
+        });
+        setErrors({});
+      };
+
+      const fillInvalid = () => {
+        const invalid = { title: "", artist: "X", genre: "Synthwave", bpm: "999", year: "1850", url: "bad-url" };
+        setFormData(invalid);
+        setErrors(validate(invalid));
+        setSubmitted(true);
+      };
+
+      const filteredTracks = useMemo(() => {
+        return tracks.filter(t => !search.trim() || t.title.toLowerCase().includes(search.toLowerCase()) || t.artist.toLowerCase().includes(search.toLowerCase()));
+      }, [tracks, search]);
+
+      return (
+        <div class="react-studio-container">
+          <div style={{ marginBottom: '24px' }}>
+            <span class="status-pill live d-inline-flex mb-2">Practical No. 3</span>
+            <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '32px', fontWeight: '800', margin: '4px 0' }}>
+              ReactJS Client-Side Form Validation &amp; State Studio
+            </h1>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', margin: 0 }}>
+              Demonstrates React 18 component state, controlled inputs, multi-rule client-side validation, error messaging, and Array/JSON synchronization.
+            </p>
+          </div>
+
+          {/* Validation Form Card */}
+          <div class="form-card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700' }}>Submit Underground Record</h3>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button type="button" onClick={fillValid} class="btn btn-secondary" style={{ fontSize: '11px', padding: '6px 12px' }}>
+                  Quick Fill Valid
+                </button>
+                <button type="button" onClick={fillInvalid} class="btn btn-danger" style={{ fontSize: '11px', padding: '6px 12px' }}>
+                  Test Validation Errors
+                </button>
+              </div>
+            </div>
+
+            {submitted && Object.keys(errors).length > 0 && (
+              <div class="alert-banner">
+                <strong>Validation Errors Detected:</strong>
+                <ul>
+                  {Object.values(errors).map((err, i) => <li key={i}>{err}</li>)}
+                </ul>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Track Title *</label>
+                  <input
+                    type="text"
+                    value={formData.title}
+                    onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    class={`react-input ${errors.title ? 'is-invalid' : (formData.title ? 'is-valid' : '')}`}
+                    placeholder="e.g. Midnight City Drift"
+                  />
+                  {errors.title && <div class="err-text">{errors.title}</div>}
+                </div>
+
+                <div class="form-group">
+                  <label>Artist / Producer *</label>
+                  <input
+                    type="text"
+                    value={formData.artist}
+                    onChange={e => setFormData({ ...formData, artist: e.target.value })}
+                    class={`react-input ${errors.artist ? 'is-invalid' : (formData.artist ? 'is-valid' : '')}`}
+                    placeholder="e.g. CyberGhost"
+                  />
+                  {errors.artist && <div class="err-text">{errors.artist}</div>}
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Micro-Genre *</label>
+                  <select
+                    value={formData.genre}
+                    onChange={e => setFormData({ ...formData, genre: e.target.value })}
+                    class="react-input"
+                  >
+                    {["Synthwave", "Vaporwave", "Shoegaze", "Chiptune", "Dungeon Synth", "Deconstructed Club"].map(g => (
+                      <option key={g} value={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>BPM (40 - 260) *</label>
+                  <input
+                    type="number"
+                    value={formData.bpm}
+                    onChange={e => setFormData({ ...formData, bpm: e.target.value })}
+                    class={`react-input ${errors.bpm ? 'is-invalid' : ''}`}
+                  />
+                  {errors.bpm && <div class="err-text">{errors.bpm}</div>}
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Release Year (1970 - 2026) *</label>
+                  <input
+                    type="number"
+                    value={formData.year}
+                    onChange={e => setFormData({ ...formData, year: e.target.value })}
+                    class={`react-input ${errors.year ? 'is-invalid' : ''}`}
+                  />
+                  {errors.year && <div class="err-text">{errors.year}</div>}
+                </div>
+
+                <div class="form-group">
+                  <label>Stream / Bandcamp URL *</label>
+                  <input
+                    type="url"
+                    value={formData.url}
+                    onChange={e => setFormData({ ...formData, url: e.target.value })}
+                    class={`react-input ${errors.url ? 'is-invalid' : ''}`}
+                    placeholder="https://..."
+                  />
+                  {errors.url && <div class="err-text">{errors.url}</div>}
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style={{ padding: '10px 24px', fontWeight: '700' }}>
+                Validate &amp; Save Track
+              </button>
+            </form>
+          </div>
+
+          {/* Table Container */}
+          <div class="table-container">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700' }}>React State Records ({filteredTracks.length})</h3>
+              <input
+                type="text"
+                placeholder="Filter by title / artist..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                class="react-input"
+                style={{ width: '220px' }}
+              />
+            </div>
+
+            <table class="studio-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Artist</th>
+                  <th>Genre</th>
+                  <th>BPM</th>
+                  <th>Year</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTracks.map(t => (
+                  <tr key={t.id}>
+                    <td><strong>{t.title}</strong></td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{t.artist}</td>
+                    <td><span class="status-pill live d-inline-flex">{t.genre}</span></td>
+                    <td>{t.bpm} BPM</td>
+                    <td>{t.year}</td>
+                    <td>
+                      <button
+                        onClick={() => setTracks(tracks.filter(x => x.id !== t.id))}
+                        class="btn btn-danger"
+                        style={{ fontSize: '11px', padding: '4px 8px' }}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Serialized JSON View */}
+            <h4 style={{ marginTop: '24px', marginBottom: '6px', fontSize: '14px' }}>Serialized React JSON State:</h4>
+            <pre class="raw-json-box">{JSON.stringify(tracks, null, 2)}</pre>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('react-root')).render(<ReactStudio />);
+  </script>
+
+</body>
+</html>

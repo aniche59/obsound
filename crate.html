@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Crate — obsound</title>
+  <!-- Google Fonts: Outfit & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    /* Specific styles for the crate page grid view */
+    html {
+      overflow-y: auto !important;
+      height: auto !important;
+    }
+    
+    .crate-body {
+      overflow-y: auto !important;
+      height: auto !important;
+      padding-bottom: 140px; /* space for sticky player */
+      background-color: var(--bg-primary);
+    }
+    
+    .crate-page-header {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .crate-page-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+    
+    .library-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.02);
+    }
+    
+    .library-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .track-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.01);
+      position: relative;
+    }
+
+    .track-row:hover {
+      border-color: var(--accent-orange);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateX(4px);
+      box-shadow: 0 4px 15px rgba(118, 179, 157, 0.08);
+    }
+
+    .track-row.playing-border {
+      border-color: var(--accent-orange);
+      background: rgba(118, 179, 157, 0.04);
+      box-shadow: 0 4px 15px rgba(118, 179, 157, 0.12);
+    }
+
+    .track-row-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-row-play-indicator {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-orange);
+      flex-shrink: 0;
+      transition: var(--transition-smooth);
+    }
+
+    .track-row-cover {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .track-row-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition-smooth);
+      display: block;
+    }
+
+    .track-row:hover .track-row-cover img {
+      transform: scale(1.06);
+    }
+
+    .track-row-meta {
+      min-width: 0;
+    }
+
+    .track-row-meta h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .track-row-meta p {
+      margin: 2px 0 0 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .track-row-tags {
+      display: flex;
+      gap: 8px;
+      margin: 0 20px;
+      flex-shrink: 0;
+    }
+
+    .track-row-actions {
+      flex-shrink: 0;
+    }
+
+    .remove-card-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .remove-card-btn:hover {
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626 !important;
+    }
+
+    /* 2-Column Library Dashboard Layout */
+    .library-dashboard {
+      display: flex;
+      gap: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      margin-top: 40px;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .library-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .library-main {
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    /* Subgenre Folders styling */
+    .folder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      font-weight: 500;
+    }
+
+    .folder-item:hover {
+      background: rgba(118, 179, 157, 0.08);
+      color: var(--accent-orange);
+    }
+
+    .folder-item.active {
+      background: var(--accent-orange);
+      color: white;
+      font-weight: 600;
+    }
+
+    .folder-count {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text-muted);
+    }
+
+    .folder-item.active .folder-count {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .track-card {
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .library-dashboard {
+        flex-direction: column;
+        padding: 0 20px;
+      }
+      .library-sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="crate-body">
+
+  <!-- Background Layer -->
+  <div class="cyber-background"></div>
+
+  <!-- Navbar -->
+  <header class="app-header">
+    <a href="index.html" class="logo-area" style="text-decoration: none; display: flex; align-items: baseline; gap: 10px;">
+      <span class="logo-glow"></span>
+      <h1 class="logo-text">obsound</h1>
+      <span class="logo-tagline">connected sounds</span>
+    </a>
+    
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="app.html" class="nav-link">Explore Graph</a>
+      <a href="crate.html" class="nav-link active">Library</a>
+    </nav>
+  </header>
+
+  <!-- Main Crate Panel -->
+  <main class="library-dashboard">
+    <!-- Left Sidebar: Folders & Export -->
+    <aside class="library-sidebar">
+      <!-- Dynamic Subgenres list -->
+      <div class="control-box glass">
+        <h3>Subgenre Folders</h3>
+        <div id="subgenre-folders-list" style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+          <!-- Generated dynamically in cratePage.js -->
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="control-box glass">
+        <h3>Playlist Actions</h3>
+        <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+          Export query parameters to import your discoveries directly to Spotify or Apple Music.
+        </p>
+        <button id="copy-spotify-btn" class="btn btn-primary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px;">
+          📋 Copy Spotify Search list
+        </button>
+        <button id="export-library-btn" class="btn btn-secondary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px;">
+          💾 Export JSON Crate
+        </button>
+        <label for="import-library-file" class="btn btn-secondary cursor-pointer" style="display: flex; justify-content: center; align-items: center; font-size: 12px; height: 38px; margin-bottom: 8px;">
+          📂 Import JSON Crate
+          <input type="file" id="import-library-file" accept=".json" class="hidden">
+        </label>
+        <button id="clear-library-btn" class="btn btn-danger" style="width: 100%; justify-content: center; font-size: 12px; height: 38px;">
+          ❌ Clear Library Crate
+        </button>
+      </div>
+    </aside>
+
+    <!-- Right Content: Tracks Grid -->
+    <div class="library-main">
+      <div class="crate-page-header" style="margin-bottom: 20px;">
+        <div>
+          <h2>My Library Crate</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Stream and organize your custom micro-genre discoveries.</p>
+        </div>
+      </div>
+
+      <!-- Search & Filter toolbar -->
+      <div class="library-toolbar glass" style="padding: 16px 20px; border-radius: var(--radius-md); margin-bottom: 24px;">
+        <div class="search-wrapper" style="max-width: 360px; width: 100%;">
+          <input type="text" id="library-search-input" placeholder="Search saved tracks or artists..." autocomplete="off">
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary);">
+          Tracks: <strong id="library-count-label">0</strong>
+        </div>
+      </div>
+
+      <!-- Grid items list -->
+      <section id="library-grid" class="library-grid" style="margin-bottom: 120px;">
+        <!-- Generated dynamically -->
+        <div class="placeholder-details" style="grid-column: 1 / -1; margin-top: 40px; text-align: center; color: var(--text-muted);">
+          <p>No tracks saved in your crate yet. Head over to the <a href="app.html" style="color: var(--accent-orange);">Explore Graph</a> to dig some tracks!</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Sticky Player Bar -->
+  <footer id="audio-player-bar" class="audio-player-bar glass">
+    <!-- Left side: Track Info -->
+    <div class="player-left">
+      <div class="now-playing-cover">
+        <img id="player-artwork" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=120&auto=format&fit=crop&q=80" alt="Cover Artwork">
+      </div>
+      <div class="now-playing-meta">
+        <h4 id="player-title">No Track Loaded</h4>
+        <p id="player-artist">Select a track card above to play</p>
+      </div>
+      <button id="player-favorite-btn" class="favorite-btn" title="Remove from Crate">
+        <svg class="svg-icon" viewBox="0 0 24 24" id="fav-icon-svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3 1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+    </div>
+
+    <!-- Center: Media Controls -->
+    <div class="player-center">
+      <div class="playback-buttons">
+        <button id="player-prev-btn" class="player-control-btn" title="Previous Track">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button id="player-play-btn" class="player-control-btn play-btn" title="Play / Pause">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button id="player-next-btn" class="player-control-btn" title="Next Track">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm10-12h2v12h-2z"/></svg>
+        </button>
+      </div>
+      <div class="playback-timeline">
+        <span id="current-time">0:00</span>
+        <input type="range" id="progress-slider" min="0" max="100" value="0" step="0.1">
+        <span id="total-duration">0:30</span>
+      </div>
+    </div>
+
+    <!-- Right side: Visualizer and Volume -->
+    <div class="player-right">
+      <div class="visualizer-container">
+        <canvas id="visualizer-canvas"></canvas>
+      </div>
+      
+      <div class="volume-container">
+        <button id="volume-mute-btn" class="volume-btn" title="Mute / Unmute">
+          <svg class="svg-icon" viewBox="0 0 24 24" id="volume-icon-svg"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" value="0.8" step="0.05">
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="cratePage.js"></script>
+</body>
+</html>

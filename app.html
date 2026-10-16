@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>obsound — Interconnected Micro-Genre Crate Digging</title>
+  <!-- Google Fonts: Outfit & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+
+  <!-- Background Animated Cyber Grid Lines -->
+  <div class="cyber-background"></div>
+
+  <!-- Header Dashboard -->
+  <header class="app-header">
+    <a href="index.html" class="logo-area" style="text-decoration: none; display: flex; align-items: baseline; gap: 10px;">
+      <span class="logo-glow"></span>
+      <h1 class="logo-text">obsound</h1>
+      <span class="logo-tagline">connected sounds</span>
+    </a>
+    
+    <nav class="nav-links" style="margin-right: auto; margin-left: 40px;">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="app.html" class="nav-link active">Explore Graph</a>
+      <a href="crate.html" class="nav-link">Library</a>
+      <a href="react-studio.html" class="nav-link">React Studio</a>
+    </nav>
+
+    <div class="status-area">
+      <div id="api-status-indicator" class="status-pill live">Connecting...</div>
+      <button id="btn-react-submit" onclick="window.openReactValidatorModal && window.openReactValidatorModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 11px; border-radius: 20px; font-weight: 700; cursor: pointer; background: var(--accent-orange); color: white; border: none; box-shadow: 0 4px 12px rgba(118, 179, 157, 0.3);">
+        + Submit Node (React)
+      </button>
+      <button id="toggle-crate-panel-btn" class="icon-btn" title="Toggle Library">
+        📁 <span id="crate-badge" class="badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Exploration Container -->
+  <main class="exploration-area">
+    <!-- Graph Canvas Container -->
+    <div class="canvas-container">
+      <canvas id="graph-canvas"></canvas>
+      <div id="graph-tooltip" class="graph-tooltip hidden"></div>
+      
+      <!-- Graph Canvas HUD instructions -->
+      <div class="canvas-hud">
+        <p>🖱️ Drag to Pan | 📜 Scroll to Zoom | 👆 Click Node to Expand | 👤 Drag Node to Arrange</p>
+      </div>
+    </div>
+
+    <!-- Left Controls Panel -->
+    <aside class="left-panel">
+      <!-- Search & Autocomplete -->
+      <div class="control-box glass">
+        <h3>Graph Search</h3>
+        <div class="search-wrapper">
+          <input type="text" id="search-input" placeholder="Search tag, artist or track..." autocomplete="off">
+          <button id="search-clear-btn" class="clear-btn hidden">&times;</button>
+        </div>
+        <div id="suggestions-panel" class="suggestions-panel glass hidden"></div>
+      </div>
+
+      <!-- Quick Micro-Genre Selector -->
+      <div class="control-box glass">
+        <h3>Micro-Genres</h3>
+        <div id="tag-list" class="tag-grid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- React Form Validation Trigger Box (Assignment 3) -->
+      <div class="control-box glass">
+        <h3>Node Injection</h3>
+        <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">
+          Validate and inject new subterranean audio tracks directly into the active physics graph.
+        </p>
+        <button onclick="window.openReactValidatorModal && window.openReactValidatorModal()" class="btn btn-primary" style="width: 100%; padding: 8px 12px; font-size: 12px; font-weight: 700; border-radius: var(--radius-md); background: var(--accent-orange); color: white; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(118, 179, 157, 0.25);">
+          + Open React Validator
+        </button>
+      </div>
+    </aside>
+
+    <!-- Right Details Panel (Slide-out) -->
+    <aside id="details-panel" class="right-panel glass hidden">
+      <button id="close-details-btn" class="close-panel-btn">&times;</button>
+      <div id="details-content" class="panel-content">
+        <!-- Rendered dynamically depending on selected node type -->
+        <div class="placeholder-details">
+          <div class="radar-ping"></div>
+          <p>Select a node in the graph network to examine metadata details, bios, and lyrics.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- My Crate Sidebar (Slide-out) -->
+    <aside id="crate-panel" class="crate-panel glass hidden">
+      <div class="crate-header">
+        <h2>My Crate</h2>
+        <button id="close-crate-btn" class="close-panel-btn">&times;</button>
+      </div>
+      <div class="crate-actions">
+        <button id="export-crate-btn" class="btn btn-secondary">Export Crate</button>
+        <label for="import-crate-file" class="btn btn-secondary text-center cursor-pointer">
+          Import Crate
+          <input type="file" id="import-crate-file" accept=".json" class="hidden">
+        </label>
+        <button id="clear-crate-btn" class="btn btn-danger">Clear</button>
+      </div>
+      <div id="crate-list" class="crate-list">
+        <p class="empty-message">Your crate is empty. Click the heart icon on any track card to start digging!</p>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Lyrics Modal Viewer -->
+  <div id="lyrics-modal" class="modal hidden">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h2 id="lyrics-modal-title">Track Lyrics</h2>
+        <button id="close-lyrics-btn" class="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre id="lyrics-content">Fetching lyrics...</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Sticky Bottom Audio Player -->
+  <footer id="audio-player-bar" class="audio-player-bar glass">
+    <!-- Left side: Track Info -->
+    <div class="player-left">
+      <div class="now-playing-cover">
+        <img id="player-artwork" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=120&auto=format&fit=crop&q=80" alt="Cover Artwork">
+      </div>
+      <div class="now-playing-meta">
+        <h4 id="player-title">No Track Loaded</h4>
+        <p id="player-artist">Explore the graph to discover sound</p>
+      </div>
+      <button id="player-favorite-btn" class="favorite-btn" title="Add to Crate">
+        <svg class="svg-icon" viewBox="0 0 24 24" id="fav-icon-svg"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg>
+      </button>
+    </div>
+
+    <!-- Center: Media Controls -->
+    <div class="player-center">
+      <div class="playback-buttons">
+        <button id="player-prev-btn" class="player-control-btn" title="Previous Track">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button id="player-play-btn" class="player-control-btn play-btn" title="Play / Pause">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button id="player-next-btn" class="player-control-btn" title="Next Track">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zm10-12h2v12h-2z"/></svg>
+        </button>
+      </div>
+      <div class="playback-timeline">
+        <span id="current-time">0:00</span>
+        <input type="range" id="progress-slider" min="0" max="100" value="0" step="0.1">
+        <span id="total-duration">0:30</span>
+      </div>
+    </div>
+
+    <!-- Right side: Visualizer and Volume -->
+    <div class="player-right">
+      <!-- Live Web Audio visualizer canvas -->
+      <div class="visualizer-container">
+        <canvas id="visualizer-canvas"></canvas>
+      </div>
+      
+      <!-- Volume Slider -->
+      <div class="volume-container">
+        <button id="volume-mute-btn" class="volume-btn" title="Mute / Unmute">
+          <svg class="svg-icon" viewBox="0 0 24 24" id="volume-icon-svg"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" value="0.8" step="0.05">
+      </div>
+    </div>
+  </footer>
+
+  <!-- React Component Root for Node Validation Modal -->
+  <div id="react-validation-root"></div>
+
+  <!-- React 18, ReactDOM & Babel -->
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.4/babel.min.js"></script>
+  <script type="text/babel" src="react-node-injector.js"></script>
+
+  <!-- Application Entry Scripts -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

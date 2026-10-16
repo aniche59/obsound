@@ -1,85 +1,224 @@
-# ObSound — Underground Micro-Genre Discovery Platform
-## Web Technology — Practical No. 3 Submission (ReactJS, Client-Side Validation & Graph Interactivity)
+# Web Technology Lab — Practical No. 3
+## ReactJS Web Application with Client-Side Validation & Interactive Functionality
 
 ---
 
-## 1. Problem Statement
-Commercial streaming algorithms (Spotify, Apple Music) push the same repetitive top-40 hits into auto-play loops based on corporate pay-for-placement. Independent artists, niche scenes, and obscure micro-genres (*HexD*, *Mallsoft*, *Dungeon Synth*, *Shoegaze*, *Deconstructed Club*, *Chiptune*) are routinely obscured.
-
-**ObSound** is a graph-based music discovery platform and crate-digging ecosystem. It replaces closed commercial algorithms with **interactive 2D physics graphs**, connecting acoustic vectors, harmonic keys, and human crate digging.
-
----
-
-## 2. Integrated Assignment Capabilities
-
-### From Assignment 1 (HTML/CSS & Responsive Design):
-* Responsive landing page (`public/index.html`) with header, hero section, philosophy features grid, micro-genre gateways, and collapsible FAQ section.
-* Authentic custom CSS design system with Outfit and Space Grotesk typography, glassmorphism, and responsive layout.
-
-### From Assignment 2 (JSON & Array Data Handling):
-* Data is stored dynamically using JavaScript Arrays and JSON objects.
-* One-click Crate export to `.json` file (`Blob` download) and file import with `JSON.parse()` error handling.
-* Crate library table view (`public/crate.html`) with live search, sorting, and track management.
-
-### For Assignment 3 (ReactJS Component & Client-Side Validation):
-* **React 18 Component Integration**:
-  * An interactive **React Form Validator Modal** (`public/react-node-injector.js`) mounted in `public/app.html` via `+ Submit Node (React)`.
-  * A dedicated **React Studio** page (`public/react-studio.html`).
-* **Client-Side Form Validation**:
-  * Controlled inputs: Track Title, Artist, Micro-Genre, BPM, Release Year, Audio Stream URL, and Tags.
-  * Granular validation: Checks length boundaries (2-60 chars for title), numeric ranges (40-260 BPM, 1970-2026 for year), URL regex pattern, and duplicate track detection.
-  * Displays specific, meaningful error messages below invalid fields with red borders (`.is-invalid`) and green borders on valid fields (`.is-valid`).
-  * Master alert banner summarizing failed validation rules.
-  * On valid submission: Commits to React state, updates the Crate Array, and **immediately injects the newly created node into the live 2D force-directed physics graph canvas**!
-  * Helper buttons: "Quick Fill Valid Data" and "Test Error Validation" for instant evaluation.
-
-### Core ObSound Interactive Features:
-* **2D Physics Graph Canvas (`public/graph.js`)**: Interactive force-directed graph with drag-to-pan, scroll-to-zoom, node drag, and clickable nodes.
-* **Sticky Bottom Audio Player (`public/player.js`)**: Real-time canvas frequency visualizer, timeline scrub slider, volume controls, and Web Audio API tone synthesis.
-* **My Crate Drawer (`public/crate.js`)**: Real-time bookmarking and JSON export.
+### **Project Information**
+* **Project Title:** ObSound — Underground Micro-Genre & Sonic Discovery Platform
+* **Course:** Web Technology Laboratory
+* **Student GitHub Username:** `aniche59`
+* **Assignment Rubric Focus:** ReactJS components, client-side input validation, error/success messaging, interactive state handling, and live deployment.
 
 ---
 
-## 3. How to Run Locally
+## 🌐 Live Deployment Links
 
-1. **Directly in Browser:**
-   - Double-click `public/index.html` (Landing Page) or `public/app.html` (Graph Explorer) or `public/react-studio.html` (React Studio).
-2. **Using VS Code Live Server:**
-   - Right-click `public/index.html` &rarr; **"Open with Live Server"**.
-3. **Using Node Gateway Server:**
-   - Run `node server.js` in terminal &rarr; Open `http://localhost:3000`.
+| Resource | Link |
+| :--- | :--- |
+| 🚀 **Live GitHub Pages Deployment** | [https://aniche59.github.io/obsound/](https://aniche59.github.io/obsound/) |
+| 📦 **GitHub Source Repository** | [https://github.com/aniche59/obsound](https://github.com/aniche59/obsound) |
+| ⚛️ **Direct React Studio Route** | [https://aniche59.github.io/obsound/public/react-studio.html](https://aniche59.github.io/obsound/public/react-studio.html) |
+| 🗺️ **Interactive 2D Physics Graph** | [https://aniche59.github.io/obsound/public/app.html](https://aniche59.github.io/obsound/public/app.html) |
+| 📁 **Crate Digging Library (JSON CRUD)** | [https://aniche59.github.io/obsound/public/crate.html](https://aniche59.github.io/obsound/public/crate.html) |
 
 ---
 
-## 4. GitHub Pages Deployment Instructions
+## 1. Problem Statement & Real-World Concept
 
-To deploy this project to **GitHub Pages** and get your public submission link:
+Commercial music streaming services (such as Spotify and Apple Music) rely on corporate engagement algorithms that repeatedly recycle the same mainstream Top-40 tracks into auto-play loops. Independent artists, niche DIY scenes, and underground micro-genres (*HexD*, *Mallsoft*, *Dungeon Synth*, *Shoegaze*, *Deconstructed Club*, *Chiptune*, *Darkwave*) are routinely obscured.
 
-1. **Initialize Git & Commit:**
+**ObSound** is a graph-based crate-digging ecosystem that replaces closed commercial algorithms with **an interactive 2D physics graph** connecting acoustic vectors, harmonic keys, and human crate curation. Built as an interactive web application powered by **ReactJS**, ObSound allows users to explore micro-genre relationships, catalog discoveries into a digital crate, listen to generated audio frequency previews, and submit newly discovered underground audio nodes using a **strict client-side validation engine** that immediately injects verified tracks into the live physics simulation.
+
+---
+
+## 2. Curriculum Synthesis (Integrating Assignments 1, 2, and 3)
+
+This project synthesizes the core competencies of the entire Web Technology laboratory sequence:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       ObSound Web Application Platform                      │
+├──────────────────────────────┬──────────────────────────────┬───────────────┤
+│ Practical No. 1 (HTML/CSS)   │ Practical No. 2 (JS / JSON)  │ Practical No. 3 (ReactJS)
+├──────────────────────────────┼──────────────────────────────┼───────────────┤
+│ • Semantic HTML5 layout      │ • In-Memory Array structures │ • React 18 component tree
+│ • Custom CSS3 design tokens  │ • JSON serialization (CRUD)  │ • Controlled input states
+│ • Responsive grid & flexbox  │ • Crate management table     │ • Client-side form validation
+│ • Glassmorphism & animations │ • LocalStorage persistence   │ • Specific error feedback
+│ • Collapsible FAQ accordion  │ • One-click JSON file export │ • Live 2D graph node inject
+└──────────────────────────────┴──────────────────────────────┴───────────────┘
+```
+
+* **Aspects from Practical 1 (Responsive Design & UI Structure):**
+  * Responsive multi-section layout (`public/index.html`) featuring an app header, hero section, philosophy features grid, micro-genre gateway pills, and an accordion FAQ.
+  * Modern custom CSS styling with dark/light themes, Outfit and Space Grotesk typography, glassmorphism, and responsive breakpoints.
+* **Aspects from Practical 2 (JavaScript Arrays & JSON Handling):**
+  * Underground track catalog stored dynamically in JavaScript arrays and structured JSON objects.
+  * Dedicated Crate Library view (`public/crate.html`) with live search, micro-genre folder filtering, and one-click JSON file export (`Blob` download).
+* **Core Requirements of Practical 3 (ReactJS & Client-Side Validation):**
+  * Interactive **React Form Validator Modal** (`public/react-node-injector.js`) mounted into the live 2D graph explorer.
+  * Standalone **React Studio** view (`public/react-studio.html`) with live state inspection, CRUD table, and raw JSON preview.
+  * Multi-field input validation engine checking string bounds, numeric ranges, URL regex patterns, and duplicate prevention with immediate visual feedback.
+
+---
+
+## 3. Teacher's Evaluation & Testing Walkthrough
+
+Follow these step-by-step instructions to test and grade every requirement of Practical No. 3:
+
+### Step 1: Open the Application
+* **Online:** Visit the live deployment URL at [https://aniche59.github.io/obsound/](https://aniche59.github.io/obsound/)
+* **Offline / Local:** Open `public/index.html` or `public/app.html` directly in any web browser.
+
+---
+
+### Step 2: Test Client-Side Form Validation (Invalid Inputs & Error Messages)
+1. Navigate to **Explore Graph** (`public/app.html`) or **React Studio** (`public/react-studio.html`).
+2. Click the orange **`+ Submit Node (React)`** button in the header or the left panel.
+3. Click the **"Test Error Validation"** helper button (or click *"Validate & Inject Track"* with empty inputs).
+4. **Observe the evaluation outcomes:**
+   * An **Error Alert Banner** appears at the top summarizing the failed validation criteria.
+   * Every invalid input field receives a distinct red border (`.is-invalid`).
+   * **Specific, meaningful error messages** are displayed directly below each invalid field:
+     * **Track Title:** *"Track title is required (min 2, max 60 chars)."*
+     * **Artist Alias:** *"Artist moniker or band alias is required (min 2, max 50 chars)."*
+     * **Micro-Genre:** *"Please select a valid micro-genre from the list."*
+     * **BPM (Tempo):** *"BPM must fall within the range 40 to 260."*
+     * **Release Year:** *"Release year must be between 1970 and current calendar year (2026)."*
+     * **Audio Stream URL:** *"Please enter a valid URL (e.g. https://artist.bandcamp.com)."*
+     * **Sonic Tags:** *"Provide at least one sonic tag or keyword."*
+
+---
+
+### Step 3: Test Duplicate Detection Validation
+1. In the modal, enter a track that already exists in the graph database (e.g., Title: `Resonance`, Artist: `HOME`).
+2. Notice the real-time duplicate check triggers:
+   * *"A track with this title and artist already exists in the graph database!"*
+   * Form submission is blocked until unique metadata is provided.
+
+---
+
+### Step 4: Test Valid Input Submission & Dynamic Graph Node Injection
+1. Click the **"Quick Fill Valid Data"** button to auto-populate the form with valid underground track data (e.g. *"Midnight City Glitch"* by *"Neon Phantom"*).
+2. Observe all inputs immediately transition to valid state with green borders (`.is-valid`).
+3. Click **"Validate & Inject Track"**.
+4. **Observe the interactive confirmation & live simulation:**
+   * A success alert confirms: *"Success! Midnight City Glitch by Neon Phantom validated and injected into the live graph!"*
+   * The React modal closes and dispatches an `obsound:injectTrack` custom event.
+   * **A brand-new glowing node appears live in the 2D Physics Canvas Graph!**
+   * Physics spring connections automatically link the new track to its corresponding micro-genre cluster.
+   * The camera smoothly pans to center the newly injected node, and synthetic audio tone playback begins automatically!
+
+---
+
+### Step 5: Test Interactive Features
+1. **Interactive 2D Physics Graph (`public/graph.js`):**
+   * **Pan:** Click and drag the background canvas to pan around the graph space.
+   * **Zoom:** Scroll the mouse wheel up or down to zoom in and out.
+   * **Inspect:** Click any track node to slide open the right details inspector showing artwork, BPM, tags, and bio.
+   * **Physics Drag:** Click and hold any node to drag it around; observe Hooke's law spring physics pulling linked nodes along.
+2. **Sticky Bottom Audio Player (`public/player.js`):**
+   * Click Play/Pause on the bottom transport bar.
+   * Observe the **real-time 16-bar frequency spectrum visualizer** reacting in canvas.
+   * Drag the timeline scrubber slider and adjust volume controls.
+3. **Crate Digging & JSON Export (`public/crate.html`):**
+   * Click **"+ Add to Crate"** on any track node to bookmark it.
+   * Click the crate icon 📁 in the header to open the crate drawer.
+   * Navigate to the **Library** page (`public/crate.html`) to view the complete catalog table and click **"Export Crate (.JSON)"** to download the crate as a JSON file.
+
+---
+
+## 4. How to Run Locally
+
+### Method A: Direct Browser Launch (Zero Installation)
+No Node.js or build steps required. The application loads React 18, ReactDOM, and Babel Standalone via CDN:
+1. Extract `obsound.zip` (or `assignment3.zip`).
+2. Double-click `index.html` (or `public/index.html`) to launch in Google Chrome, Microsoft Edge, or Mozilla Firefox.
+
+### Method B: VS Code Live Server
+1. Open the project folder in **Visual Studio Code**.
+2. Right-click `index.html` &rarr; click **"Open with Live Server"**.
+3. Access the web app at `http://127.0.0.1:5500`.
+
+### Method C: Node.js Express Gateway
+1. Open terminal in the project directory:
+   ```bash
+   node server.js
+   ```
+2. Open your browser and navigate to `http://localhost:3000`.
+
+---
+
+## 5. GitHub Pages Deployment Instructions
+
+This application is deployed and hosted using **GitHub Pages**. To replicate or verify the deployment:
+
+1. **GitHub Repository Creation:**
+   * Repository Name: `obsound`
+   * Visibility: Public
+   * Owner: `aniche59`
+   * URL: `https://github.com/aniche59/obsound`
+
+2. **Git Commands Executed:**
    ```bash
    cd obsound
    git init
    git add .
    git commit -m "Deploy ObSound ReactJS Web Application"
+   git branch -M main
+   git remote add origin https://github.com/aniche59/obsound.git
+   git push -u origin main
    ```
 
-2. **Push to Your GitHub Account:**
-   - Go to [https://github.com/new](https://github.com/new) and create a new repository named `obsound`.
-   - Run the commands shown on GitHub:
-     ```bash
-     git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/obsound.git
-     git branch -M main
-     git push -u origin main
-     ```
+3. **Configuring GitHub Pages:**
+   * In GitHub, navigate to **Settings** &rarr; **Pages** (under Code and automation).
+   * Under **Build and deployment** &rarr; **Source**: Select `Deploy from a branch`.
+   * **Branch**: Select `main` &rarr; Folder: `/ (root)` &rarr; Click **Save**.
+   * Root routing is handled by `index.html`, which redirects directly to `public/index.html`.
 
-3. **Enable GitHub Pages:**
-   - In your GitHub repository, click **Settings** &rarr; **Pages** (on the left menu).
-   - Under **Build and deployment** &rarr; **Branch**, select `main` and folder `/ (root)`.
-   - Click **Save**.
+4. **Live URL:**
+   ```
+   https://aniche59.github.io/obsound/
+   ```
 
-4. **Your Live Deployment Link:**
-   Within 1 to 2 minutes, your live site will be available at:
-   ```
-   https://<YOUR_GITHUB_USERNAME>.github.io/obsound/
-   ```
-   Submit this URL for Assignment 3!
+---
+
+## 6. Project File Directory
+
+```
+obsound/ (assignment3/)
+│
+├── index.html                   # Root entry point & GitHub Pages redirector
+├── package.json                 # Project manifest & metadata
+├── server.js                    # Node.js Express API & static gateway
+├── README.md                    # Academic lab report & evaluation manual
+│
+└── public/                      # Client-side web application bundle
+    ├── index.html               # Landing page (Assignment 1 layout & FAQ)
+    ├── app.html                 # Main 2D physics graph exploration environment
+    ├── react-studio.html        # Dedicated React 18 validation & CRUD studio
+    ├── crate.html               # Digging library & JSON catalog management
+    ├── react-node-injector.js   # React 18 client-side validation modal component
+    ├── app.js                   # State manager & bridge between React and canvas
+    ├── graph.js                 # Interactive 2D canvas physics simulation engine
+    ├── player.js                # Web Audio API tone synthesizer & canvas visualizer
+    ├── crate.js                 # In-memory array CRUD & JSON export/import handlers
+    ├── cratePage.js             # Table filtering and sorting engine for crate.html
+    ├── mockData.js              # Initial subterranean genre catalog dataset
+    ├── api.js                   # Fallback data fetching service
+    └── styles.css               # Design system, glassmorphism, & validation CSS
+```
+
+---
+
+## 7. Compliance Checklist for Practical No. 3 Rubric
+
+| Requirement | Implementation Detail | Status |
+| :--- | :--- | :---: |
+| **ReactJS Application** | Built with React 18, functional components, hooks (`useState`, `useEffect`) | ✅ Pass |
+| **Accept User Input** | Form with 8 controlled inputs (Title, Artist, Genre, BPM, Year, Intensity, URL, Tags) | ✅ Pass |
+| **Client-Side Validation** | Type checking, character length, numeric bounds, URL regex, duplicate detection | ✅ Pass |
+| **Meaningful Error Messages** | Specific inline text under each invalid input + summary alert banner | ✅ Pass |
+| **Success / Confirmation** | Green input states (`.is-valid`), confirmation alerts, and instant graph injection | ✅ Pass |
+| **Interactive User Experience** | Force-directed 2D physics graph, audio spectrum visualizer, JSON export | ✅ Pass |
+| **Live Deployment** | Deployed on GitHub Pages at `https://aniche59.github.io/obsound/` | ✅ Pass |

@@ -18,6 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
   let tracksList = crate.getTracks();
   let selectedFolderTag = 'all';
 
+  // Sync Curator Profile
+  const userStr = localStorage.getItem('obsound_user');
+  const curatorLabel = document.getElementById('curator-handle-label');
+  const curatorAvatar = document.getElementById('curator-avatar-icon');
+  if (userStr && curatorLabel) {
+    try {
+      const u = JSON.parse(userStr);
+      curatorLabel.textContent = u.handle || '@curator';
+      if (curatorAvatar) curatorAvatar.textContent = u.avatar || 'C';
+    } catch (e) {}
+  }
+
   // DOM Elements
   const libraryGrid = document.getElementById('library-grid');
   const libraryCountLabel = document.getElementById('library-count-label');

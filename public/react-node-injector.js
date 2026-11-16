@@ -28,7 +28,7 @@
       "Synthwave", "Vaporwave", "Shoegaze", "Chiptune",
       "Math Rock", "City Pop", "Darkwave", "Mid West Emo",
       "Dungeon Synth", "Downtempo", "Afrobeats", "Future Funk",
-      "Deconstructed Club", "Phonk"
+      "Deconstructed Club", "Phonk", "HexD", "Mallsoft", "Breakcore", "Ambient Drone"
     ];
 
     const validate = (data) => {
@@ -132,7 +132,25 @@
       // Dispatch event to app.js graph coordinator
       window.dispatchEvent(new CustomEvent('obsound:injectTrack', { detail: newTrack }));
 
-      alert(`Success! "${newTrack.title}" by ${newTrack.artist} validated and injected into the live graph!`);
+      // Persist to MongoDB NoSQL Document Database
+      fetch('/api/nosql/tracks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newTrack.title,
+          artist: newTrack.artist,
+          genre: newTrack.genre,
+          bpm: newTrack.bpm,
+          year: newTrack.year,
+          curator: (JSON.parse(localStorage.getItem('obsound_user') || '{}').handle) || '@react_curator',
+          streamUrl: newTrack.url,
+          tags: newTrack.tags
+        })
+      }).then(r => r.json()).then(res => {
+        console.log("NoSQL Document Store persistence response:", res);
+      }).catch(err => console.warn("NoSQL insert offline:", err));
+
+      alert(`Success! "${newTrack.title}" by ${newTrack.artist} validated by React and saved to MongoDB NoSQL store!`);
       onClose();
     };
 

@@ -22,14 +22,35 @@ export class CrateManager {
     }
   }
 
-  // Save to localStorage
+  // Save to localStorage & NoSQL Database
   save() {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(this.tracks));
       this.triggerChange();
+      this.syncToNoSQLCloud();
     } catch (err) {
       console.error("Failed to save crate to localStorage:", err);
       alert("Error: Storage limit reached! Could not save track.");
+    }
+  }
+
+  async syncToNoSQLCloud() {
+    try {
+      const user = JSON.parse(localStorage.getItem('obsound_user') || 'null');
+      const curatorHandle = user?.handle || '@analog_digger';
+      await fetch('/api/nosql/playlists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _id: 'playlist_crate_' + curatorHandle.replace(/[^a-z0-9]/gi, '_').toLowerCase(),
+          name: `${curatorHandle}'s Sonic Crate`,
+          curator: curatorHandle,
+          tracks: this.tracks,
+          trackCount: this.tracks.length
+        })
+      });
+    } catch (e) {
+      console.warn("NoSQL cloud sync deferred:", e.message);
     }
   }
 

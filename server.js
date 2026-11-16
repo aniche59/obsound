@@ -238,7 +238,144 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 5. NoSQL Document Database Route
+  // Helper for Sound Node Validation (Mongoose Schema equivalent)
+  function validateSoundNode(data) {
+    const errors = [];
+    if (!data.title || typeof data.title !== 'string' || data.title.trim().length < 2) {
+      errors.push('Title is required and must be at least 2 characters.');
+    }
+    if (!data.artist || typeof data.artist !== 'string' || data.artist.trim().length < 2) {
+      errors.push('Artist is required and must be at least 2 characters.');
+    }
+    const bpm = Number(data.bpm);
+    if (isNaN(bpm) || bpm < 40 || bpm > 280) {
+      errors.push('BPM must be a valid number between 40 and 280.');
+    }
+    const year = Number(data.year);
+    if (isNaN(year) || year < 1970 || year > 2026) {
+      errors.push('Release year must fall between 1970 and 2026.');
+    }
+    return { valid: errors.length === 0, errors };
+  }
+
+  // 5. User Authentication Routes (NoSQL User Collection)
+  const usersPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_users.json');
+  const playlistsPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_playlists.json');
+
+  if (pathname === '/api/auth/register' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        const { handle, email, password, genre } = JSON.parse(body);
+        if (!handle || !email || !password || password.length < 6) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Valid handle, email, and password (min 6 chars) required.' }));
+          return;
+        }
+        let users = [];
+        if (fs.existsSync(usersPath)) {
+          users = JSON.parse(fs.readFileSync(usersPath, 'utf8'));
+        }
+        if (users.some(u => u.handle.toLowerCase() === handle.toLowerCase() || u.email.toLowerCase() === email.toLowerCase())) {
+          res.writeHead(409, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Curator handle or email already registered in NoSQL database.' }));
+          return;
+        }
+        const newUser = {
+          _id: Date.now().toString(16) + Math.random().toString(16).substring(2, 10),
+          handle,
+          email,
+          genre: genre || 'Vaporwave',
+          avatar: (handle.replace('@', '')[0] || 'C').toUpperCase(),
+          createdAt: new Date().toISOString()
+        };
+        users.push(newUser);
+        fs.writeFileSync(usersPath, JSON.stringify(users, null, 2), 'utf8');
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, user: newUser, token: 'obsound_session_' + newUser._id }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
+  if (pathname === '/api/auth/login' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        const { identifier, password } = JSON.parse(body);
+        let users = [];
+        if (fs.existsSync(usersPath)) {
+          users = JSON.parse(fs.readFileSync(usersPath, 'utf8'));
+        }
+        const idLower = (identifier || '').toLowerCase();
+        const user = users.find(u => u.handle.toLowerCase() === idLower || u.email.toLowerCase() === idLower);
+        if (!user) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Curator account not found.' }));
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, user, token: 'obsound_session_' + user._id }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // 6. NoSQL Playlist & Library Routes
+  if (pathname === '/api/nosql/playlists') {
+    if (req.method === 'GET') {
+      try {
+        let lists = [];
+        if (fs.existsSync(playlistsPath)) {
+          lists = JSON.parse(fs.readFileSync(playlistsPath, 'utf8'));
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, playlists: lists }));
+      } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+      return;
+    } else if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => body += chunk);
+      req.on('end', () => {
+        try {
+          const playlistData = JSON.parse(body);
+          let lists = [];
+          if (fs.existsSync(playlistsPath)) {
+            lists = JSON.parse(fs.readFileSync(playlistsPath, 'utf8'));
+          }
+          playlistData._id = playlistData._id || (Date.now().toString(16) + Math.random().toString(16).substring(2, 10));
+          playlistData.updatedAt = new Date().toISOString();
+          const existingIdx = lists.findIndex(p => p._id === playlistData._id);
+          if (existingIdx !== -1) {
+            lists[existingIdx] = { ...lists[existingIdx], ...playlistData };
+          } else {
+            playlistData.createdAt = new Date().toISOString();
+            lists.unshift(playlistData);
+          }
+          fs.writeFileSync(playlistsPath, JSON.stringify(lists, null, 2), 'utf8');
+          res.writeHead(201, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, playlist: playlistData }));
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: e.message }));
+        }
+      });
+      return;
+    }
+  }
+
+  // 7. NoSQL Track Nodes with Validation
   if (pathname === '/api/nosql/tracks') {
     const nosqlPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_soundnodes.json');
     if (req.method === 'GET') {
@@ -260,16 +397,30 @@ const server = http.createServer(async (req, res) => {
       req.on('end', () => {
         try {
           const newDoc = JSON.parse(body);
+          // Server-side NoSQL Validation Check
+          const validation = validateSoundNode(newDoc);
+          if (!validation.valid) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+              success: false,
+              status: 'VALIDATION_ERROR',
+              message: 'Track node rejected by NoSQL schema validation.',
+              errors: validation.errors
+            }));
+            return;
+          }
+
           let docs = [];
           if (fs.existsSync(nosqlPath)) {
             docs = JSON.parse(fs.readFileSync(nosqlPath, 'utf8'));
           }
           newDoc._id = Date.now().toString(16) + Math.random().toString(16).substring(2, 10);
           newDoc.createdAt = new Date().toISOString();
+          newDoc.updatedAt = new Date().toISOString();
           docs.unshift(newDoc);
           fs.writeFileSync(nosqlPath, JSON.stringify(docs, null, 2), 'utf8');
           res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, document: newDoc }));
+          res.end(JSON.stringify({ success: true, message: 'Node validated & persisted in NoSQL store.', document: newDoc }));
         } catch (e) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: e.message }));
@@ -281,21 +432,26 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/nosql/status') {
     const nosqlPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_soundnodes.json');
-    let count = 0;
+    let soundNodesCount = 0;
+    let playlistsCount = 0;
+    let usersCount = 0;
     try {
-      if (fs.existsSync(nosqlPath)) {
-        count = JSON.parse(fs.readFileSync(nosqlPath, 'utf8')).length;
-      }
+      if (fs.existsSync(nosqlPath)) soundNodesCount = JSON.parse(fs.readFileSync(nosqlPath, 'utf8')).length;
+      if (fs.existsSync(playlistsPath)) playlistsCount = JSON.parse(fs.readFileSync(playlistsPath, 'utf8')).length;
+      if (fs.existsSync(usersPath)) usersCount = JSON.parse(fs.readFileSync(usersPath, 'utf8')).length;
     } catch (e) {}
     const maskedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':••••••••@');
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       database: 'obsound_nosql_db',
-      collection: 'soundnodes',
+      collections: {
+        soundnodes: soundNodesCount,
+        playlists: playlistsCount,
+        users: usersCount
+      },
       cluster: 'MongoDB Atlas (Cluster0)',
       host: 'cluster0.rc0j9kq.mongodb.net',
       status: 'CONNECTED',
-      totalDocuments: count,
       connectionUri: maskedUri,
       fileStore: nosqlPath
     }));

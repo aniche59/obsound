@@ -112,6 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
       playerFavoriteBtn.innerHTML = HEART_EMPTY_SVG;
       playerFavoriteBtn.title = 'Add to Crate';
     }
+
+    // Spotify quick link state
+    const spotifyBtn = document.getElementById('player-spotify-btn');
+    if (spotifyBtn) {
+      spotifyBtn.href = `https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}`;
+      spotifyBtn.title = `Listen to "${track.title}" on Spotify`;
+    }
   }
 
   // Render Saved tracks list inside Crate Panel
@@ -415,10 +422,21 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
-      <div class="action-buttons" style="margin-bottom: 24px;">
-        <button id="detail-play-btn" class="btn btn-primary">Play Preview</button>
-        <button id="detail-favorite-btn" class="btn btn-secondary">${isBookmarked ? 'Remove Library' : 'Save to Library'}</button>
-        <button id="detail-lyrics-btn" class="btn btn-secondary">View Lyrics</button>
+      <div class="action-buttons" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+        <div style="display: flex; gap: 8px;">
+          <button id="detail-play-btn" class="btn btn-primary" style="flex: 1;">▶ Play Preview</button>
+          <button id="detail-favorite-btn" class="btn btn-secondary" style="flex: 1;">${isBookmarked ? 'Remove Library' : 'Save to Library'}</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a id="detail-spotify-btn" target="_blank" href="https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}" class="btn" style="flex: 1; background: #1db954; color: #000; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; border-radius: var(--radius-md);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            Play on Spotify
+          </a>
+          <a id="detail-lastfm-btn" target="_blank" href="https://www.last.fm/music/${encodeURIComponent(track.artist)}/_/${encodeURIComponent(track.title)}" class="btn" style="flex: 1; background: #ba0000; color: #fff; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; border-radius: var(--radius-md);">
+            Last.fm Page
+          </a>
+        </div>
+        <button id="detail-lyrics-btn" class="btn btn-secondary" style="width: 100%;">View Lyrics</button>
       </div>
       
       <div class="detail-section">
@@ -445,6 +463,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const albumDiv = document.getElementById('detail-track-album');
       if (albumDiv) albumDiv.textContent = `Album: ${media.albumName} (${media.releaseDate})`;
 
+      // Update Spotify and Last.fm links
+      const spotifyBtn = document.getElementById('detail-spotify-btn');
+      if (spotifyBtn) spotifyBtn.href = `https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}`;
+
       // Fetch full scrobble stats if they aren't loaded
       if (track.listeners === 0) {
         const info = await api.getTrackInfo(track.artist, track.title);
@@ -461,11 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Play button hook
     document.getElementById('detail-play-btn').addEventListener('click', () => {
-      // Sync queue
-      const queueIndex = activeTrackQueue.findIndex(t => t.id === track.id);
-      if (queueIndex !== -1) {
-        player.setPlaylist(activeTrackQueue, queueIndex);
+      if (currentPlayingTrack && currentPlayingTrack.title === track.title) {
+        player.togglePlay();
       } else {
+        currentPlayingTrack = track;
+        syncPlayerUI(track);
         player.setPlaylist([track], 0);
       }
     });
@@ -504,20 +526,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Graph Interactions Event Binding
   
-  graph.onNodeSelected((node) => {
+  graph.onNodeSelected(async (node) => {
     if (node.type === 'tag') {
       displayTagDetails(node);
     } else if (node.type === 'artist') {
       displayArtistDetails(node);
     } else if (node.type === 'track') {
       // Re-hydrate track structure if connected from artist expand
-      displayTrackDetails(node.data.title ? node.data : {
+      const trackData = node.data && node.data.title ? node.data : {
         id: node.id,
         title: node.label,
-        artist: graph.nodeMap.get(graph.links.find(l => l.target === node.id).source).label,
+        artist: graph.nodeMap.get(graph.links.find(l => l.target === node.id)?.source)?.label || 'Underground Artist',
         coverArt: '',
         previewAudioUrl: ''
-      });
+      };
+      
+      displayTrackDetails(trackData);
+
+      // Instantly start audio playback when clicked!
+      try {
+        currentPlayingTrack = trackData;
+        syncPlayerUI(trackData);
+        player.setPlaylist([trackData], 0);
+
+        // Fetch high-res artwork & audio preview stream in background
+        api.searchAudioPreview(trackData.artist, trackData.title).then(media => {
+          if (media && media.previewAudioUrl) {
+            trackData.previewAudioUrl = media.previewAudioUrl;
+            trackData.coverArt = media.coverArt;
+            trackData.album = media.albumName;
+            syncPlayerUI(trackData);
+          }
+        }).catch(() => {});
+      } catch (err) {
+        console.warn("Playback error on node select:", err);
+      }
     }
   });
 

@@ -280,6 +280,13 @@ document.addEventListener('DOMContentLoaded', () => {
       playerFavoriteBtn.innerHTML = HEART_EMPTY_SVG;
       playerFavoriteBtn.title = 'Add to Crate';
     }
+
+    // Spotify button sync
+    const spotifyBtn = document.getElementById('player-spotify-btn');
+    if (spotifyBtn) {
+      spotifyBtn.href = `https://open.spotify.com/search/${encodeURIComponent(currentPlayingTrack.artist + ' ' + currentPlayingTrack.title)}`;
+      spotifyBtn.title = `Listen to "${currentPlayingTrack.title}" on Spotify`;
+    }
   }
 
   player.onTrackChange = (track) => {

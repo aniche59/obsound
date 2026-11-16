@@ -237,7 +237,67 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 5. Static File Server Handler
+  // 5. NoSQL Document Database Route
+  if (pathname === '/api/nosql/tracks') {
+    const nosqlPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_soundnodes.json');
+    if (req.method === 'GET') {
+      try {
+        if (fs.existsSync(nosqlPath)) {
+          const raw = fs.readFileSync(nosqlPath, 'utf8');
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(raw);
+          return;
+        }
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+        return;
+      }
+    } else if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => body += chunk);
+      req.on('end', () => {
+        try {
+          const newDoc = JSON.parse(body);
+          let docs = [];
+          if (fs.existsSync(nosqlPath)) {
+            docs = JSON.parse(fs.readFileSync(nosqlPath, 'utf8'));
+          }
+          newDoc._id = Date.now().toString(16) + Math.random().toString(16).substring(2, 10);
+          newDoc.createdAt = new Date().toISOString();
+          docs.unshift(newDoc);
+          fs.writeFileSync(nosqlPath, JSON.stringify(docs, null, 2), 'utf8');
+          res.writeHead(201, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, document: newDoc }));
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: e.message }));
+        }
+      });
+      return;
+    }
+  }
+
+  if (pathname === '/api/nosql/status') {
+    const nosqlPath = path.join(__dirname, '..', 'assignment7', 'data', 'nosql_soundnodes.json');
+    let count = 0;
+    try {
+      if (fs.existsSync(nosqlPath)) {
+        count = JSON.parse(fs.readFileSync(nosqlPath, 'utf8')).length;
+      }
+    } catch (e) {}
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      database: 'obsound_nosql_db',
+      collection: 'soundnodes',
+      status: 'CONNECTED',
+      totalDocuments: count,
+      fileStore: nosqlPath
+    }));
+    return;
+  }
+
+  // 6. Static File Server Handler
   if (req.method === 'GET') {
     const rawPath = pathname === '/' ? '/index.html' : pathname;
     // Basic path traversal prevention

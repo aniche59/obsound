@@ -28,6 +28,7 @@ if (fs.existsSync(envPath)) {
 
 const PORT = env.PORT || process.env.PORT || 3000;
 const LASTFM_API_KEY = env.LASTFM_API_KEY || process.env.LASTFM_API_KEY || '';
+const MONGODB_URI = env.MONGODB_URI || process.env.MONGODB_URI || 'mongodb+srv://adityaiche59_db_user:t3MpqEZur1G2AKmf@cluster0.rc0j9kq.mongodb.net/obsound_nosql_db?retryWrites=true&w=majority';
 const LASTFM_BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
 
 // MIME types for static file serving
@@ -286,12 +287,16 @@ const server = http.createServer(async (req, res) => {
         count = JSON.parse(fs.readFileSync(nosqlPath, 'utf8')).length;
       }
     } catch (e) {}
+    const maskedUri = MONGODB_URI.replace(/:([^:@]+)@/, ':••••••••@');
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       database: 'obsound_nosql_db',
       collection: 'soundnodes',
+      cluster: 'MongoDB Atlas (Cluster0)',
+      host: 'cluster0.rc0j9kq.mongodb.net',
       status: 'CONNECTED',
       totalDocuments: count,
+      connectionUri: maskedUri,
       fileStore: nosqlPath
     }));
     return;

@@ -1,32 +1,33 @@
-/* public/styles.css - Modern Cyber-Neon Glassmorphism UI Stylesheet */
+/* public/styles.css - Retro-Futuristic Cyber-Analog Music Discovery Theme */
 :root {
-  /* Warm Ivory / Cream & Flat Pastel Sage/Amber Theme */
-  --bg-primary: #fcf9f2;     /* Warm Milky Cream */
-  --bg-secondary: #f5f0e1;   /* Rich Pastel Ivory Cream */
-  --bg-card: rgba(255, 255, 255, 0.7); /* Frosted Milky Glass Card */
+  /* Retro Cyber-Analog Underground Audio Deck Theme */
+  --bg-primary: #070913;       /* Deep Obsidian Void */
+  --bg-secondary: #0d1222;     /* Rich Studio Rack Deck */
+  --bg-card: rgba(15, 21, 38, 0.88); /* Smoked Glass Deck Card */
   
-  --accent-orange: #76b39d;  /* Pastel Sage Green */
-  --accent-blue: #e2975d;    /* Soft Pastel Amber */
-  --accent-purple: #7e9ebb;  /* Dusty Pastel Slate Blue */
+  --accent-orange: #ff9e00;    /* Vintage Amber / Warm Tangerine */
+  --accent-blue: #00f5d4;      /* Cyber Neon Cyan / Mint */
+  --accent-purple: #9d4edd;    /* Laser Violet */
+  --accent-magenta: #f72585;   /* Synthwave Pink */
   
-  --accent-glow-orange: rgba(118, 179, 157, 0.08);
-  --accent-glow-blue: rgba(226, 151, 93, 0.06);
-  --accent-glow-purple: rgba(126, 158, 187, 0.06);
+  --accent-glow-orange: rgba(255, 158, 0, 0.25);
+  --accent-glow-blue: rgba(0, 245, 212, 0.25);
+  --accent-glow-purple: rgba(157, 78, 221, 0.2);
   
-  --text-primary: #2c3e50;   /* Deep Slate Blue */
-  --text-secondary: #4a5a6a; /* Medium Slate Blue */
-  --text-muted: #8ba0b2;     /* Light Muted Blue-Gray */
-  --border-color: rgba(118, 179, 157, 0.16);
-  --border-glow: rgba(118, 179, 157, 0.08);
+  --text-primary: #ffffff;     /* Pure Crisp White (Ultra High Contrast) */
+  --text-secondary: #cbd5e1;   /* Luminous Pale Slate */
+  --text-muted: #94a3b8;       /* Cool Muted Steel */
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(0, 245, 212, 0.4);
   
-  --glass-background: rgba(252, 249, 242, 0.8);
-  --glass-blur: blur(12px);
+  --glass-background: rgba(14, 19, 34, 0.85);
+  --glass-blur: blur(16px);
   
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 18px;
   
-  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-smooth: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Reset and Core Styles */
@@ -35,7 +36,7 @@
   margin: 0;
   padding: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(118, 179, 157, 0.3) rgba(0, 0, 0, 0);
+  scrollbar-color: rgba(0, 245, 212, 0.3) rgba(0, 0, 0, 0);
 }
 
 html {
@@ -80,11 +81,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(118, 179, 157, 0.3);
+  background: rgba(0, 245, 212, 0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-orange);
+  background: var(--accent-blue);
 }
 
 /* Animated Cybernetic grid background */
@@ -94,7 +95,10 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 50%, var(--bg-secondary) 0%, var(--bg-primary) 80%);
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(0, 245, 212, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(255, 158, 0, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, var(--bg-secondary) 0%, var(--bg-primary) 85%);
   z-index: -2;
 }
 
@@ -104,7 +108,7 @@ body {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.06);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
 }
 
 /* Header styling */
@@ -116,9 +120,9 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
-  background: rgba(252, 249, 242, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(7, 9, 19, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 100;
 }
 

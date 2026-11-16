@@ -1,192 +1,328 @@
 ================================================================================
           OBSOUND — SUBTERRANEAN MUSIC DISCOVERY NETWORK
-     COLLEGE LAB PRESENTATION, PRACTICAL MAPPING & VIVA DEFENSE SCRIPT
+     LIVE PRESENTATION WALKTHROUGH SCRIPT & VIVA DEFENSE GUIDE
+================================================================================
+(HOW TO USE THIS SCRIPT: Follow this exact script while sharing your screen
+and clicking through the live website. As you demonstrate each live feature,
+you will naturally explain the underlying practical and technical concept.)
 ================================================================================
 
 --------------------------------------------------------------------------------
-PART 1: THE 2-MINUTE PRESENTATION SCRIPT (WHAT TO SAY TO START)
+STAGE 0: OPENING HOOK & PROJECT PITCH (30 SECONDS)
 --------------------------------------------------------------------------------
+[ACTION: You are on the desktop or opening the browser to http://localhost:3001]
 
-"Good morning, Sir. Today, I am presenting ObSound — an autonomous subterranean 
-music discovery network and web application.
+WHAT TO SAY:
+"Good morning, Sir. Today I am presenting ObSound — an autonomous subterranean 
+music discovery web application.
 
-[1] THE PROBLEM:
-Modern commercial streaming platforms (like Spotify and Apple Music) rely on 
-pay-for-placement algorithms, commercial sponsors, and popular engagement loops. 
-This creates algorithmic echo chambers where underground, independent, and niche 
-micro-genre artists are completely buried.
+The problem we are addressing is algorithmic bias in modern commercial streaming 
+platforms like Spotify and Apple Music. Because those platforms optimize for 
+commercial sponsors and popular engagement loops, niche underground artists and 
+micro-genres are completely buried in algorithmic echo chambers.
 
-[2] WHAT OBSOUND DOES:
-ObSound eliminates commercial bias by organizing music into an interactive 
-2D/3D physics-based relational graph. Instead of popularity metrics, connections 
-between music nodes are calculated using acoustic affinity vectors (BPM tempo, 
-harmonic musical key, resonance frequencies, and human curator tags). 
-Users can visually traverse floating sound nodes, listen to instant 30-second 
-audio previews, view synchronized lyrics, bookmark discoveries in their personal 
-Crate, and export tracks directly to their Spotify library.
+ObSound solves this by replacing popularity metrics with an interactive 2D/3D 
+physics-based relational graph. Music nodes are connected purely through acoustic 
+affinity vectors — such as BPM tempo, harmonic musical key, resonance frequencies, 
+and community curator tags.
 
-[3] TECHNICAL IMPLEMENTATION:
-The project is built on an end-to-end full-stack JavaScript architecture using 
-Node.js, Express, React 18, and MongoDB Atlas (NoSQL), acting as an API Gateway 
-Reverse Proxy that securely aggregates multi-source external APIs. Every single 
-practical from our Web Technology curriculum (Practicals 1 through 7) is natively 
-integrated into this project."
+Throughout this project, I have implemented an end-to-end full-stack web 
+architecture using semantic HTML5, Vanilla CSS, pure JavaScript, React 18, 
+Node.js, Express, an API Gateway reverse-proxy, and a live MongoDB Atlas NoSQL 
+cloud database. Every single practical from our curriculum is natively woven 
+into this application. 
+
+Allow me to walk you through the live project screen-by-screen."
 
 
 --------------------------------------------------------------------------------
-PART 2: COMPLETE LAB PRACTICAL MAPPING (PRACTICALS 1 TO 7)
+STAGE 1: THE LANDING PAGE (index.html)
 --------------------------------------------------------------------------------
+[ACTION: Navigate to http://localhost:3001/index.html. Let Sir see the page. 
+ Move your mouse across the hero banner to show the particle constellation.]
 
-If asked: "How are your lab practicals mapped to this project?", explain:
+WHAT TO SAY:
+"We begin on our landing page.
 
-PRACTICAL 01: Web Application Architecture, HTML5 & CSS
-- Implementation: Responsive multi-page architecture with semantic HTML5 elements 
-  (<header>, <nav>, <main>, <aside>, <footer>, <canvas>).
-- Aesthetics: Warm retro pastel indie-zine theme with custom CSS variables, 
-  custom scrollbars, and tactile outline shadows.
+First, you will notice the visual aesthetic. Instead of generic AI neon themes, 
+we designed a warm, tactile retro-pastel indie zine layout with paper-cream 
+backgrounds, terracotta accents, and retro offset box-shadows.
 
-PRACTICAL 02: Client-Side Scripting using Pure JavaScript
-- Implementation: Force-directed physics graph calculations in graph.js.
-- Audio Visualizer: Uses HTML5 Web Audio API (AudioContext & AnalyserNode) 
-  to extract real-time FFT frequency spectrums onto a canvas element.
-- Library Management: Local crate management in crate.js with JSON export/import.
+>>> PRACTICAL 1 TIE-IN (HTML5 & Modern CSS):
+'Here, we implemented Practical 1. The entire structure is built with semantic 
+HTML5 tags — <header>, <nav>, <section>, <canvas>, and <footer>. The styling 
+uses a centralized CSS custom property (variable) design system without external 
+bloat, featuring responsive grid layouts and custom scrollbars.'
 
-PRACTICAL 03: Client-Side Validation using ReactJS
-- Implementation: React 18 Node Injector Component (react-node-injector.js).
-- Validation Rules: Controlled inputs with React useState hooks enforcing:
-  * Title & Artist: Minimum 2 characters, max 60 characters.
-  * BPM: Numeric integer between 40 and 280 BPM.
-  * Year: Numeric release year between 1970 and 2026.
-  * Stream URL: Regex format checking for valid domain and protocol.
-  * Sonic Tags: Required comma-separated tokenization.
-- Result: Instant visual validation state (red error callouts / green checkmarks).
+Now watch this interactive hero section as I move my mouse:
 
-PRACTICAL 04: Server-Side Validation using NodeJS
-- Implementation: Pure Node.js HTTP server (assignment4/) with modular architecture.
-- Structure: server.js, validator.js, and storage.js.
-- Validation Logic: Intercepts POST user input, validates constraints, and 
-  returns HTTP 400 Bad Request with field-by-field error lists, or HTTP 201 Created.
+>>> PRACTICAL 2 TIE-IN (Client-Side Pure JS Canvas Animation):
+'This dynamic constellation simulation is built with pure JavaScript on an HTML5 
+<canvas> element, fulfilling Practical 2. It calculates real-time Euclidean distance 
+between particles, draws connector vectors below a threshold, and applies physics 
+attraction towards the cursor coordinates at 60 frames per second.'
 
-PRACTICAL 05: Web Application Framework using ExpressJS
-- Implementation: Curator registration and onboarding framework (assignment5/).
-- Architecture: Express middleware pipeline, route modularization, body-parser, 
-  static file serving, and centralized error-handling middleware.
-
-PRACTICAL 06: RESTful API Design & Verification
-- Implementation: Full RESTful CRUD API on /api/v1/tracks (assignment6/).
-- HTTP Methods: GET (all/one), POST (create), PUT (idempotent full update), 
-  PATCH (partial update), DELETE (remove).
-- Verification: Complete Postman test suite (ObSound_REST_API.postman_collection.json).
-
-PRACTICAL 07: NoSQL Database using MongoDB & Mongoose
-- Implementation: Document store on MongoDB Atlas (obsound_nosql_db) via 
-  Mongoose ODM schema (SoundNode.js).
-- Features: 24-character BSON ObjectIds, schema enum validation, cloud connection 
-  string (mongodb+srv://), and live collections (soundnodes, playlists, users).
+Now, let's launch into our core discovery engine."
 
 
 --------------------------------------------------------------------------------
-PART 3: API GATEWAY ARCHITECTURE (PROFESSOR'S FREQUENT QUESTIONS)
+STAGE 2: THE GALAXY GRAPH DISCOVERY ENGINE (app.html)
 --------------------------------------------------------------------------------
+[ACTION: Click 'Launch Discovery Engine' -> Opens http://localhost:3001/app.html.
+ Show the floating colored nodes in the graph canvas.]
 
-Q: What is an API Gateway, which one are you using, and why?
-A: An API Gateway acts as a single reverse-proxy entry point between the frontend 
-   client and multiple external backend services.
-   In ObSound, our Node.js server (server.js) acts as the API Gateway. All client 
-   requests go to /api/* endpoints on our server, which dispatches requests to 
-   the appropriate upstream service.
+WHAT TO SAY:
+"This is the core of ObSound: our interactive relational sound graph. 
+Every node floating here is an underground micro-genre track — ranging from 
+Dungeon Synth and HexD to Deconstructed Club, Breakcore, and Mallsoft.
 
-   Why we use an API Gateway:
-   1. Security & Key Masking: Private API keys (e.g. LASTFM_API_KEY) stay 
-      securely on the server and are never exposed in client browser code.
-   2. CORS Resolution: Third-party APIs (Last.fm, iTunes CDN) block cross-origin 
-      browser calls. The server-side gateway performs HTTPS calls without CORS.
-   3. In-Memory Caching (TTL = 5 mins): Avoids rate-limiting bans and speeds up 
-      repeated queries with X-Cache: HIT responses.
-   4. Resilience / Fallback: If external APIs are down or blocked, the gateway 
-      seamlessly falls back to our offline mock dataset (mockData.js).
+>>> PRACTICAL 2 TIE-IN (Physics Graph Engine):
+'This is another major component of Practical 2 (Pure JavaScript). We implemented 
+a force-directed physics engine from scratch in graph.js. It runs a continuous 
+animation loop calculating:
+  1. Coulomb repulsion so nodes don't collide.
+  2. Hooke's spring attraction along edges that share sonic tags or harmonic keys.
+  3. Boundary damping so the graph settles into an organic equilibrium.'"
 
-Q: In which specific scenarios is each API Gateway endpoint used?
-A:
+
+--------------------------------------------------------------------------------
+STAGE 3: AUDIO PREVIEWS & REAL-TIME SPECTRUM VISUALIZER
+--------------------------------------------------------------------------------
+[ACTION: Click on any sound node in the graph. The audio preview starts playing, 
+ and the visualizer bars at the bottom of the screen dance in real-time.]
+
+WHAT TO SAY:
+"When I click on any track node, ObSound immediately streams a 30-second audio 
+preview, displays the artist lore in the inspection panel, and activates our 
+live spectrum visualizer at the bottom of the screen.
+
+>>> PRACTICAL 2 TIE-IN (HTML5 Web Audio API):
+'This visualizer directly leverages the browser's HTML5 Web Audio API. In pure 
+JavaScript, we route the audio stream through an AudioContext and AnalyserNode. 
+Using Fast Fourier Transform (FFT), it extracts the instantaneous frequency 
+spectrum and renders the dancing bars onto a dedicated 2D canvas in real-time.'"
+
+
+--------------------------------------------------------------------------------
+STAGE 4: THE API GATEWAY REVERSE PROXY & LYRICS
+--------------------------------------------------------------------------------
+[ACTION: Click 'View Lyrics' or look at the track inspection sidebar displaying 
+ artist biography and album artwork.]
+
+WHAT TO SAY:
+"You'll notice we display full synchronized lyrics, 600x600 high-res cover art, 
+and artist biography lore.
+
+>>> API GATEWAY & ARCHITECTURE EXPLANATION:
+'Sir, this is where our Node.js backend acts as an API Gateway Reverse Proxy:
+  1. Security: If the browser called external APIs directly, our private API keys 
+     would be exposed in the frontend network tab. By routing through our 
+     Node.js gateway (/api/lastfm, /api/lyrics, /api/preview), the keys remain 
+     encrypted on the server.
+  2. CORS Resolution: Third-party music APIs often block direct browser requests 
+     with Cross-Origin Resource Sharing errors. Our Node.js gateway fetches the 
+     data server-to-server and streams it cleanly to our client.
+  3. Caching: The gateway caches responses in memory with a 5-minute TTL, avoiding 
+     rate limits and giving instantaneous sub-millisecond responses on repeated queries.'"
+
+
+--------------------------------------------------------------------------------
+STAGE 5: INJECTING A SOUND NODE (REACT VALIDATION & NODE VALIDATION)
+--------------------------------------------------------------------------------
+[ACTION: Click the 'Inject Sound Node' button on app.html. The React modal opens.
+ Intentionally type invalid data: e.g. BPM '500', release year '1900', or empty title.
+ Show the instant red error callouts. Then correct them to valid values (e.g. 140 BPM).]
+
+WHAT TO SAY:
+"ObSound is a community-curated archive, meaning any listener can submit a 
+new underground sound node. 
+
+Watch what happens when I try to enter invalid data:
+
+>>> PRACTICAL 3 TIE-IN (Client-Side Validation using React 18):
+'Here we integrated Practical 3 using a React 18 component (react-node-injector.js). 
+Using React useState hooks and controlled inputs, every keystroke is validated in real-time:
+  * Title & Artist: Enforces 2 to 60 characters.
+  * BPM: Restricts tempo strictly between 40 and 280 BPM.
+  * Year: Must be between 1970 and 2026.
+  * Stream URL: Validates proper audio stream URL formats with regular expressions.
+The user gets immediate visual feedback with clear red error messages or green checks.'
+
+Now, when I click 'Inject to Graph':
+
+>>> PRACTICAL 4 TIE-IN (Server-Side Validation using Node.js):
+'Even though React validated the form on the client, client-side checks can be 
+bypassed by an attacker using Postman or cURL. 
+Therefore, this POST request is intercepted by our Node.js backend validator 
+(Practical 4). The server validates the payload independently before touching 
+the database. If an invalid payload is sent, the server responds with an 
+HTTP 400 Bad Request and detailed field-by-field error messages.'"
+
+
+--------------------------------------------------------------------------------
+STAGE 6: CURATOR VAULT & AUTHENTICATION (login.html)
+--------------------------------------------------------------------------------
+[ACTION: Click 'Curator Vault' in the navigation bar -> opens http://localhost:3001/login.html.
+ Click the button '🔑 Sign In as @adityaiche'. Show the session activates.]
+
+WHAT TO SAY:
+"Next is our Curator Authentication portal.
+
+>>> PRACTICAL 5 TIE-IN (Express.js Framework & Middleware Pipeline):
+'This portal demonstrates Practical 5 — using the Express.js framework. We built 
+a modular architecture with:
+  * express.urlencoded() and express.json() body-parsing middleware.
+  * Route modularization (/api/auth/login, /api/auth/register).
+  * Centralized error-handling middleware.
+  * Session and cookie token management.'
+
+And notice where this curator information lives:
+
+>>> PRACTICAL 7 TIE-IN (MongoDB Atlas NoSQL Store):
+'When I log in as @adityaiche, the credentials and curator profile are queried 
+from our live MongoDB Atlas cloud database in the users collection.'"
+
+
+--------------------------------------------------------------------------------
+STAGE 7: PERSONAL CRATE, SPOTIFY EXPORT & CLOUD PLAYLISTS (crate.html)
+--------------------------------------------------------------------------------
+[ACTION: Click 'My Crate' in navbar -> opens http://localhost:3001/crate.html.
+ Point out the saved tracks, '💚 Liked', and 'Copy Spotify Search List' button.]
+
+WHAT TO SAY:
+"Finally, we arrive at the Curator's Crate.
+
+Here, users can organize their saved tracks into custom underground playlists. 
+We also integrated Spotify Web helpers:
+  1. Each track has a '💚 Liked' toggle and a direct 'Play on Spotify' deep-link.
+  2. Curators can click 'Copy Spotify Search List' to export their underground 
+     crate directly into Spotify.
+
+>>> PRACTICAL 7 TIE-IN (NoSQL Document Store & Collections):
+'All crate playlists are synchronized with our live MongoDB Atlas cloud cluster 
+(cluster0.rc0j9kq.mongodb.net) under the obsound_nosql_db database:
+  * soundnodes collection: Stores each track document with its 24-character BSON ObjectId.
+  * playlists collection: Stores custom user playlists with nested track reference arrays.
+  * users collection: Stores curator profiles.'"
+
+
+================================================================================
+PART B: SIR'S FREQUENT QUESTIONS & VIVA DEFENSE GUIDE
+================================================================================
+
+--------------------------------------------------------------------------------
+QUESTION 1: "WHAT REST API METHODS DO YOU USE AND HOW DO YOU TEST THEM IN POSTMAN?"
+--------------------------------------------------------------------------------
+ANSWER:
+"Sir, we implemented a full RESTful CRUD API on /api/v1/tracks (Practical 6), 
+which we tested and verified using Postman:
+
+1. GET /api/v1/tracks
+   - Purpose: Fetches the entire collection of sound nodes.
+   - Idempotent: YES (Calling it 1 time or 100 times returns the exact same data without modifying the server).
+   - Status Code: 200 OK.
+
+2. GET /api/v1/tracks/:id
+   - Purpose: Fetches a single sound node by its unique ID.
+   - Idempotent: YES.
+   - Status Code: 200 OK (or 404 Not Found if missing).
+
+3. POST /api/v1/tracks
+   - Purpose: Creates a brand new sound node from client JSON payload.
+   - Idempotent: NO (Every repeated POST request creates a new record with a new ID).
+   - Status Code: 201 Created.
+
+4. PUT /api/v1/tracks/:id
+   - Purpose: Full replacement/update of an existing sound node. The payload contains 
+     the complete new state of the entity.
+   - Idempotent: YES (Repeating the same PUT with the same payload results in the identical final state).
+   - Status Code: 200 OK.
+
+5. PATCH /api/v1/tracks/:id
+   - Purpose: Partial update. For example, updating only the 'bpm' or adding a tag, 
+     without resending the entire track record.
+   - Idempotent: YES in our implementation (setting a specific property value).
+   - Status Code: 200 OK.
+
+6. DELETE /api/v1/tracks/:id
+   - Purpose: Deletes a sound node from the database.
+   - Idempotent: YES (Deleting the node once removes it; repeating the request still leaves it deleted).
+   - Status Code: 200 OK or 204 No Content.
+
+In Postman, we have an automated test collection (ObSound_REST_API.postman_collection.json) 
+with pm.test() assertions verifying status codes, response times under 200ms, 
+and schema validations."
+
+
+--------------------------------------------------------------------------------
+QUESTION 2: "EXACTLY WHICH API GATEWAY IS USED IN WHICH SCENARIO?"
+--------------------------------------------------------------------------------
+ANSWER:
+"Our Node.js server (server.js) acts as the API Gateway. Here is the scenario breakdown:
+
 +------------------------------------+--------------------------+-----------------------------------------+
 | Scenario / User Action             | Gateway Route & Method   | External Upstream Service Used          |
 +------------------------------------+--------------------------+-----------------------------------------+
-| Explore micro-genre tag            | GET /api/lastfm          | Last.fm AudioScrobbler 2.0 REST API     |
-| Audio preview & 600x600 cover art  | GET /api/preview         | Apple iTunes Search API / Deezer CDN    |
-| Synchronized song lyrics modal     | GET /api/lyrics          | LRCLIB Open Lyrics API                  |
-| Add track to Spotify Liked Songs   | spotify.js client helper | Spotify Web API & Desktop Deep Link     |
-| Curator login & profile session    | POST /api/auth/login     | Internal NoSQL Auth Engine (Atlas/JSON) |
-| Save playlist / crate to cloud     | POST /api/nosql/playlists| MongoDB Atlas Cloud Document Store      |
-| Inject new sound node into graph   | POST /api/nosql/tracks   | MongoDB Mongoose Schema Model           |
-| Check database cluster health      | GET /api/nosql/status    | MongoDB Atlas Cluster Health Check      |
+| 1. Explore micro-genre tag lore    | GET /api/lastfm          | Last.fm AudioScrobbler 2.0 API          |
+| 2. 30s Audio preview & cover art   | GET /api/preview         | Apple iTunes Search API / Deezer CDN    |
+| 3. Synchronized song lyrics        | GET /api/lyrics          | LRCLIB Open Source Lyrics API           |
+| 4. Add track to Spotify Liked      | spotify.js helper        | Spotify Web API / URI Deep-Link         |
+| 5. Curator login & session         | POST /api/auth/login     | Internal NoSQL Auth Engine (Atlas)      |
+| 6. Save playlist to cloud          | POST /api/nosql/playlists| MongoDB Atlas Cloud Document Store      |
+| 7. Inject new node to cloud        | POST /api/nosql/tracks   | MongoDB Mongoose Schema Model           |
+| 8. Check database health           | GET /api/nosql/status    | MongoDB Atlas Ping Diagnostics          |
 +------------------------------------+--------------------------+-----------------------------------------+
 
+Why we use this Gateway:
+  - Masking Private API keys so they are never visible to the client.
+  - Eliminating CORS browser blocking through server-side HTTP proxies.
+  - In-memory 5-minute caching to prevent rate-limiting bans.
+  - High availability fallback: if an external API fails, the gateway automatically 
+    returns our curated offline dataset."
+
 
 --------------------------------------------------------------------------------
-PART 4: WHY MONGODB (NOSQL) OVER RELATIONAL SQL (MYSQL/POSTGRESQL)?
+QUESTION 3: "WHY USE MONGODB (NOSQL) INSTEAD OF RELATIONAL SQL (MYSQL / POSTGRES)?"
 --------------------------------------------------------------------------------
+ANSWER:
+"Sir, there are three key architectural reasons why MongoDB is superior for ObSound:
 
-1. Polymorphic & Nested Data Structures:
-   Each track contains hierarchical acoustic vectors:
-   "acousticVectors": {
-     "harmonicKey": "D Minor",
-     "resonanceFrequency": 528,
-     "energyLevel": 9
+1. Hierarchical Acoustic Vectors:
+   Each sound node stores nested acoustic properties:
+   {
+     harmonicKey: 'D Minor',
+     resonanceFrequency: 528,
+     bpm: 140,
+     acousticVectors: { danceability: 0.82, energy: 0.91 }
    }
-   In SQL, this would require 3 normalized tables with foreign keys and expensive 
-   JOIN operations. In MongoDB, it is stored natively as a single document.
+   In relational SQL, storing this requires multiple normalized tables, foreign keys, 
+   and expensive JOIN operations on every graph render. In MongoDB, it is stored 
+   as a single native BSON document.
 
-2. Dynamic Array Indexing:
-   Tracks have variable-length arrays of user-generated sonic tags:
-   "tags": ["wall-of-sound", "shoegaze", "blastbeat"]
-   MongoDB natively indexes and queries arrays without requiring junction tables.
+2. Dynamic Sonic Tag Arrays:
+   Underground tracks have variable, user-generated tag arrays:
+   ['dungeon-synth', 'dark-ambient', 'tape-decay', 'lo-fi']
+   MongoDB natively indexes arrays. In SQL, querying arbitrary tags requires a 
+   Tracks table, a Tags table, and a many-to-many junction table with multi-table JOINs.
 
-3. Rapid Schema Evolution for Underground Music:
-   Different underground micro-genres require arbitrary metadata fields 
-   (e.g., Bandcamp URLs, cassette catalog codes, tape decay rate). 
-   MongoDB's document model allows schema evolution without database table migrations.
+3. Schema Flexibility for Underground Metadata:
+   Different niche genres require arbitrary custom fields (e.g. Bandcamp tape cassette 
+   codes, vinyl pressing numbers, sample origins). MongoDB allows schema evolution 
+   instantly without running database migration scripts or altering table schemas.
 
-4. MongoDB Atlas Cloud Integration:
-   ObSound connects to MongoDB Atlas cloud via the connection string:
-   mongodb+srv://adityaiche59_db_user:••••••••@cluster0.rc0j9kq.mongodb.net/obsound_nosql_db
-   Atlas provides automated 3-node replica sets and high availability.
-
-
---------------------------------------------------------------------------------
-PART 5: CLIENT-SIDE VS SERVER-SIDE VALIDATION EXPLAINED
---------------------------------------------------------------------------------
-
-- Client-Side Validation (React - react-node-injector.js):
-  Provides instantaneous user feedback as the curator types, preventing bad 
-  form submissions and reducing unnecessary server bandwidth.
-
-- Server-Side Validation (Node.js - server.js & validator.js):
-  Crucial for security. Client-side checks can be bypassed using Postman or cURL. 
-  The server inspects every payload, enforces data types and ranges, and rejects 
-  malformed input with HTTP 400 Bad Request, protecting the database from corruption.
+4. Cloud Scalability:
+   Our application connects directly to a 3-node MongoDB Atlas replica set 
+   (cluster0.rc0j9kq.mongodb.net), giving automated failover, backups, and horizontal scaling."
 
 
 --------------------------------------------------------------------------------
-PART 6: LIVE DEMO CHEAT SHEET FOR THE EXAMINER
+SUMMARY: HOW ALL PRACTICALS ARE LINKED TO OBSOUND
 --------------------------------------------------------------------------------
-
-1. Open Landing Page:
-   URL: http://localhost:3001/index.html
-   Action: Show the warm retro pastel design and interactive constellation canvas.
-
-2. Open Galaxy Graph & Audio Playback:
-   URL: http://localhost:3001/app.html
-   Action: Click any sound node. The 30-second audio preview plays instantly, 
-   and the Web Audio visualizer spectrum dances on the bottom bar.
-
-3. Show Curator Vault:
-   URL: http://localhost:3001/login.html
-   Action: Click "Sign In as @adityaiche". Show that the user session is active.
-
-4. Show MongoDB Atlas Collections:
-   URL: cloud.mongodb.com
-   Action: Click "Browse Collections" on Cluster0 -> obsound_nosql_db:
-   * soundnodes: Shows individual track documents with 24-char BSON _id.
-   * playlists: Shows saved user crate playlists.
-   * users: Shows registered curator profiles.
+- Practical 1: Semantic HTML5 structure + Warm Retro Pastel CSS design system.
+- Practical 2: Pure JavaScript Canvas constellation, Force-Directed Graph & Web Audio FFT Visualizer.
+- Practical 3: React 18 Node Injector with controlled form validation (useState).
+- Practical 4: Node.js server-side input validation and error dispatching.
+- Practical 5: Express.js web application framework, modular routing & middleware.
+- Practical 6: RESTful CRUD API on /api/v1/tracks with Postman test collection.
+- Practical 7: MongoDB Atlas NoSQL cloud database integration via Mongoose ODM.
 ================================================================================

@@ -31,34 +31,47 @@ Commercial music streaming services (such as Spotify and Apple Music) rely on co
 
 ---
 
-## 2. Curriculum Synthesis (Integrating Assignments 1, 2, and 3)
+## 2. Curriculum Synthesis (Integrating Practicals 1 through 7)
 
-This project synthesizes the core competencies of the entire Web Technology laboratory sequence:
+This project synthesizes the core competencies of the entire Web Technology laboratory curriculum:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       ObSound Web Application Platform                      │
-├──────────────────────────────┬──────────────────────────────┬───────────────┤
-│ Practical No. 1 (HTML/CSS)   │ Practical No. 2 (JS / JSON)  │ Practical No. 3 (ReactJS)
-├──────────────────────────────┼──────────────────────────────┼───────────────┤
-│ • Semantic HTML5 layout      │ • In-Memory Array structures │ • React 18 component tree
-│ • Custom CSS3 design tokens  │ • JSON serialization (CRUD)  │ • Controlled input states
-│ • Responsive grid & flexbox  │ • Crate management table     │ • Client-side form validation
-│ • Glassmorphism & animations │ • LocalStorage persistence   │ • Specific error feedback
-│ • Collapsible FAQ accordion  │ • One-click JSON file export │ • Live 2D graph node inject
-└──────────────────────────────┴──────────────────────────────┴───────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                             ObSound Full-Stack Audio Platform                                    │
+├──────────────────────────────┬──────────────────────────────┬────────────────────────────────────┤
+│ Practical 1: HTML5 & CSS3    │ Practical 2: JS & JSON       │ Practical 3: ReactJS               │
+├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
+│ • Semantic HTML5 layout      │ • Array data structures      │ • React 18 component tree          │
+│ • Custom CSS3 design tokens  │ • JSON serialization (CRUD)  │ • Controlled form state            │
+│ • Responsive grid & flexbox  │ • Crate management table     │ • Client-side form validation      │
+│ • Glassmorphism & animations │ • LocalStorage persistence   │ • Dynamic 2D graph node inject     │
+├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
+│ Practical 4: NodeJS Server   │ Practical 5: ExpressJS       │ Practical 6: RESTful API & Mongo   │
+├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
+│ • Pure NodeJS HTTP server    │ • Express web framework      │ • REST CRUD (/api/v1/tracks)       │
+│ • Modular validator.js       │ • Middleware pipeline        │ • Status codes (200, 201, 400, 404)│
+│ • Server-side validation     │ • Curator route handling     │ • Postman test suite collection    │
+│ • HTTP 400/201 status codes  │ • Central error middleware   │ • MongoDB & Mongoose NoSQL store   │
+└──────────────────────────────┴──────────────────────────────┴────────────────────────────────────┘
 ```
 
-* **Aspects from Practical 1 (Responsive Design & UI Structure):**
+* **Practical No. 1 (Responsive Design & UI Structure):**
   * Responsive multi-section layout (`public/index.html`) featuring an app header, hero section, philosophy features grid, micro-genre gateway pills, and an accordion FAQ.
   * Modern custom CSS styling with dark/light themes, Outfit and Space Grotesk typography, glassmorphism, and responsive breakpoints.
-* **Aspects from Practical 2 (JavaScript Arrays & JSON Handling):**
+* **Practical No. 2 (JavaScript Arrays & JSON Handling):**
   * Underground track catalog stored dynamically in JavaScript arrays and structured JSON objects.
   * Dedicated Crate Library view (`public/crate.html`) with live search, micro-genre folder filtering, and one-click JSON file export (`Blob` download).
-* **Core Requirements of Practical 3 (ReactJS & Client-Side Validation):**
+* **Practical No. 3 (ReactJS & Client-Side Validation):**
   * Interactive **React Form Validator Modal** (`public/react-node-injector.js`) mounted into the live 2D graph explorer.
   * Standalone **React Studio** view (`public/react-studio.html`) with live state inspection, CRUD table, and raw JSON preview.
-  * Multi-field input validation engine checking string bounds, numeric ranges, URL regex patterns, and duplicate prevention with immediate visual feedback.
+* **Practical No. 4 (Server-Side Validation using NodeJS):**
+  * Native Node.js HTTP server (`assignment4/server.js`) with request body stream buffer, modular validator (`validator.js`), storage layer (`storage.js`), and strict HTTP 400/201 error reporting.
+* **Practical No. 5 (Web Application Framework: ExpressJS):**
+  * ExpressJS web application (`assignment5/server.js`) with custom validation middleware (`validateCuratorSubmission`), routing, request body parsing, and centralized error handling.
+* **Practical No. 6 (RESTful API with Database & Postman):**
+  * Complete RESTful API (`assignment6/server.js`) implementing all CRUD operations on `/api/v1/tracks` with query filtering, file database persistence, and Postman Collection suite (`ObSound_REST_API.postman_collection.json`).
+* **Practical No. 7 (NoSQL Database: MongoDB & Mongoose):**
+  * MongoDB document database application (`assignment7/server.js`) with Mongoose ODM modeling, strict schema validation, 24-character BSON ObjectIds, CRUD queries (`find`, `create`, `findByIdAndUpdate`, `findByIdAndDelete`), and Postman test verification.
 
 ---
 

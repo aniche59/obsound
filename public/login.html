@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ObSound — Curator Vault Terminal</title>
+  <title>ObSound — Curator Vault</title>
   
-  <!-- Fonts -->
+  <!-- Retro & Editorial Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
   <style>
     :root {
-      --bg-dark: #070913;
-      --bg-surface: rgba(14, 18, 32, 0.88);
-      --neon-cyan: #00f5d4;
-      --neon-amber: #ff9e00;
-      --neon-magenta: #f72585;
-      --neon-purple: #7b2cbf;
-      --text-main: #ffffff;
-      --text-sub: #94a3b8;
-      --text-dim: #64748b;
-      --border-deck: rgba(0, 245, 212, 0.25);
-      --border-glow: rgba(0, 245, 212, 0.5);
+      --paper-bg: #FAF7F2;
+      --paper-card: #FFFFFF;
+      --ink-charcoal: #232533;
+      --ink-muted: #646A7E;
+      --pastel-terracotta: #E76F51;
+      --pastel-peach: #F4A261;
+      --pastel-sage: #76A08A;
+      --pastel-honey: #E9C46A;
+      --pastel-sand: #F4EFE6;
+      --border-ink: #232533;
+      --retro-shadow: 4px 4px 0px #232533;
+      --retro-shadow-sm: 2px 2px 0px #232533;
     }
 
     * {
@@ -33,119 +34,106 @@
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      background-color: var(--paper-bg);
+      color: var(--ink-charcoal);
       font-family: 'Space Grotesk', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 245, 212, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(255, 158, 0, 0.1) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(123, 44, 191, 0.08) 0%, transparent 60%);
+        radial-gradient(circle at 10% 15%, rgba(231, 111, 81, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(118, 160, 138, 0.12) 0%, transparent 40%),
+        linear-gradient(180deg, #FAF7F2 0%, #F5EFE6 100%);
       background-attachment: fixed;
     }
 
-    /* Ambient CRT Scanline texture overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 10;
-      opacity: 0.4;
-    }
-
-    /* Interactive Background Waveform Canvas */
-    #bg-canvas {
+    /* Ambient Canvas */
+    #ambient-canvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.45;
+      opacity: 0.6;
     }
 
-    /* Hardware Header */
-    .terminal-nav {
+    /* Retro Header */
+    .retro-nav {
       position: relative;
       z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 36px;
-      background: rgba(7, 9, 19, 0.85);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
+      padding: 18px 40px;
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--border-ink);
+      box-shadow: 0 2px 0px rgba(35, 37, 51, 0.04);
     }
 
-    .brand-logo {
+    .retro-brand {
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: #fff;
+      color: var(--ink-charcoal);
     }
 
-    .brand-logo h1 {
+    .retro-brand h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
       letter-spacing: -0.5px;
       margin: 0;
     }
 
-    .brand-logo h1 span {
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-amber));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .retro-brand h1 span {
+      color: var(--pastel-terracotta);
     }
 
-    .deck-badge {
+    .cassette-badge {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 4px;
-      background: rgba(0, 245, 212, 0.12);
-      border: 1px solid rgba(0, 245, 212, 0.35);
-      color: var(--neon-cyan);
-      letter-spacing: 1px;
+      background: var(--pastel-sand);
+      border: 1.5px solid var(--border-ink);
+      color: var(--ink-charcoal);
+      box-shadow: var(--retro-shadow-sm);
+      letter-spacing: 0.5px;
     }
 
-    .nav-actions {
+    .nav-links {
       display: flex;
       gap: 16px;
       align-items: center;
     }
 
-    .nav-btn {
-      color: var(--text-sub);
+    .nav-item {
+      color: var(--ink-charcoal);
       text-decoration: none;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s ease;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
     }
 
-    .nav-btn:hover {
-      color: var(--neon-cyan);
+    .nav-item:hover {
+      background: var(--pastel-sand);
+      border-color: var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
+      transform: translate(-1px, -1px);
     }
 
-    /* Main Console Container */
-    .console-wrapper {
+    /* Vault Box Container */
+    .vault-layout {
       position: relative;
       z-index: 20;
       flex: 1;
@@ -155,367 +143,362 @@
       padding: 40px 20px;
     }
 
-    .audio-rack {
+    .cassette-card {
       width: 100%;
-      max-width: 500px;
-      background: var(--bg-surface);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 36px 32px;
-      box-shadow: 
-        0 24px 60px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(0, 245, 212, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(24px);
+      max-width: 520px;
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 16px;
+      padding: 38px 34px;
+      box-shadow: var(--retro-shadow);
       position: relative;
     }
 
-    /* Screw bolt aesthetic in corners */
-    .audio-rack::before, .audio-rack::after {
-      content: "＋";
-      position: absolute;
-      font-family: monospace;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.2);
-    }
-    .audio-rack::before { top: 12px; left: 14px; }
-    .audio-rack::after { top: 12px; right: 14px; }
-
-    /* LED Status Line */
-    .rack-status-bar {
+    /* Retro Vinyl Label Header */
+    .tape-meta-bar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding-bottom: 16px;
+      align-items: center;
+      padding-bottom: 14px;
       margin-bottom: 22px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 2px dashed #E2DBD0;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-muted);
     }
 
-    .led-indicator {
-      display: flex;
+    .tape-status-pill {
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: var(--neon-cyan);
-      font-weight: 700;
+      background: #E8F3EE;
+      color: var(--pastel-sage);
+      border: 1px solid var(--pastel-sage);
+      padding: 2px 8px;
+      border-radius: 4px;
     }
 
-    .led-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--neon-cyan);
-      box-shadow: 0 0 10px var(--neon-cyan);
-      animation: pulseLed 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseLed {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .rack-header h2 {
+    .card-title-group h2 {
       font-family: 'Outfit', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
+      font-size: 32px;
+      font-weight: 900;
       letter-spacing: -0.5px;
+      color: var(--ink-charcoal);
       margin-bottom: 6px;
-      color: #ffffff;
     }
 
-    .rack-header h2 span {
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-amber));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .card-title-group h2 span {
+      color: var(--pastel-terracotta);
+      font-style: italic;
+      font-family: 'Newsreader', serif;
+      font-weight: 500;
     }
 
-    .rack-header p {
-      font-size: 13px;
-      color: var(--text-sub);
+    .card-title-group p {
+      font-size: 14px;
+      color: var(--ink-muted);
       line-height: 1.5;
       margin-bottom: 24px;
     }
 
-    /* Switch Tabs */
-    .tab-console {
-      display: flex;
-      background: rgba(8, 11, 20, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Personal User Ready-Login Badge */
+    .personal-account-box {
+      background: #FFF9ED;
+      border: 1.5px solid var(--border-ink);
       border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: var(--retro-shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .user-avatar-tag {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--pastel-terracotta);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border: 1.5px solid var(--border-ink);
+      flex-shrink: 0;
+    }
+
+    .account-quick-btn {
+      background: var(--pastel-sage);
+      color: #fff;
+      border: 1.5px solid var(--border-ink);
+      box-shadow: 2px 2px 0px var(--border-ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .account-quick-btn:hover {
+      background: #5d8a74;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--border-ink);
+    }
+
+    .account-quick-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--border-ink);
+    }
+
+    /* Switch Tabs */
+    .tab-strip {
+      display: flex;
+      background: var(--pastel-sand);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 10px;
       padding: 4px;
       margin-bottom: 24px;
     }
 
-    .tab-trigger {
+    .tab-item {
       flex: 1;
-      padding: 10px 14px;
+      padding: 10px;
       border: none;
       background: transparent;
-      color: var(--text-sub);
+      color: var(--ink-muted);
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.5px;
-      border-radius: 8px;
+      font-size: 13px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      transition: all 0.15s ease;
     }
 
-    .tab-trigger.active {
-      background: linear-gradient(135deg, rgba(0, 245, 212, 0.2), rgba(0, 245, 212, 0.08));
-      color: #ffffff;
-      border: 1px solid rgba(0, 245, 212, 0.4);
-      box-shadow: 0 4px 16px rgba(0, 245, 212, 0.15);
+    .tab-item.active {
+      background: #FFFFFF;
+      color: var(--ink-charcoal);
+      border: 1.5px solid var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
     }
 
-    /* Hardware Inputs */
-    .input-block {
+    /* Form Fields */
+    .field-group {
       margin-bottom: 18px;
     }
 
-    .input-label {
+    .field-label {
       display: block;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       font-weight: 700;
-      color: var(--neon-cyan);
+      color: var(--ink-charcoal);
       margin-bottom: 6px;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .hardware-input, .hardware-select {
+    .retro-input, .retro-select {
       width: 100%;
       padding: 13px 16px;
-      background: rgba(6, 8, 16, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      color: #ffffff;
+      background: #FAF7F2;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 8px;
+      color: var(--ink-charcoal);
       font-family: 'Space Grotesk', sans-serif;
       font-size: 14px;
       outline: none;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
 
-    .hardware-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+    .retro-input:focus, .retro-select:focus {
+      background: #FFFFFF;
+      border-color: var(--pastel-terracotta);
+      box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.15);
     }
 
-    .hardware-input:focus, .hardware-select:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.2), 0 0 20px rgba(0, 245, 212, 0.1);
-      background: rgba(10, 14, 26, 0.95);
-    }
-
-    .hardware-select option {
-      background: #090d1a;
-      color: #fff;
-    }
-
-    /* Master Action Button */
-    .master-btn {
+    /* Main Submit Button */
+    .btn-vault-submit {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, var(--neon-cyan), #00b4d8);
-      color: #050811;
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      border: none;
-      border-radius: 12px;
+      font-size: 15px;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      box-shadow: var(--retro-shadow);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 22px;
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 24px rgba(0, 245, 212, 0.35);
+      margin-top: 24px;
+      transition: all 0.15s ease;
     }
 
-    .master-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 245, 212, 0.5);
-      background: linear-gradient(135deg, #00ffe0, #00d2ff);
+    .btn-vault-submit:hover {
+      background: #d85d3f;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-ink);
     }
 
-    /* Live alert box */
-    .rack-alert {
+    .btn-vault-submit:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--border-ink);
+    }
+
+    /* Notification Box */
+    .vault-banner {
       display: none;
       padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 12px;
-      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-ink);
       font-family: 'JetBrains Mono', monospace;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Instant Demo Card */
-    .demo-strip {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-    }
-
-    .demo-btn {
-      background: rgba(255, 158, 0, 0.1);
-      border: 1px solid rgba(255, 158, 0, 0.4);
-      color: var(--neon-amber);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
       font-size: 12px;
-      padding: 8px 18px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .demo-btn:hover {
-      background: rgba(255, 158, 0, 0.2);
-      box-shadow: 0 0 20px rgba(255, 158, 0, 0.3);
-      transform: scale(1.02);
-    }
-
-    /* Curator badge preview */
-    .curator-preview {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      background: rgba(0, 245, 212, 0.06);
-      border: 1px dashed rgba(0, 245, 212, 0.4);
-      border-radius: 12px;
+      font-weight: 600;
       margin-bottom: 20px;
     }
 
-    .curator-avatar-disc {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-amber));
+    /* Avatar preview for registration */
+    .curator-tag-preview {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 900;
-      color: #060913;
-      font-size: 18px;
-      box-shadow: 0 0 16px rgba(0, 245, 212, 0.4);
+      gap: 12px;
+      padding: 12px;
+      background: var(--pastel-sand);
+      border: 1.5px dashed var(--border-ink);
+      border-radius: 10px;
+      margin-bottom: 18px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Dynamic Waveform Canvas -->
-  <canvas id="bg-canvas"></canvas>
+  <!-- Ambient Waveform Canvas -->
+  <canvas id="ambient-canvas"></canvas>
 
   <!-- Top Navigation -->
-  <header class="terminal-nav">
-    <a href="app.html" class="brand-logo">
+  <header class="retro-nav">
+    <a href="app.html" class="retro-brand">
       <h1>Ob<span>Sound</span></h1>
-      <span class="deck-badge">VAULT // CH-01</span>
+      <span class="cassette-badge">SIDE A // 33⅓ RPM</span>
     </a>
-    <div class="nav-actions">
-      <a href="app.html" class="nav-btn">
+    <div class="nav-links">
+      <a href="index.html" class="nav-item">
+        <i class="bi bi-house-door-fill"></i> Home
+      </a>
+      <a href="app.html" class="nav-item">
         <i class="bi bi-diagram-3-fill"></i> Galaxy Graph
       </a>
-      <a href="crate.html" class="nav-btn">
+      <a href="crate.html" class="nav-item">
         <i class="bi bi-disc-fill"></i> My Crate
-      </a>
-      <a href="index.html" class="nav-btn">
-        <i class="bi bi-house-door-fill"></i> Home
       </a>
     </div>
   </header>
 
-  <!-- Main Rack Console -->
-  <main class="console-wrapper">
-    <div class="audio-rack">
+  <!-- Main Vault Layout -->
+  <main class="vault-layout">
+    <div class="cassette-card">
       
-      <!-- Top Hardware Status -->
-      <div class="rack-status-bar">
-        <div class="led-indicator">
-          <div class="led-dot"></div>
-          <span>VAULT ONLINE</span>
+      <!-- Cassette Tape Status Bar -->
+      <div class="tape-meta-bar">
+        <div class="tape-status-pill">
+          <i class="bi bi-broadcast"></i> VAULT CONNECTED
         </div>
-        <div style="color: var(--text-dim);">
-          BUFFER: 44.1kHz • NoSQL SYNC
+        <div>
+          CATALOG: OBS-2026 // ATLAS SYNC
         </div>
       </div>
 
-      <!-- Header Title -->
-      <div class="rack-header">
-        <h2>Curator <span>Terminal</span></h2>
-        <p>Authenticate your curator identity to sync custom crates, sonic vectors &amp; subterranean sound nodes directly with the MongoDB Atlas cloud cluster.</p>
+      <!-- Title & Welcome -->
+      <div class="card-title-group">
+        <h2>Curator <span>Vault</span></h2>
+        <p>Your personal gateway to sync crates, playlists, and newly discovered subterranean sound nodes directly with MongoDB Atlas.</p>
       </div>
 
-      <!-- Tab Console -->
-      <div class="tab-console">
-        <button id="tab-login" class="tab-trigger active">
-          <i class="bi bi-key-fill"></i> SIGN IN
-        </button>
-        <button id="tab-register" class="tab-trigger">
-          <i class="bi bi-person-plus-fill"></i> NEW CURATOR ID
+      <!-- PRE-CONFIGURED LOGIN BADGE FOR THE USER (@adityaiche) -->
+      <div class="personal-account-box">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="user-avatar-tag">A</div>
+          <div>
+            <div style="font-weight: 800; font-size: 14px; color: var(--ink-charcoal);">@adityaiche</div>
+            <div style="font-size: 11px; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace;">Ready to Sign In</div>
+          </div>
+        </div>
+        <button type="button" id="auto-login-aditya" class="account-quick-btn">
+          <i class="bi bi-box-arrow-in-right"></i> Sign In as @adityaiche
         </button>
       </div>
 
-      <!-- Alert Banner -->
-      <div id="rack-alert" class="rack-alert"></div>
+      <!-- Switch Tabs -->
+      <div class="tab-strip">
+        <button id="tab-login" class="tab-item active">
+          <i class="bi bi-key-fill"></i> Sign In
+        </button>
+        <button id="tab-register" class="tab-item">
+          <i class="bi bi-person-plus-fill"></i> Register New Curator
+        </button>
+      </div>
 
-      <!-- 1. LOGIN FORM -->
+      <!-- Alert Notification Banner -->
+      <div id="vault-banner" class="vault-banner"></div>
+
+      <!-- 1. SIGN IN FORM -->
       <form id="form-login">
-        <div class="input-block">
-          <label for="login-id" class="input-label">// CURATOR HANDLE OR EMAIL</label>
-          <input type="text" id="login-id" class="hardware-input" placeholder="@analog_digger or digger@obsound.org" required autocomplete="off">
+        <div class="field-group">
+          <label for="login-user" class="field-label">Curator Handle or Email</label>
+          <input type="text" id="login-user" class="retro-input" placeholder="@adityaiche or @analog_digger" value="@adityaiche" required autocomplete="off">
         </div>
 
-        <div class="input-block">
-          <label for="login-pass" class="input-label">// ACCESS CIPHER</label>
-          <input type="password" id="login-pass" class="hardware-input" placeholder="••••••••••••" required>
+        <div class="field-group">
+          <label for="login-pass" class="field-label">Password</label>
+          <input type="password" id="login-pass" class="retro-input" placeholder="••••••••••••" value="aditya123" required>
         </div>
 
-        <button type="submit" class="master-btn" id="login-btn">
-          <i class="bi bi-box-arrow-in-right"></i> ACCESS VAULT // INITIALIZE SESSION
+        <button type="submit" class="btn-vault-submit" id="btn-login-submit">
+          <i class="bi bi-arrow-right-circle-fill"></i> Open Vault &amp; Sync Playlists
         </button>
       </form>
 
       <!-- 2. REGISTER FORM -->
       <form id="form-register" style="display: none;">
-        <div class="curator-preview">
-          <div class="curator-avatar-disc" id="preview-avatar">?</div>
+        <div class="curator-tag-preview">
+          <div class="user-avatar-tag" id="preview-avatar" style="background: var(--pastel-sage);">?</div>
           <div>
-            <div style="font-weight: 700; font-size: 14px; color: #fff;" id="preview-handle">@new_curator</div>
-            <div style="font-size: 11px; color: var(--neon-cyan); font-family: 'JetBrains Mono', monospace;" id="preview-genre">CORE: Vaporwave</div>
+            <div style="font-weight: 800; font-size: 14px; color: var(--ink-charcoal);" id="preview-handle">@new_digger</div>
+            <div style="font-size: 11px; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace;" id="preview-genre">Vaporwave &amp; Dungeon Synth</div>
           </div>
         </div>
 
-        <div class="input-block">
-          <label for="reg-handle" class="input-label">// CURATOR ALIAS</label>
-          <input type="text" id="reg-handle" class="hardware-input" placeholder="@underground_digger" required autocomplete="off">
+        <div class="field-group">
+          <label for="reg-handle" class="field-label">Curator Alias (Handle)</label>
+          <input type="text" id="reg-handle" class="retro-input" placeholder="@underground_digger" required autocomplete="off">
         </div>
 
-        <div class="input-block">
-          <label for="reg-email" class="input-label">// CONTACT FREQUENCY (EMAIL)</label>
-          <input type="email" id="reg-email" class="hardware-input" placeholder="curator@sound.io" required autocomplete="off">
+        <div class="field-group">
+          <label for="reg-email" class="field-label">Email Address</label>
+          <input type="email" id="reg-email" class="retro-input" placeholder="curator@sound.io" required autocomplete="off">
         </div>
 
-        <div class="input-block">
-          <label for="reg-genre" class="input-label">// PRIMARY SONIC AESTHETIC</label>
-          <select id="reg-genre" class="hardware-select">
+        <div class="field-group">
+          <label for="reg-genre" class="field-label">Primary Musical Niche</label>
+          <select id="reg-genre" class="retro-select">
             <option value="Dungeon Synth">Dungeon Synth</option>
             <option value="Deconstructed Club">Deconstructed Club</option>
             <option value="HexD">HexD</option>
@@ -527,25 +510,24 @@
             <option value="Midwest Emo">Midwest Emo</option>
             <option value="Phonk">Phonk / Wave</option>
             <option value="Ambient Drone">Ambient Drone</option>
-            <option value="Chiptune">Chiptune</option>
           </select>
         </div>
 
-        <div class="input-block">
-          <label for="reg-pass" class="input-label">// SECURITY CIPHER (MIN 6 CHARACTERS)</label>
-          <input type="password" id="reg-pass" class="hardware-input" placeholder="••••••••••••" required>
+        <div class="field-group">
+          <label for="reg-pass" class="field-label">Password (min 6 characters)</label>
+          <input type="password" id="reg-pass" class="retro-input" placeholder="••••••••••••" required>
         </div>
 
-        <button type="submit" class="master-btn" id="register-btn" style="background: linear-gradient(135deg, var(--neon-amber), #ff6b6b);">
-          <i class="bi bi-shield-check"></i> REGISTER CURATOR // PERSIST IN ATLAS
+        <button type="submit" class="btn-vault-submit" style="background: var(--pastel-sage);">
+          <i class="bi bi-shield-check"></i> Register ID &amp; Create Atlas Vault
         </button>
       </form>
 
-      <!-- Instant Demo Strip -->
-      <div class="demo-strip">
-        <p style="font-size: 11px; color: var(--text-dim); margin-bottom: 8px;">Want to inspect the graph immediately?</p>
-        <button type="button" id="quick-demo" class="demo-btn">
-          ⚡ One-Click Access as Demo Curator (@analog_digger)
+      <!-- Bottom Quick Switch -->
+      <div style="text-align: center; margin-top: 22px; padding-top: 18px; border-top: 1.5px dashed #E2DBD0;">
+        <span style="font-size: 12px; color: var(--ink-muted);">Alternate Demo Account:</span>
+        <button type="button" id="demo-digger" style="background: transparent; border: none; color: var(--pastel-terracotta); font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 6px; font-size: 12px;">
+          @analog_digger
         </button>
       </div>
 
@@ -558,14 +540,14 @@
     const tabRegister = document.getElementById('tab-register');
     const formLogin = document.getElementById('form-login');
     const formRegister = document.getElementById('form-register');
-    const alertBox = document.getElementById('rack-alert');
+    const banner = document.getElementById('vault-banner');
 
-    function showAlert(msg, isSuccess = false) {
-      alertBox.textContent = msg;
-      alertBox.style.display = 'block';
-      alertBox.style.background = isSuccess ? 'rgba(0, 245, 212, 0.12)' : 'rgba(255, 107, 107, 0.15)';
-      alertBox.style.border = isSuccess ? '1px solid var(--neon-cyan)' : '1px solid #ff6b6b';
-      alertBox.style.color = isSuccess ? 'var(--neon-cyan)' : '#ff6b6b';
+    function showBanner(msg, isSuccess = false) {
+      banner.textContent = msg;
+      banner.style.display = 'block';
+      banner.style.background = isSuccess ? '#E8F3EE' : '#FDE8E4';
+      banner.style.color = isSuccess ? '#2E6347' : '#B83A24';
+      banner.style.borderColor = isSuccess ? '#76A08A' : '#E76F51';
     }
 
     tabLogin.addEventListener('click', () => {
@@ -573,7 +555,7 @@
       tabRegister.classList.remove('active');
       formLogin.style.display = 'block';
       formRegister.style.display = 'none';
-      alertBox.style.display = 'none';
+      banner.style.display = 'none';
     });
 
     tabRegister.addEventListener('click', () => {
@@ -581,10 +563,10 @@
       tabLogin.classList.remove('active');
       formRegister.style.display = 'block';
       formLogin.style.display = 'none';
-      alertBox.style.display = 'none';
+      banner.style.display = 'none';
     });
 
-    // Handle live preview in register tab
+    // Registration preview
     const regHandle = document.getElementById('reg-handle');
     const regGenre = document.getElementById('reg-genre');
     const previewAvatar = document.getElementById('preview-avatar');
@@ -594,18 +576,33 @@
     regHandle.addEventListener('input', () => {
       let val = regHandle.value.trim();
       if (!val.startsWith('@') && val.length > 0) val = '@' + val;
-      previewHandle.textContent = val || '@new_curator';
+      previewHandle.textContent = val || '@new_digger';
       previewAvatar.textContent = (val.replace('@', '')[0] || '?').toUpperCase();
     });
 
     regGenre.addEventListener('change', () => {
-      previewGenre.textContent = 'CORE: ' + regGenre.value;
+      previewGenre.textContent = regGenre.value;
     });
 
-    // Handle Login Submit
+    // 1-Click Login for @adityaiche
+    document.getElementById('auto-login-aditya').addEventListener('click', async () => {
+      const userObj = {
+        _id: "6724a1b0f5b9d3e8a1000000",
+        handle: "@adityaiche",
+        email: "adityaiche59@obsound.org",
+        genre: "Darkwave & Synthwave",
+        avatar: "A"
+      };
+      localStorage.setItem('obsound_user', JSON.stringify(userObj));
+      localStorage.setItem('obsound_token', 'obsound_session_aditya_2026');
+      showBanner("Welcome back, @adityaiche! Opening your vault...", true);
+      setTimeout(() => window.location.href = 'app.html', 800);
+    });
+
+    // Standard Login
     formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const identifier = document.getElementById('login-id').value.trim();
+      const identifier = document.getElementById('login-user').value.trim();
       const password = document.getElementById('login-pass').value;
 
       try {
@@ -615,18 +612,18 @@
           body: JSON.stringify({ identifier, password })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Access denied');
+        if (!res.ok) throw new Error(data.error || 'Login rejected');
 
         localStorage.setItem('obsound_user', JSON.stringify(data.user));
         localStorage.setItem('obsound_token', data.token);
-        showAlert(`// WELCOME ${data.user.handle} • SESSION INITIALIZED • REDIRECTING...`, true);
-        setTimeout(() => window.location.href = 'app.html', 900);
+        showBanner(`Welcome back, ${data.user.handle}! Opening vault...`, true);
+        setTimeout(() => window.location.href = 'app.html', 800);
       } catch (err) {
-        showAlert('// ACCESS ERROR: ' + err.message);
+        showBanner("Error: " + err.message);
       }
     });
 
-    // Handle Register Submit
+    // Register Submit
     formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
       let handle = regHandle.value.trim();
@@ -636,7 +633,7 @@
       const genre = regGenre.value;
 
       if (password.length < 6) {
-        showAlert('// ERROR: Password requires 6+ characters');
+        showBanner("Password must be at least 6 characters.");
         return;
       }
 
@@ -651,68 +648,64 @@
 
         localStorage.setItem('obsound_user', JSON.stringify(data.user));
         localStorage.setItem('obsound_token', data.token);
-        showAlert('// CURATOR ID CREATED IN MONGODB • REDIRECTING TO GRAPH...', true);
+        showBanner(`Curator ${data.user.handle} registered in MongoDB Atlas! Redirecting...`, true);
         setTimeout(() => window.location.href = 'app.html', 1000);
       } catch (err) {
-        showAlert('// ERROR: ' + err.message);
+        showBanner("Error: " + err.message);
       }
     });
 
-    // One-Click Demo
-    document.getElementById('quick-demo').addEventListener('click', () => {
-      const demo = {
-        id: "curator_demo_01",
-        handle: "@analog_digger",
-        email: "digger@obsound.org",
-        genre: "Vaporwave",
-        avatar: "A"
-      };
-      localStorage.setItem('obsound_user', JSON.stringify(demo));
-      localStorage.setItem('obsound_token', 'demo_vault_token_777');
-      showAlert('// DEMO SESSION INITIALIZED AS @analog_digger • LAUNCHING...', true);
-      setTimeout(() => window.location.href = 'app.html', 700);
+    // Demo Digger Button
+    document.getElementById('demo-digger').addEventListener('click', () => {
+      document.getElementById('login-user').value = '@analog_digger';
+      document.getElementById('login-pass').value = 'diggerpass';
+      document.getElementById('form-login').dispatchEvent(new Event('submit'));
     });
 
-    // Ambient Audio-Waveform Canvas Background
-    const canvas = document.getElementById('bg-canvas');
+    // Ambient Pastel Floating Rings Canvas
+    const canvas = document.getElementById('ambient-canvas');
     const ctx = canvas.getContext('2d');
-    let width, height;
+    let w, h;
 
     function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
     }
     window.addEventListener('resize', resize);
     resize();
 
-    let step = 0;
-    function drawWaveform() {
-      ctx.clearRect(0, 0, width, height);
-      step += 0.02;
+    const particles = [];
+    const colors = ['rgba(231, 111, 81, 0.15)', 'rgba(244, 162, 97, 0.15)', 'rgba(118, 160, 138, 0.18)', 'rgba(233, 196, 106, 0.15)'];
 
-      const lines = [
-        { color: 'rgba(0, 245, 212, 0.15)', speed: 1.0, freq: 0.003, amp: 50 },
-        { color: 'rgba(255, 158, 0, 0.12)', speed: 1.4, freq: 0.002, amp: 70 },
-        { color: 'rgba(123, 44, 191, 0.18)', speed: 0.7, freq: 0.004, amp: 40 }
-      ];
-
-      lines.forEach(l => {
-        ctx.beginPath();
-        ctx.lineWidth = 1.5;
-        ctx.strokeStyle = l.color;
-        const midY = height * 0.55;
-
-        for (let x = 0; x < width; x += 6) {
-          const y = midY + Math.sin(x * l.freq + step * l.speed) * l.amp + Math.cos(x * 0.001 - step) * 20;
-          if (x === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
+    for (let i = 0; i < 24; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 40 + 20,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4
       });
-
-      requestAnimationFrame(drawWaveform);
     }
-    drawWaveform();
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -50) p.x = w + 50;
+        if (p.x > w + 50) p.x = -50;
+        if (p.y < -50) p.y = h + 50;
+        if (p.y > h + 50) p.y = -50;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>

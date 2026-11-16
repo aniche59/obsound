@@ -3,28 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ObSound — Subterranean Music Discovery Network</title>
+  <title>ObSound — Subterranean Music Discovery</title>
   
-  <!-- Modern & Retro Typography -->
+  <!-- Editorial & Retro Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
   <style>
     :root {
-      --bg-void: #060812;
-      --bg-deck: #0b0f1e;
-      --card-glass: rgba(14, 19, 36, 0.85);
-      --neon-cyan: #00f5d4;
-      --neon-amber: #ff9e00;
-      --neon-magenta: #f72585;
-      --neon-purple: #9d4edd;
-      --text-white: #ffffff;
-      --text-slate: #94a3b8;
-      --text-dim: #64748b;
-      --border-line: rgba(255, 255, 255, 0.1);
-      --border-glow: rgba(0, 245, 212, 0.35);
+      --paper-bg: #FAF7F2;
+      --paper-card: #FFFFFF;
+      --paper-subtle: #F4EFE6;
+      --ink-dark: #232533;
+      --ink-muted: #646A7E;
+      --ink-soft: #8D95AA;
+      --pastel-terracotta: #E76F51;
+      --pastel-peach: #F4A261;
+      --pastel-sage: #76A08A;
+      --pastel-honey: #E9C46A;
+      --pastel-clay: #DDA15E;
+      --border-ink: #232533;
+      --retro-shadow: 4px 4px 0px #232533;
+      --retro-shadow-sm: 2px 2px 0px #232533;
+      --retro-shadow-lg: 6px 6px 0px #232533;
     }
 
     * {
@@ -38,57 +41,42 @@
     }
 
     body {
-      background-color: var(--bg-void);
-      color: var(--text-white);
+      background-color: var(--paper-bg);
+      color: var(--ink-dark);
       font-family: 'Space Grotesk', sans-serif;
-      overflow-x: hidden;
       min-height: 100vh;
+      overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 10% 20%, rgba(0, 245, 212, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(255, 158, 0, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.05) 0%, transparent 50%);
-      background-attachment: fixed;
+        radial-gradient(circle at 10% 15%, rgba(244, 162, 97, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(118, 160, 138, 0.12) 0%, transparent 40%);
     }
 
-    /* Ambient Scanline Filter */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.12),
-        rgba(0, 0, 0, 0.12) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 100;
-      opacity: 0.35;
+    /* Tactile Paper Cards */
+    .tactile-card {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 14px;
+      box-shadow: var(--retro-shadow);
+      transition: all 0.15s ease;
     }
 
-    /* Glass Container */
-    .glass-deck {
-      background: var(--card-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-line);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
-      border-radius: 18px;
+    .tactile-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--retro-shadow-lg);
     }
 
-    /* Header Navigation */
-    .landing-header {
+    /* Top Navigation */
+    .landing-nav {
       position: sticky;
       top: 0;
-      z-index: 90;
-      background: rgba(6, 8, 18, 0.88);
-      border-bottom: 1px solid var(--border-line);
-      backdrop-filter: blur(16px);
-      padding: 16px 40px;
+      z-index: 100;
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--border-ink);
+      padding: 18px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 0px rgba(35, 37, 51, 0.05);
     }
 
     .brand-logo {
@@ -96,140 +84,137 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
+      color: var(--ink-dark);
     }
 
     .brand-logo h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 900;
       letter-spacing: -0.5px;
-      color: #fff;
       margin: 0;
     }
 
     .brand-logo h1 span {
-      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-amber));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--pastel-terracotta);
     }
 
-    .status-pill {
+    .retro-badge-pill {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       font-weight: 700;
       padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(0, 245, 212, 0.12);
-      border: 1px solid rgba(0, 245, 212, 0.4);
-      color: var(--neon-cyan);
+      border-radius: 6px;
+      background: #E8F3EE;
+      border: 1.5px solid var(--pastel-sage);
+      color: #2E6347;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--neon-cyan);
-      box-shadow: 0 0 8px var(--neon-cyan);
-      animation: pulseDot 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .nav-links {
+    .nav-items {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       align-items: center;
     }
 
-    .nav-link {
-      color: var(--text-slate);
+    .nav-btn {
+      color: var(--ink-dark);
       text-decoration: none;
       font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s ease;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
     }
 
-    .nav-link:hover, .nav-link.active {
-      color: var(--neon-cyan);
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--paper-subtle);
+      border-color: var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
     }
 
     .btn-header-cta {
-      padding: 8px 20px;
-      background: linear-gradient(135deg, var(--neon-cyan), #00b4d8);
-      color: #060913;
+      padding: 10px 22px;
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
       font-size: 13px;
-      border-radius: 20px;
+      border: 2px solid var(--border-ink);
+      border-radius: 6px;
+      box-shadow: var(--retro-shadow-sm);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 16px rgba(0, 245, 212, 0.3);
+      transition: all 0.15s ease;
     }
 
     .btn-header-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0, 245, 212, 0.5);
+      background: #d85d3f;
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    .btn-header-cta:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px var(--border-ink);
     }
 
     /* Hero Section */
     .hero-container {
-      max-width: 1240px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 90px 24px 70px;
+      padding: 80px 24px 60px;
       text-align: center;
-      position: relative;
     }
 
-    .hero-tagline-badge {
+    .zine-tag {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 6px 16px;
-      border-radius: 30px;
-      background: rgba(255, 158, 0, 0.12);
-      border: 1px solid rgba(255, 158, 0, 0.4);
-      color: var(--neon-amber);
+      border-radius: 20px;
+      background: #FFF9ED;
+      border: 1.5px solid var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       font-weight: 700;
+      color: var(--ink-dark);
       margin-bottom: 24px;
     }
 
-    .hero-heading {
+    .hero-title {
       font-family: 'Outfit', sans-serif;
       font-size: 64px;
       font-weight: 900;
       line-height: 1.1;
       letter-spacing: -1.5px;
-      max-width: 960px;
+      max-width: 900px;
       margin: 0 auto 24px;
-      color: #ffffff;
+      color: var(--ink-dark);
     }
 
-    .hero-heading span.gradient-text {
-      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-amber) 50%, var(--neon-magenta) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .hero-title span.editorial {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      color: var(--pastel-terracotta);
+      font-weight: 500;
     }
 
-    .hero-desc {
+    .hero-lead {
       font-size: 19px;
-      color: var(--text-slate);
-      max-width: 720px;
+      color: var(--ink-muted);
+      max-width: 680px;
       margin: 0 auto 40px;
       line-height: 1.6;
     }
 
-    .hero-actions {
+    .hero-btn-row {
       display: flex;
       gap: 16px;
       justify-content: center;
@@ -238,310 +223,315 @@
       margin-bottom: 50px;
     }
 
-    .btn-primary-hero {
+    .btn-tactile-primary {
       padding: 16px 36px;
-      background: linear-gradient(135deg, var(--neon-cyan), #00b4d8);
-      color: #060913;
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
       font-size: 15px;
-      letter-spacing: 0.5px;
-      border-radius: 30px;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      box-shadow: var(--retro-shadow);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 8px 30px rgba(0, 245, 212, 0.4);
-      transition: all 0.25s ease;
+      transition: all 0.15s ease;
     }
 
-    .btn-primary-hero:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 245, 212, 0.6);
-      background: linear-gradient(135deg, #00ffe0, #00d2ff);
+    .btn-tactile-primary:hover {
+      background: #d85d3f;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-ink);
     }
 
-    .btn-secondary-hero {
+    .btn-tactile-primary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--border-ink);
+    }
+
+    .btn-tactile-secondary {
       padding: 16px 32px;
-      background: rgba(255, 255, 255, 0.06);
-      color: #ffffff;
+      background: #FFFFFF;
+      color: var(--ink-dark);
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
       font-size: 15px;
-      border: 1px solid var(--border-line);
-      border-radius: 30px;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      box-shadow: var(--retro-shadow);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.25s ease;
+      transition: all 0.15s ease;
     }
 
-    .btn-secondary-hero:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--neon-cyan);
-      color: var(--neon-cyan);
+    .btn-tactile-secondary:hover {
+      background: var(--paper-subtle);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-ink);
     }
 
-    /* Live Interactive Hero Canvas Box */
-    .hero-graph-preview {
+    .btn-tactile-secondary:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px var(--border-ink);
+    }
+
+    /* Retro Hero Canvas Container */
+    .hero-tape-deck {
       max-width: 1040px;
       margin: 0 auto;
       height: 380px;
-      border-radius: 20px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      box-shadow: var(--retro-shadow-lg);
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(0, 245, 212, 0.3);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 245, 212, 0.15);
-      background: #080b18;
     }
 
-    #hero-canvas {
+    #hero-pastel-canvas {
       width: 100%;
       height: 100%;
       display: block;
     }
 
-    .hero-graph-overlay {
+    .tape-deck-bar {
       position: absolute;
-      bottom: 16px;
-      left: 20px;
-      right: 20px;
+      bottom: 14px;
+      left: 18px;
+      right: 18px;
+      background: var(--paper-bg);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 8px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(7, 10, 20, 0.75);
-      backdrop-filter: blur(12px);
-      padding: 10px 18px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: var(--text-slate);
+      font-weight: 700;
+      color: var(--ink-muted);
+      box-shadow: var(--retro-shadow-sm);
       pointer-events: none;
     }
 
-    /* Feature Grid Section */
+    /* Features Section */
     .section-wrap {
-      max-width: 1240px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 90px 24px;
+      padding: 80px 24px;
     }
 
-    .section-tag {
+    .section-eyebrow {
       font-family: 'JetBrains Mono', monospace;
-      color: var(--neon-cyan);
       font-size: 12px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      color: var(--pastel-terracotta);
+      letter-spacing: 1.5px;
       text-align: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
     }
 
-    .section-title {
+    .section-headline {
       font-family: 'Outfit', sans-serif;
-      font-size: 38px;
+      font-size: 40px;
       font-weight: 900;
       letter-spacing: -0.5px;
       text-align: center;
       margin-bottom: 16px;
-      color: #ffffff;
+      color: var(--ink-dark);
     }
 
-    .section-sub {
+    .section-desc {
       font-size: 16px;
-      color: var(--text-slate);
+      color: var(--ink-muted);
       text-align: center;
-      max-width: 600px;
-      margin: 0 auto 60px;
+      max-width: 580px;
+      margin: 0 auto 50px;
       line-height: 1.6;
     }
 
-    .features-grid {
+    .feature-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
     }
 
-    .rack-card {
+    .feature-card {
       padding: 32px 28px;
-      border-radius: 16px;
-      transition: all 0.25s ease;
-      position: relative;
+      background: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 14px;
+      box-shadow: var(--retro-shadow);
+      transition: all 0.15s ease;
     }
 
-    .rack-card:hover {
-      border-color: rgba(0, 245, 212, 0.4);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 245, 212, 0.12);
+    .feature-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-ink);
     }
 
-    .rack-code {
+    .feature-stamp {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
-      color: var(--neon-cyan);
+      font-weight: 800;
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border-ink);
       margin-bottom: 16px;
+      background: var(--paper-subtle);
     }
 
-    .rack-icon {
+    .feature-icon-badge {
       font-size: 32px;
-      color: var(--neon-amber);
       margin-bottom: 16px;
       display: inline-block;
     }
 
-    .rack-card h3 {
+    .feature-card h3 {
       font-family: 'Outfit', sans-serif;
-      font-size: 21px;
+      font-size: 22px;
       font-weight: 800;
       margin-bottom: 12px;
-      color: #ffffff;
+      color: var(--ink-dark);
     }
 
-    .rack-card p {
+    .feature-card p {
       font-size: 14px;
-      color: var(--text-slate);
+      color: var(--ink-muted);
       line-height: 1.6;
     }
 
-    /* Micro-Genre Showcase Grid */
+    /* Microgenre Showcase */
     .genre-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 20px;
     }
 
-    .genre-tile {
+    .genre-card {
       padding: 24px;
-      border-radius: 14px;
+      background: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      box-shadow: var(--retro-shadow);
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 190px;
-      transition: all 0.25s ease;
-      border: 1px solid var(--border-line);
+      transition: all 0.15s ease;
       position: relative;
-      overflow: hidden;
     }
 
-    .genre-tile::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 70px;
-      height: 70px;
-      background: radial-gradient(circle, rgba(0, 245, 212, 0.15), transparent 70%);
-      pointer-events: none;
+    .genre-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--border-ink);
+      border-color: var(--pastel-terracotta);
     }
 
-    .genre-tile:hover {
-      border-color: var(--neon-cyan);
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 245, 212, 0.2);
-    }
-
-    .genre-tile-header h4 {
+    .genre-card h4 {
       font-family: 'Outfit', sans-serif;
       font-size: 22px;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--ink-dark);
       margin-bottom: 6px;
     }
 
-    .genre-tile-header p {
-      font-size: 12px;
-      color: var(--text-slate);
+    .genre-card p {
+      font-size: 13px;
+      color: var(--ink-muted);
       line-height: 1.5;
     }
 
-    .genre-tile-footer {
+    .genre-card-foot {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
-      color: var(--neon-cyan);
       font-weight: 700;
+      color: var(--pastel-terracotta);
     }
 
-    /* CTA Section */
-    .cta-deck {
+    /* CTA Card */
+    .cta-card {
       text-align: center;
-      padding: 80px 32px;
-      border-radius: 24px;
-      border: 1px solid rgba(0, 245, 212, 0.3);
-      background: radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.08) 0%, rgba(11, 15, 30, 0.95) 70%);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+      padding: 70px 32px;
+      background: #FFF9ED;
+      border: 2px solid var(--border-ink);
+      border-radius: 20px;
+      box-shadow: var(--retro-shadow-lg);
       margin-bottom: 80px;
     }
 
-    .cta-deck h2 {
+    .cta-card h2 {
       font-family: 'Outfit', sans-serif;
       font-size: 42px;
       font-weight: 900;
-      letter-spacing: -0.5px;
-      margin-bottom: 18px;
-      color: #fff;
+      color: var(--ink-dark);
+      margin-bottom: 16px;
     }
 
-    .cta-deck p {
+    .cta-card p {
       font-size: 16px;
-      color: var(--text-slate);
+      color: var(--ink-muted);
       max-width: 580px;
       margin: 0 auto 36px;
       line-height: 1.6;
     }
 
     /* Footer */
-    .terminal-footer {
-      border-top: 1px solid var(--border-line);
+    .retro-footer {
+      border-top: 2px solid var(--border-ink);
       padding: 36px 40px;
-      background: rgba(4, 6, 14, 0.95);
+      background: #FFFFFF;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
       font-size: 13px;
-      color: var(--text-dim);
+      color: var(--ink-muted);
     }
 
     .footer-brand {
       font-family: 'Outfit', sans-serif;
       font-weight: 800;
-      font-size: 16px;
-      color: #fff;
+      font-size: 18px;
+      color: var(--ink-dark);
     }
 
     @media (max-width: 860px) {
-      .hero-heading { font-size: 42px; }
-      .landing-header { padding: 14px 20px; }
-      .nav-links { display: none; }
+      .hero-title { font-size: 42px; }
+      .landing-nav { padding: 14px 20px; }
+      .nav-items { display: none; }
     }
   </style>
 </head>
 <body>
 
   <!-- Top Navigation -->
-  <header class="landing-header">
+  <header class="landing-nav">
     <a href="index.html" class="brand-logo">
       <h1>Ob<span>Sound</span></h1>
-      <span class="status-pill">
-        <span class="status-dot"></span> 12,480 NODES ONLINE
+      <span class="retro-badge-pill">
+        <i class="bi bi-disc"></i> 12,480 NODES MAPPED
       </span>
     </a>
 
-    <nav class="nav-links">
-      <a href="index.html" class="nav-link active">Home</a>
-      <a href="app.html" class="nav-link">Galaxy Graph</a>
-      <a href="crate.html" class="nav-link">My Crate</a>
-      <a href="react-studio.html" class="nav-link">React Studio</a>
-      <a href="login.html" class="nav-link">Curator Vault</a>
+    <nav class="nav-items">
+      <a href="index.html" class="nav-btn active">Home</a>
+      <a href="app.html" class="nav-btn">Galaxy Graph</a>
+      <a href="crate.html" class="nav-btn">My Crate</a>
+      <a href="react-studio.html" class="nav-btn">React Studio</a>
+      <a href="login.html" class="nav-btn">Curator Vault</a>
     </nav>
 
     <div>
@@ -553,172 +543,172 @@
 
   <!-- Hero Section -->
   <section class="hero-container">
-    <div class="hero-tagline-badge">
-      <i class="bi bi-soundwave"></i> SUBTERRANEAN MUSIC DISCOVERY NETWORK
+    <div class="zine-tag">
+      <i class="bi bi-tape"></i> INDEPENDENT SUBTERRANEAN MUSIC NETWORK
     </div>
 
-    <h2 class="hero-heading">
-      Explore Music Beyond The <br>
-      <span class="gradient-text">Commercial Algorithm.</span>
+    <h2 class="hero-title">
+      Dig Deeper. Explore Music <br>
+      Beyond The <span class="editorial">Commercial Feed.</span>
     </h2>
 
-    <p class="hero-desc">
-      ObSound charts underground micro-genres, forgotten cassette gems, and sonic affinities into an interactive physics-driven constellation graph. Dig deep into sound networks without corporate playlists or pay-for-play feeds.
+    <p class="hero-lead">
+      ObSound charts forgotten cassette gems, underground micro-genres, and acoustic affinities into an interactive relational graph. Curated by humans, with zero advertising or algorithmic echo chambers.
     </p>
 
-    <div class="hero-actions">
-      <a href="app.html" class="btn-primary-hero">
-        <i class="bi bi-compass-fill"></i> Launch Discovery Graph
+    <div class="hero-btn-row">
+      <a href="app.html" class="btn-tactile-primary">
+        <i class="bi bi-compass-fill"></i> Explore Galaxy Graph
       </a>
-      <a href="login.html" class="btn-secondary-hero">
-        <i class="bi bi-shield-lock-fill"></i> Curator Vault Login
+      <a href="login.html" class="btn-tactile-secondary">
+        <i class="bi bi-key-fill"></i> Curator Vault (@adityaiche)
       </a>
-      <a href="crate.html" class="btn-secondary-hero">
-        <i class="bi bi-disc-fill"></i> Inspect Crate
+      <a href="crate.html" class="btn-tactile-secondary">
+        <i class="bi bi-collection-play-fill"></i> My Crate
       </a>
     </div>
 
-    <!-- Live Interactive Hero Canvas Network -->
-    <div class="hero-graph-preview">
-      <canvas id="hero-canvas"></canvas>
-      <div class="hero-graph-overlay">
-        <span><i class="bi bi-cpu"></i> 2D FORCE SIMULATION ACTIVE</span>
-        <span>INTERACT: MOVE MOUSE OVER NODES</span>
-        <span style="color: var(--neon-cyan);">44.1kHz • BUFFERED</span>
+    <!-- Live Interactive Retro Constellation Canvas -->
+    <div class="hero-tape-deck">
+      <canvas id="hero-pastel-canvas"></canvas>
+      <div class="tape-deck-bar">
+        <span><i class="bi bi-record-circle"></i> VINTAGE CASSETTE RADAR</span>
+        <span>HOVER TO ATTRACT MUSIC NODES</span>
+        <span style="color: var(--pastel-terracotta);">SIDE A • STEREO</span>
       </div>
     </div>
   </section>
 
   <!-- Feature Grid Section -->
   <section class="section-wrap">
-    <div class="section-tag">// ARCHITECTURAL SPECIFICATIONS</div>
-    <h2 class="section-title">The Anatomy of Underground Digging</h2>
-    <p class="section-sub">Engineered to bypass mainstream streaming silos through acoustic vectors, relational graphs, and community curation.</p>
+    <div class="section-eyebrow">The Philosophy of Digging</div>
+    <h2 class="section-headline">Engineered for the Modern Crate Digger</h2>
+    <p class="section-desc">Experience subterranean sounds through physical acoustic affinity, open-source NoSQL persistence, and direct Spotify integration.</p>
 
-    <div class="features-grid">
+    <div class="feature-grid">
       
-      <div class="glass-deck rack-card">
-        <div class="rack-code">01 // FORCE PHYSICS</div>
-        <div class="rack-icon"><i class="bi bi-diagram-3-fill"></i></div>
+      <div class="feature-card">
+        <span class="feature-stamp" style="background: #FDE8E4; color: #B83A24;">01 // CONSTELLATION GRAPH</span>
+        <div class="feature-icon-badge" style="color: var(--pastel-terracotta);"><i class="bi bi-diagram-3-fill"></i></div>
         <h3>Relational Web Graph</h3>
-        <p>Traverse micro-genres, artists, and tracks as dynamic floating celestial bodies. Real-time spring forces group similar acoustic profiles together dynamically.</p>
+        <p>Traverse micro-genres, artists, and tracks as dynamic floating physical nodes. Real-time spring forces group similar acoustic profiles together naturally.</p>
       </div>
 
-      <div class="glass-deck rack-card">
-        <div class="rack-code">02 // NOSQL PERSISTENCE</div>
-        <div class="rack-icon" style="color: var(--neon-cyan);"><i class="bi bi-hdd-network-fill"></i></div>
-        <h3>MongoDB Cloud Storage</h3>
-        <p>Your custom crates, curated tracks, and underground node injections synchronize seamlessly to your MongoDB Atlas cluster with strict schema validation.</p>
+      <div class="feature-card">
+        <span class="feature-stamp" style="background: #E8F3EE; color: #2E6347;">02 // MONGODB ATLAS SYNC</span>
+        <div class="feature-icon-badge" style="color: var(--pastel-sage);"><i class="bi bi-hdd-network-fill"></i></div>
+        <h3>NoSQL Cloud Vault</h3>
+        <p>Your playlists, saved crates, and new sound node submissions sync directly to your live MongoDB Atlas cloud database with strict schema validation.</p>
       </div>
 
-      <div class="glass-deck rack-card">
-        <div class="rack-code">03 // SPOTIFY CONNECT</div>
-        <div class="rack-icon" style="color: #1db954;"><i class="bi bi-spotify"></i></div>
-        <h3>Instant Spotify Export</h3>
-        <p>Save discovered tracks directly into your Spotify "Liked Songs" library with one click, or export entire curated crate collections for seamless streaming.</p>
+      <div class="feature-card">
+        <span class="feature-stamp" style="background: #FFF9ED; color: #9A6700;">03 // SPOTIFY EXPORT</span>
+        <div class="feature-icon-badge" style="color: #1db954;"><i class="bi bi-spotify"></i></div>
+        <h3>1-Click Spotify Connect</h3>
+        <p>Add discovered subterranean tracks straight to your Spotify "Liked Songs" library with a single tap, or export entire curated playlists to desktop streaming.</p>
       </div>
 
-      <div class="glass-deck rack-card">
-        <div class="rack-code">04 // ZERO CORPORATE FILTER</div>
-        <div class="rack-icon" style="color: var(--neon-magenta);"><i class="bi bi-vinyl-fill"></i></div>
-        <h3>Pure Sonic Affinity</h3>
-        <p>No pay-for-placement algorithms. Every link is weighted by acoustic harmonic keys, tempo BPM, and underground human digger recommendations.</p>
+      <div class="feature-card">
+        <span class="feature-stamp" style="background: #F4EFE6; color: var(--ink-dark);">04 // PURE HUMAN DISCOVERY</span>
+        <div class="feature-icon-badge" style="color: var(--pastel-peach);"><i class="bi bi-vinyl-fill"></i></div>
+        <h3>Zero Corporate Bias</h3>
+        <p>No payola, no sponsored track boosts, no algorithmic loops. Every connection is powered by acoustic vectors, harmonic keys, and human underground curation.</p>
       </div>
 
     </div>
   </section>
 
-  <!-- Micro-Genre Gateways -->
+  <!-- Curated Micro-Genre Portals -->
   <section class="section-wrap" style="padding-top: 0;">
-    <div class="section-tag">// SUBTERRANEAN GATEWAYS</div>
-    <h2 class="section-title">Curated Micro-Genre Portals</h2>
-    <p class="section-sub">Jump straight into specialized sound constellations across underground electronic, experimental, and guitar-driven genres.</p>
+    <div class="section-eyebrow">Sonic Gateways</div>
+    <h2 class="section-headline">Explore Niche Subterranean Worlds</h2>
+    <p class="section-desc">Jump straight into specialized sound constellations across underground electronic, tape lo-fi, and guitar-driven movements.</p>
 
     <div class="genre-grid">
       
-      <a href="app.html?tag=Vaporwave" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Vaporwave" class="genre-card">
+        <div>
           <h4>Vaporwave</h4>
-          <p>Glitchy luxury elevator music, slowed Diana Ross loops, and modern computing aesthetics.</p>
+          <p>Glitchy luxury elevator music, slowed Diana Ross loops, and nostalgic mall atmospheres.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>MACINTOSH PLUS / HOME</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Dungeon+Synth" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Dungeon+Synth" class="genre-card">
+        <div>
           <h4>Dungeon Synth</h4>
-          <p>Medieval fantasy synthesizer pads, mossy crypt atmospheres, and nostalgic tabletop folklore.</p>
+          <p>Medieval fantasy synthesizer pads, mossy crypt acoustics, and tabletop folklore.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>OLD SORCERY / MORTIIS</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Deconstructed+Club" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Deconstructed+Club" class="genre-card">
+        <div>
           <h4>Deconstructed Club</h4>
-          <p>Metallic sound design, industrial syncopation, and avant-garde club dance floor deconstruction.</p>
+          <p>Metallic sound design, industrial syncopation, and avant-garde club deconstruction.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>AMNESIA SCANNER / SOPHIE</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Breakcore" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Breakcore" class="genre-card">
+        <div>
           <h4>Breakcore</h4>
-          <p>Hyper-accelerated amen breaks, drill 'n' bass glitching, and high-velocity emotional chaos.</p>
+          <p>Hyper-accelerated amen breaks, drill 'n' bass glitching, and high-velocity emotional velocity.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>SEWERSLVT / VENETIAN SNARES</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Darkwave" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Darkwave" class="genre-card">
+        <div>
           <h4>Darkwave</h4>
-          <p>Post-punk coldwave synths, reverb-drenched baritone vocals, and pulsating analog drum machines.</p>
+          <p>Post-punk coldwave synths, reverb-drenched baritone vocals, and pulsating drum machines.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>BOY HARSHER / MOLCHAT DOMA</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Shoegaze" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Shoegaze" class="genre-card">
+        <div>
           <h4>Shoegaze</h4>
-          <p>Swirling walls of sonic fuzz, reverse reverb guitar textures, and ethereal dream pop harmonies.</p>
+          <p>Swirling walls of guitar fuzz, reverse reverb textures, and ethereal dream pop harmonies.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>SLOWDIVE / MBV</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Phonk" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Phonk" class="genre-card">
+        <div>
           <h4>Phonk / Wave</h4>
           <p>Distorted Memphis rap vocals, cowbell drift rhythms, and high-energy nocturnal atmospheric synths.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>DVRST / KORDHELL</span>
           <span>EXPLORE &rarr;</span>
         </div>
       </a>
 
-      <a href="app.html?tag=Ambient+Drone" class="glass-deck genre-tile">
-        <div class="genre-tile-header">
+      <a href="app.html?tag=Ambient+Drone" class="genre-card">
+        <div>
           <h4>Ambient Drone</h4>
           <p>Decaying magnetic tape loops, sub-harmonic resonance, and infinite drifting soundscapes.</p>
         </div>
-        <div class="genre-tile-footer">
+        <div class="genre-card-foot">
           <span>BASINSKI / TIM HECKER</span>
           <span>EXPLORE &rarr;</span>
         </div>
@@ -729,30 +719,30 @@
 
   <!-- CTA Box -->
   <section class="section-wrap" style="padding-top: 0;">
-    <div class="cta-deck">
-      <h2>Enter The Subterranean Vault</h2>
+    <div class="cta-card">
+      <h2>Step Inside The Subterranean Vault</h2>
       <p>Escape algorithmic homogenization. Traverse thousands of interconnected sound nodes, preview underground tracks, and curate your personal collection.</p>
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="app.html" class="btn-primary-hero">
-          <i class="bi bi-play-circle-fill"></i> Launch Galaxy Graph
+        <a href="app.html" class="btn-tactile-primary">
+          <i class="bi bi-play-circle-fill"></i> Launch Discovery Graph
         </a>
-        <a href="login.html" class="btn-secondary-hero">
-          <i class="bi bi-person-badge-fill"></i> Curator Terminal
+        <a href="login.html" class="btn-tactile-secondary">
+          <i class="bi bi-person-badge-fill"></i> Curator Vault (@adityaiche)
         </a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="terminal-footer">
+  <footer class="retro-footer">
     <div class="footer-brand">Ob<span>Sound</span> // Subterranean Music Discovery</div>
     <div>Zero Advertising • Powered by MongoDB Atlas &amp; Last.fm</div>
     <div>&copy; 2026 ObSound. Autonomous Underground Sound Network.</div>
   </footer>
 
-  <!-- Interactive Hero Canvas Script -->
+  <!-- Interactive Retro Pastel Constellation Canvas -->
   <script>
-    const canvas = document.getElementById('hero-canvas');
+    const canvas = document.getElementById('hero-pastel-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
 
@@ -764,21 +754,21 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // Node definitions
-    const colors = ['#00f5d4', '#ff9e00', '#f72585', '#9d4edd', '#00b4d8'];
+    // Warm Retro Pastel Palette
+    const pastelColors = ['#E76F51', '#F4A261', '#76A08A', '#E9C46A', '#DDA15E', '#52796F'];
     const genres = ['Vaporwave', 'Dungeon Synth', 'HexD', 'Mallsoft', 'Darkwave', 'Breakcore', 'Shoegaze', 'Phonk', 'Ambient Drone', 'Midwest Emo'];
     
     const nodes = [];
-    const count = 38;
+    const count = 36;
 
     for (let i = 0; i < count; i++) {
       nodes.push({
         x: Math.random() * (width || 800),
         y: Math.random() * (height || 380),
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
-        radius: Math.random() * 5 + 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7,
+        radius: Math.random() * 5 + 5,
+        color: pastelColors[Math.floor(Math.random() * pastelColors.length)],
         label: genres[Math.floor(Math.random() * genres.length)]
       });
     }
@@ -795,8 +785,18 @@
     });
 
     function loop() {
-      ctx.fillStyle = 'rgba(8, 11, 24, 0.35)';
+      ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, width, height);
+
+      // Draw subtle grid dots
+      ctx.fillStyle = '#E5DFD4';
+      for (let x = 20; x < width; x += 40) {
+        for (let y = 20; y < height; y += 40) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
 
       // Draw links
       for (let i = 0; i < nodes.length; i++) {
@@ -804,10 +804,10 @@
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130) {
-            const alpha = 1 - (dist / 130);
-            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha * 0.25})`;
-            ctx.lineWidth = 1;
+          if (dist < 140) {
+            const alpha = 1 - (dist / 140);
+            ctx.strokeStyle = `rgba(35, 37, 51, ${alpha * 0.22})`;
+            ctx.lineWidth = 1.2;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -821,32 +821,32 @@
         n.x += n.vx;
         n.y += n.vy;
 
-        if (n.x < 10 || n.x > width - 10) n.vx *= -1;
-        if (n.y < 10 || n.y > height - 10) n.vy *= -1;
+        if (n.x < 15 || n.x > width - 15) n.vx *= -1;
+        if (n.y < 15 || n.y > height - 15) n.vy *= -1;
 
         // Mouse attraction
         const mdx = mouse.x - n.x;
         const mdy = mouse.y - n.y;
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-        if (mdist < 140) {
-          n.x += (mdx / mdist) * 1.5;
-          n.y += (mdy / mdist) * 1.5;
+        if (mdist < 150) {
+          n.x += (mdx / mdist) * 1.6;
+          n.y += (mdy / mdist) * 1.6;
         }
 
-        // Draw node
+        // Draw node outline
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fillStyle = n.color;
-        ctx.shadowColor = n.color;
-        ctx.shadowBlur = 12;
         ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#232533';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
 
         // Label on selected nodes
-        if (idx % 4 === 0) {
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-          ctx.font = '10px JetBrains Mono, monospace';
-          ctx.fillText(n.label, n.x + 10, n.y + 3);
+        if (idx % 3 === 0) {
+          ctx.fillStyle = '#232533';
+          ctx.font = 'bold 11px Space Grotesk, sans-serif';
+          ctx.fillText(n.label, n.x + 10, n.y + 4);
         }
       });
 

@@ -1,0 +1,45 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/crate"
+  to = "/crate.html"
+  status = 200
+
+[[redirects]]
+  from = "/albums"
+  to = "/albums.html"
+  status = 200
+
+[[redirects]]
+  from = "/recommendations"
+  to = "/recommendations.html"
+  status = 200
+
+[[redirects]]
+  from = "/oracle"
+  to = "/recommendations.html"
+  status = 200
+
+[[redirects]]
+  from = "/app"
+  to = "/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"

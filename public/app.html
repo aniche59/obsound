@@ -16,31 +16,36 @@
   <!-- Background Animated Cyber Grid Lines -->
   <div class="cyber-background"></div>
 
-  <!-- Header Dashboard -->
+  <!-- Unified Retro Header -->
   <header class="app-header">
-    <a href="index.html" class="logo-area" style="text-decoration: none; display: flex; align-items: baseline; gap: 10px;">
-      <span class="logo-glow"></span>
-      <h1 class="logo-text">obsound</h1>
-      <span class="logo-tagline">connected sounds</span>
+    <a href="index.html" class="brand-logo">
+      <i class="bi bi-disc-fill" style="color: #E76F51; font-size: 24px;"></i>
+      <h1 class="logo-text">Ob<span>Sound</span></h1>
+      <span class="retro-badge-pill">
+        <i class="bi bi-diagram-3-fill"></i> GALAXY GRAPH
+      </span>
     </a>
     
-    <nav class="nav-links" style="margin-right: auto; margin-left: 40px;">
+    <nav class="nav-links" style="margin-right: auto; margin-left: 28px;">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="app.html" class="nav-link active">Explore Graph</a>
-      <a href="crate.html" class="nav-link">Library</a>
+      <a href="app.html" class="nav-link active">Galaxy Graph</a>
+      <a href="albums.html" class="nav-link">Vinyl Vault</a>
+      <a href="recommendations.html" class="nav-link">Taste Oracle</a>
+      <a href="crate.html" class="nav-link">My Crate</a>
       <a href="react-studio.html" class="nav-link">React Studio</a>
+      <a href="login.html" class="nav-link">Curator Vault</a>
     </nav>
 
     <div class="status-area">
-      <div id="api-status-indicator" class="status-pill live">Connecting...</div>
-      <button id="btn-react-submit" onclick="window.openReactValidatorModal && window.openReactValidatorModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 11px; border-radius: 20px; font-weight: 700; cursor: pointer; background: var(--accent-orange); color: white; border: none; box-shadow: 0 4px 12px rgba(118, 179, 157, 0.3);">
+      <div id="api-status-indicator" class="status-pill live">🟢 Atlas Cluster: Connected (82 Nodes)</div>
+      <button id="btn-react-submit" onclick="window.openReactValidatorModal && window.openReactValidatorModal()" class="btn btn-primary" style="padding: 6px 14px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; background: #F4A261; color: #232533; border: 1.5px solid #232533; box-shadow: 2px 2px 0 #232533;">
         + Submit Node (React)
       </button>
-      <a href="login.html" id="curator-auth-link" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; background: var(--bg-secondary); border: 1.5px solid var(--border-color); color: var(--text-primary); font-size: 11px; font-weight: 700; box-shadow: var(--retro-shadow-sm);">
-        <span id="curator-avatar-icon" style="width: 18px; height: 18px; border-radius: 50%; background: var(--accent-terracotta); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">A</span>
+      <a href="login.html" id="curator-auth-link" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; background: #FAF7F2; border: 1.5px solid #232533; color: #232533; font-size: 11px; font-weight: 700; box-shadow: 2px 2px 0 #232533;">
+        <span id="curator-avatar-icon" style="width: 18px; height: 18px; border-radius: 50%; background: #E76F51; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">A</span>
         <span id="curator-handle-label">Vault (@adityaiche)</span>
       </a>
-      <button id="toggle-crate-panel-btn" class="icon-btn" title="Toggle Library">
+      <button id="toggle-crate-panel-btn" class="icon-btn" title="Toggle Crate" style="background: #FAF7F2; border: 1.5px solid #232533; border-radius: 6px; box-shadow: 2px 2px 0 #232533; padding: 5px 10px; cursor: pointer;">
         📁 <span id="crate-badge" class="badge">0</span>
       </button>
     </div>
@@ -55,7 +60,7 @@
       
       <!-- Graph Canvas HUD instructions -->
       <div class="canvas-hud">
-        <p>🖱️ Drag to Pan | 📜 Scroll to Zoom | 👆 Click Node to Expand | 👤 Drag Node to Arrange</p>
+        <p>🖱️ Drag to Pan | 📜 Scroll to Zoom | 👆 Click Node to Focus &amp; Play | 🌀 Pivot Similar Tracks into Rabbit Hole</p>
       </div>
     </div>
 
@@ -73,9 +78,25 @@
 
       <!-- Quick Micro-Genre Selector -->
       <div class="control-box glass">
-        <h3>Micro-Genres</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h3 style="margin: 0;">Micro-Genres</h3>
+          <button id="btn-full-galaxy" class="tag-pill active" style="background: #76A08A; color: white; font-weight: 700; border-radius: 6px; padding: 3px 8px; font-size: 11px; border: 1.5px solid #232533; cursor: pointer;">🌌 Full Galaxy</button>
+        </div>
         <div id="tag-list" class="tag-grid">
           <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- 50+ Infinite Subterranean Scene Lexicon -->
+        <div style="margin-top: 14px; padding-top: 10px; border-top: 1.5px dashed rgba(35,37,51,0.2);">
+          <details style="font-size: 12px; cursor: pointer;">
+            <summary style="font-weight: 800; color: #E76F51; font-family: 'Space Grotesk'; display: flex; align-items: center; justify-content: space-between;">
+              <span><i class="bi bi-collection-fill"></i> 50+ Scene Lexicon</span>
+              <span style="font-size: 10px; background: #FAF7F2; padding: 2px 6px; border: 1px solid #232533; border-radius: 4px;">Explore &darr;</span>
+            </summary>
+            <div id="extended-genre-cloud" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; max-height: 140px; overflow-y: auto;">
+              <!-- Populated in app.js -->
+            </div>
+          </details>
         </div>
       </div>
 

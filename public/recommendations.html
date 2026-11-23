@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation Engine &amp; Taste Oracle | ObSound</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    :root {
+      --paper-bg: #FAF7F2;
+      --paper-card: #FFFFFF;
+      --paper-subtle: #F4EFE6;
+      --ink-dark: #232533;
+      --ink-muted: #646A7E;
+      --pastel-terracotta: #E76F51;
+      --pastel-peach: #F4A261;
+      --pastel-sage: #76A08A;
+      --pastel-honey: #E9C46A;
+      --pastel-clay: #DDA15E;
+      --border-ink: #232533;
+      --retro-shadow: 4px 4px 0px #232533;
+      --retro-shadow-sm: 2px 2px 0px #232533;
+      --retro-shadow-lg: 6px 6px 0px #232533;
+    }
+
+    html, body {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: auto !important;
+      min-height: 100vh !important;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--paper-bg);
+      color: var(--ink-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .oracle-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 32px 24px 80px 24px;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+
+    /* Hero Banner */
+    .oracle-hero {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: var(--retro-shadow);
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .oracle-hero::after {
+      content: 'TASTE ORACLE';
+      position: absolute;
+      right: -20px;
+      bottom: -15px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(35, 37, 51, 0.04);
+      pointer-events: none;
+    }
+
+    .oracle-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pastel-honey);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: var(--retro-shadow-sm);
+      width: fit-content;
+    }
+
+    .oracle-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .oracle-title span {
+      color: var(--pastel-terracotta);
+    }
+
+    .oracle-desc {
+      font-size: 16px;
+      color: var(--ink-muted);
+      max-width: 840px;
+      line-height: 1.55;
+    }
+
+    /* Dual Input Panel: Manual Artists + Spotify Sync */
+    .oracle-inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 900px) {
+      .oracle-inputs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-card {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--retro-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .artist-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .artist-input-field {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      background: var(--paper-subtle);
+      outline: none;
+    }
+
+    .artist-input-field:focus {
+      background: #FFFFFF;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .btn-add-artist {
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 0 18px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      transition: all 0.1s ease;
+    }
+
+    .btn-add-artist:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    /* Active Artist Chips */
+    .active-artist-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 40px;
+      padding: 8px;
+      border: 1.5px dashed rgba(35, 37, 51, 0.2);
+      border-radius: 8px;
+      background: var(--paper-subtle);
+    }
+
+    .artist-chip-tag {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .artist-chip-remove {
+      color: var(--pastel-terracotta);
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    /* Spotify Taste Profile Sync Card */
+    .spotify-sync-card {
+      background: linear-gradient(135deg, #FAF7F2 0%, #E8F5E9 100%);
+      border: 2px solid var(--border-ink);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: var(--retro-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-spotify-sync {
+      background: #1DB954;
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--retro-shadow-sm);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-spotify-sync:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    /* Presets Strip */
+    .presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .preset-pill {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      transition: all 0.1s ease;
+    }
+
+    .preset-pill:hover {
+      background: var(--pastel-honey);
+      transform: translate(-1px, -1px);
+    }
+
+    /* Action Trigger Button */
+    .btn-oracle-generate {
+      background: var(--ink-dark);
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: var(--retro-shadow);
+      transition: all 0.15s ease;
+      margin-bottom: 40px;
+    }
+
+    .btn-oracle-generate:hover {
+      background: var(--pastel-terracotta);
+      transform: translate(-2px, -2px);
+      box-shadow: var(--retro-shadow-lg);
+    }
+
+    /* Recommendation Results View */
+    .results-section {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .results-group-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--ink-dark);
+    }
+
+    /* 1. Recommended Genres Strip */
+    .rec-genres-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .rec-genre-card {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: var(--retro-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rec-genre-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rec-genre-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--pastel-terracotta);
+    }
+
+    .rec-genre-affinity {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #81C784;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .rec-genre-desc {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+
+    .rec-genre-btn {
+      background: var(--paper-subtle);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-weight: 700;
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--ink-dark);
+      cursor: pointer;
+      margin-top: auto;
+    }
+
+    .rec-genre-btn:hover {
+      background: var(--pastel-sage);
+      color: #fff;
+    }
+
+    /* 2. Recommended Artists Grid */
+    .rec-artists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .rec-artist-card {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--retro-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .rec-artist-avatar-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid var(--border-ink);
+      overflow: hidden;
+      box-shadow: var(--retro-shadow-sm);
+      background: #111;
+    }
+
+    .rec-artist-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rec-artist-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .rec-artist-match {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--pastel-terracotta);
+    }
+
+    .rec-artist-bio {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.4;
+      max-height: 60px;
+      overflow: hidden;
+    }
+
+    /* 3. Recommended Albums Grid */
+    .rec-albums-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    /* Sticky Floating Action Bar */
+    .oracle-floating-actions {
+      position: sticky;
+      bottom: 24px;
+      background: #FFFFFF;
+      border: 2.5px solid var(--border-ink);
+      border-radius: 12px;
+      padding: 16px 24px;
+      box-shadow: 6px 6px 0px #232533;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      z-index: 100;
+      margin-top: 40px;
+    }
+
+    .btn-project-graph {
+      background: var(--pastel-sage);
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .btn-project-graph:hover {
+      background: #52796F;
+      transform: translate(-1px, -1px);
+    }
+
+    .btn-crate-recommendations {
+      background: var(--pastel-honey);
+      color: var(--ink-dark);
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .btn-crate-recommendations:hover {
+      background: var(--pastel-peach);
+      transform: translate(-1px, -1px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Unified Retro Nav Bar -->
+  <header class="landing-nav">
+    <a href="index.html" class="brand-logo">
+      <i class="bi bi-disc-fill" style="color: var(--pastel-terracotta); font-size: 24px;"></i>
+      <h1>Ob<span>Sound</span></h1>
+      <span class="retro-badge-pill">
+        <i class="bi bi-magic"></i> TASTE ORACLE
+      </span>
+    </a>
+
+    <nav class="nav-items">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="app.html" class="nav-btn">Galaxy Graph</a>
+      <a href="albums.html" class="nav-btn">Vinyl Vault</a>
+      <a href="recommendations.html" class="nav-btn active">Taste Oracle</a>
+      <a href="crate.html" class="nav-btn">My Crate</a>
+      <a href="react-studio.html" class="nav-btn">React Studio</a>
+      <a href="login.html" class="nav-btn">Curator Vault</a>
+    </nav>
+
+    <div class="nav-right-actions">
+      <div class="status-pill-unified">
+        <i class="bi bi-cpu-fill"></i> Recommendation Engine: Active
+      </div>
+      <a href="crate.html" class="btn-header-cta" title="Open Your Crate">
+        <i class="bi bi-archive-fill"></i> My Crate
+      </a>
+    </div>
+  </header>
+
+  <div class="oracle-container">
+    
+    <!-- Hero Banner -->
+    <div class="oracle-hero">
+      <div class="oracle-badge">
+        <i class="bi bi-compass"></i> Autonomous Cross-Scene Sonic Recommendation Engine
+      </div>
+      <h1 class="oracle-title">Acoustic Oracle &amp; <span>Taste Profiler</span></h1>
+      <p class="oracle-desc">
+        Connect your musical affinities to the subterranean sound graph. Input your favorite artists or sync your Spotify listening taste to run our multi-dimensional recommendation algorithm. Discover new underground micro-genres, cult artists, and vinyl pressings tailored to your acoustic footprint.
+      </p>
+    </div>
+
+    <!-- Inputs Container: Favorite Artists Taste Seed Interface -->
+    <div class="input-card" style="margin-bottom: 32px; border-radius: 16px; padding: 32px; box-shadow: var(--retro-shadow);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 4px;">
+        <h3 class="input-card-title" style="font-size: 24px; margin: 0;">
+          <i class="bi bi-person-heart" style="color: var(--pastel-terracotta);"></i>
+          Enter Your Favorite Artists &amp; Sound Creators
+        </h3>
+        <span style="font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 700; background: #E8F5E9; color: #2E7D32; border: 1.5px solid #81C784; padding: 4px 10px; border-radius: 999px;">
+          Multi-Dimensional Taste Engine
+        </span>
+      </div>
+      <p style="font-size: 14.5px; color: var(--ink-muted); margin: 0; line-height: 1.5;">
+        Input the underground creators or bands you love. ObSound analyzes their sonic lineage, micro-genre intersections, and acoustic lore to generate a personalized Constellation of cult artists, full album pressings, and related subterranean scenes.
+      </p>
+
+      <div class="artist-input-row" style="display: flex; gap: 10px; margin-top: 6px;">
+        <input type="text" id="artist-input-field" class="artist-input-field" placeholder="Type artist name (e.g. My Bloody Valentine, Whirr, Salem, Slowdive, Machine Girl, Burial)..." style="flex: 1; padding: 12px 16px; font-size: 15px; border-radius: 8px;">
+        <button id="btn-add-artist" class="btn-add-artist" style="padding: 12px 24px; font-size: 14px; font-weight: 800; cursor: pointer;">+ Add to Taste Seeds</button>
+      </div>
+
+      <div id="active-artist-chips" class="active-artist-chips" style="min-height: 38px; display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0;">
+        <!-- Populated dynamically via JS -->
+      </div>
+
+      <div style="border-top: 1.5px dashed rgba(35, 37, 51, 0.15); padding-top: 16px; margin-top: 8px;">
+        <span style="font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 700; color: var(--ink-muted); text-transform: uppercase; display: block; margin-bottom: 8px;">
+          <i class="bi bi-magic"></i> Or Select Instant Subterranean Scene Archetypes:
+        </span>
+        <div class="presets-row" style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button class="preset-pill" data-preset="Slowdive, Whirr, Drop Nineteens">🌫️ Shoegaze &amp; Noise Pop</button>
+          <button class="preset-pill" data-preset="SALEM, Snow Strippers, Crim3s">🔮 Witch House &amp; Darkwave</button>
+          <button class="preset-pill" data-preset="Machine Girl, Venetian Snares, goreshit">⚡ Breakcore &amp; Digital Glitch</button>
+          <button class="preset-pill" data-preset="Macintosh Plus, Saint Pepsi, Blank Banshee">📼 Vaporwave &amp; Mallsoft</button>
+          <button class="preset-pill" data-preset="Mortiis, Depressive Silence, Fief">🏰 Dungeon Synth</button>
+          <button class="preset-pill" data-preset="Kordhell, DVRST, Pharmacist">🏎️ Drift Phonk</button>
+          <button class="preset-pill" data-preset="Cocteau Twins, Joy Division, The Cure">🖤 Post-Punk &amp; Ethereal Wave</button>
+          <button class="preset-pill" data-preset="American Football, Modern Baseball, Algernon Cadwallader">🍂 Midwest Emo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compute Button -->
+    <button id="btn-oracle-generate" class="btn-oracle-generate">
+      <i class="bi bi-cpu-fill"></i>
+      <span>Execute Subterranean Recommendation Algorithm</span>
+    </button>
+
+    <!-- Results Area -->
+    <div id="oracle-results-area" class="results-section" style="display: none;">
+      
+      <!-- Group 1: Recommended Micro-Genres -->
+      <div>
+        <h2 class="results-group-title">
+          <i class="bi bi-tag-fill" style="color: var(--pastel-sage);"></i>
+          1. Recommended Subterranean Micro-Genres
+        </h2>
+        <div id="rec-genres-grid" class="rec-genres-grid">
+          <!-- Injected via recommendations.js -->
+        </div>
+      </div>
+
+      <!-- Group 2: Recommended Cult Creators -->
+      <div>
+        <h2 class="results-group-title">
+          <i class="bi bi-people-fill" style="color: var(--pastel-peach);"></i>
+          2. Recommended Cult Artists &amp; Scene Creators
+        </h2>
+        <div id="rec-artists-grid" class="rec-artists-grid">
+          <!-- Injected via recommendations.js -->
+        </div>
+      </div>
+
+      <!-- Group 3: Recommended Vinyl Albums -->
+      <div>
+        <h2 class="results-group-title">
+          <i class="bi bi-disc-fill" style="color: var(--pastel-terracotta);"></i>
+          3. Recommended Archival Vinyl Sleeves &amp; LPs
+        </h2>
+        <div id="rec-albums-grid" class="rec-albums-grid">
+          <!-- Injected via recommendations.js -->
+        </div>
+      </div>
+
+      <!-- Sticky Floating Action Dock -->
+      <div class="oracle-floating-actions">
+        <div>
+          <div style="font-weight: 800; font-size: 16px;">Recommendation Engine Output Ready</div>
+          <div style="font-size: 12px; color: var(--ink-muted);">Plot personal recommendations directly into the live interactive canvas or export to crate.</div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <a id="btn-project-galaxy" class="btn-project-graph" href="app.html">
+            <i class="bi bi-diagram-3-fill"></i> 🌌 Project into Galaxy Graph
+          </a>
+          <button id="btn-crate-all-recs" class="btn-crate-recommendations">
+            <i class="bi bi-archive-fill"></i> Add All to Crate (.M3U8)
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div id="vault-toast" class="vault-toast" style="position: fixed; bottom: 24px; right: 24px; background: #fff; border: 2px solid #232533; border-radius: 8px; padding: 12px 20px; font-weight: 700; display: none; box-shadow: 4px 4px 0 #232533; z-index: 2000;">
+    <i class="bi bi-check-circle-fill" style="color: var(--pastel-sage);"></i>
+    <span id="vault-toast-msg">Added to your Crate!</span>
+  </div>
+
+  <script type="module" src="recommendations.js"></script>
+</body>
+</html>

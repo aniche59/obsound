@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinyl Vault — Discover Artists Through Albums | ObSound</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    :root {
+      --paper-bg: #FAF7F2;
+      --paper-card: #FFFFFF;
+      --paper-subtle: #F4EFE6;
+      --ink-dark: #232533;
+      --ink-muted: #646A7E;
+      --pastel-terracotta: #E76F51;
+      --pastel-peach: #F4A261;
+      --pastel-sage: #76A08A;
+      --pastel-honey: #E9C46A;
+      --pastel-clay: #DDA15E;
+      --border-ink: #232533;
+      --retro-shadow: 4px 4px 0px #232533;
+      --retro-shadow-sm: 2px 2px 0px #232533;
+      --retro-shadow-lg: 6px 6px 0px #232533;
+    }
+
+    html, body {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      height: auto !important;
+      min-height: 100vh !important;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--paper-bg);
+      color: var(--ink-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Unified Top Navigation */
+    .landing-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--border-ink);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 0px rgba(35, 37, 51, 0.05);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--ink-dark);
+    }
+
+    .brand-logo h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .brand-logo h1 span {
+      color: var(--pastel-terracotta);
+    }
+
+    .retro-badge-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #E8F3EE;
+      border: 1.5px solid var(--pastel-sage);
+      color: #2E6347;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      color: var(--ink-dark);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--paper-subtle);
+      border-color: var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .nav-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill-unified {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1.5px solid #81C784;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-header-cta {
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: 2px solid var(--border-ink);
+      box-shadow: var(--retro-shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.1s ease;
+    }
+
+    .btn-header-cta:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    .vault-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      flex: 1;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Hero Section */
+    .vault-hero {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--retro-shadow);
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vault-hero::after {
+      content: 'VINYL VAULT';
+      position: absolute;
+      right: -20px;
+      bottom: -15px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(35, 37, 51, 0.04);
+      pointer-events: none;
+      letter-spacing: -2px;
+    }
+
+    .vault-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pastel-honey);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: var(--retro-shadow-sm);
+      width: fit-content;
+    }
+
+    .vault-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--ink-dark);
+      margin: 0;
+    }
+
+    .vault-title span {
+      color: var(--pastel-terracotta);
+    }
+
+    .vault-desc {
+      font-size: 16px;
+      color: var(--ink-muted);
+      max-width: 800px;
+      line-height: 1.5;
+    }
+
+    .vault-stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 12px;
+      border-top: 1.5px dashed rgba(35, 37, 51, 0.15);
+    }
+
+    .vault-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-dark);
+    }
+
+    /* Filter & Search Bar */
+    .vault-controls {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--retro-shadow);
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--ink-muted);
+      font-size: 16px;
+    }
+
+    .vault-search-input {
+      width: 100%;
+      padding: 12px 14px 12px 42px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      background: var(--paper-subtle);
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .vault-search-input:focus {
+      background: #FFFFFF;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .btn-search {
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 0 24px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.1s ease;
+    }
+
+    .btn-search:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    .tag-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tag-chip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      margin-right: 4px;
+    }
+
+    .tag-chip {
+      background: var(--paper-subtle);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      transition: all 0.15s ease;
+      color: var(--ink-dark);
+    }
+
+    .tag-chip:hover, .tag-chip.active {
+      background: var(--pastel-sage);
+      color: #FFFFFF;
+      transform: translate(-1px, -1px);
+    }
+
+    /* Vinyl Album Grid */
+    .albums-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    /* Realistic Cardboard Vinyl Sleeve Card */
+    .vinyl-card {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: var(--retro-shadow);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .vinyl-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--retro-shadow-lg);
+    }
+
+    /* Vinyl Jacket & Disc Peek Container */
+    .sleeve-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: visible;
+    }
+
+    /* The Vinyl Record Disc that slides out */
+    .vinyl-disc {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      width: 90%;
+      height: 90%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a2a2a 20%, #111111 25%, #2a2a2a 40%, #111111 45%, #2a2a2a 60%, #111111 65%, #050505 100%);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      z-index: 1;
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vinyl-disc::after {
+      content: '';
+      width: 32%;
+      height: 32%;
+      border-radius: 50%;
+      background: var(--pastel-peach);
+      border: 2px solid #232533;
+    }
+
+    .vinyl-card:hover .vinyl-disc {
+      transform: translateX(25%) rotate(60deg);
+    }
+
+    /* The Front Jacket Artwork */
+    .sleeve-cover {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-ink);
+      object-fit: cover;
+      z-index: 2;
+      background: #EAE5D9;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .album-info-meta {
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .album-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .artist-name-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--pastel-terracotta);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .artist-name-link:hover {
+      text-decoration: underline;
+    }
+
+    .album-stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(35, 37, 51, 0.15);
+    }
+
+    .btn-inspect-sleeve {
+      background: var(--paper-subtle);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--ink-dark);
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      transition: all 0.1s ease;
+    }
+
+    .btn-inspect-sleeve:hover {
+      background: var(--pastel-honey);
+      transform: translate(-1px, -1px);
+    }
+
+    /* Modal / Drawer for "Discover Artist Through Album" */
+    .vault-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(35, 37, 51, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .vault-modal-backdrop.open {
+      display: flex;
+    }
+
+    .vault-modal-card {
+      background: var(--paper-card);
+      border: 3px solid var(--border-ink);
+      border-radius: 16px;
+      box-shadow: 8px 8px 0px #232533;
+      width: 100%;
+      max-width: 960px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .vault-modal-header {
+      padding: 20px 24px;
+      background: var(--paper-subtle);
+      border-bottom: 2px solid var(--border-ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vault-modal-header h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vault-modal-close {
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 6px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .vault-modal-close:hover {
+      background: var(--pastel-terracotta);
+      color: #FFFFFF;
+    }
+
+    .vault-modal-body {
+      padding: 28px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .vault-modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Modal Column */
+    .modal-artwork-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-cover-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border: 2px solid var(--border-ink);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--retro-shadow);
+      background: #111;
+    }
+
+    .modal-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-action-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-spotify-big {
+      background: #1DB954;
+      color: #FFFFFF;
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: var(--retro-shadow-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-spotify-big:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: var(--retro-shadow);
+    }
+
+    .btn-crate-all {
+      background: var(--pastel-honey);
+      color: var(--ink-dark);
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--retro-shadow-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-crate-all:hover {
+      background: var(--pastel-peach);
+      transform: translate(-1px, -1px);
+    }
+
+    /* Right Modal Column */
+    .modal-details-box {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .modal-alb-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ink-dark);
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .modal-artist-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .modal-art-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--pastel-terracotta);
+    }
+
+    .btn-galaxy-hop {
+      background: var(--pastel-sage);
+      color: #FFFFFF;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--retro-shadow-sm);
+    }
+
+    .artist-bio-section {
+      background: var(--paper-subtle);
+      border: 1.5px solid var(--border-ink);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-dark);
+    }
+
+    .similar-artists-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .similar-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .similar-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .similar-artist-chip {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--retro-shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .similar-artist-chip:hover {
+      background: var(--pastel-peach);
+      transform: translate(-1px, -1px);
+    }
+
+    /* Tracklist */
+    .tracklist-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tracklist-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+
+    .tracklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1.5px solid var(--border-ink);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .tracklist-table th {
+      background: var(--paper-subtle);
+      border-bottom: 1.5px solid var(--border-ink);
+      padding: 8px 12px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .tracklist-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(35, 37, 51, 0.1);
+      font-size: 13px;
+    }
+
+    .tracklist-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .track-play-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .track-spotify-mini-btn {
+      color: #1DB954;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .track-spotify-mini-btn:hover {
+      transform: scale(1.2);
+    }
+
+    /* Toast */
+    .vault-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--paper-card);
+      border: 2px solid var(--border-ink);
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: var(--retro-shadow);
+      z-index: 2000;
+      display: none;
+      animation: popIn 0.2s ease;
+    }
+
+    .vault-toast.show {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Unified Retro Nav Bar -->
+  <header class="landing-nav">
+    <a href="index.html" class="brand-logo">
+      <i class="bi bi-disc-fill" style="color: var(--pastel-terracotta); font-size: 24px;"></i>
+      <h1>Ob<span>Sound</span></h1>
+      <span class="retro-badge-pill">
+        <i class="bi bi-vinyl"></i> VINYL VAULT
+      </span>
+    </a>
+
+    <nav class="nav-items">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="app.html" class="nav-btn">Galaxy Graph</a>
+      <a href="albums.html" class="nav-btn active">Vinyl Vault</a>
+      <a href="recommendations.html" class="nav-btn">Taste Oracle</a>
+      <a href="crate.html" class="nav-btn">My Crate</a>
+      <a href="react-studio.html" class="nav-btn">React Studio</a>
+      <a href="login.html" class="nav-btn">Curator Vault</a>
+    </nav>
+
+    <div class="nav-right-actions">
+      <div class="status-pill-unified">
+        <i class="bi bi-database-check"></i> Atlas: Connected
+      </div>
+      <a href="crate.html" class="btn-header-cta" title="Open Your Crate">
+        <i class="bi bi-archive-fill"></i> My Crate
+      </a>
+    </div>
+  </header>
+
+  <div class="vault-container">
+    
+    <!-- Hero Banner -->
+    <div class="vault-hero">
+      <div class="vault-badge">
+        <i class="bi bi-vinyl"></i> Last.fm Live Vault &amp; Micro-Genre Archival Engine
+      </div>
+      <h1 class="vault-title">Underground <span>Vinyl &amp; Album Vault</span></h1>
+      <p class="vault-desc">
+        In subterranean sound culture, full-length records and sleeve artwork are the true gateway to cult artists. 
+        Select a micro-genre or search any esoteric scene to uncover full album pressings, inspect comprehensive tracklists, 
+        discover the artist's underground lore, listen directly on Spotify, and trace their sonic constellation.
+      </p>
+
+      <div class="vault-stats-bar">
+        <div class="vault-stat-item">
+          <i class="bi bi-activity" style="color: var(--pastel-sage);"></i>
+          <span>Live Last.fm API Key: Active</span>
+        </div>
+        <div class="vault-stat-item">
+          <i class="bi bi-disc" style="color: var(--pastel-terracotta);"></i>
+          <span id="stat-albums-count">Loading Releases...</span>
+        </div>
+        <div class="vault-stat-item">
+          <i class="bi bi-spotify" style="color: #1DB954;"></i>
+          <span>Direct Spotify Web Sync</span>
+        </div>
+        <div class="vault-stat-item">
+          <i class="bi bi-database-check" style="color: var(--pastel-honey);"></i>
+          <span>Atlas Cluster Connected</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls, Filter & Search -->
+    <div class="vault-controls">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <i class="bi bi-search"></i>
+          <input type="text" id="vault-search-input" class="vault-search-input" placeholder="Search albums, artists, or enter any custom micro-genre (e.g. Witch House, Shoegaze, HexD)...">
+        </div>
+        <button id="btn-vault-search" class="btn-search">
+          <i class="bi bi-search"></i> Dig Crates
+        </button>
+      </div>
+
+      <div class="tag-chips-wrap">
+        <span class="tag-chip-label">EXPLORE SCENES:</span>
+        <button class="tag-chip active" data-tag="Shoegaze">Shoegaze</button>
+        <button class="tag-chip" data-tag="Witch House">Witch House</button>
+        <button class="tag-chip" data-tag="Breakcore">Breakcore</button>
+        <button class="tag-chip" data-tag="Vaporwave">Vaporwave</button>
+        <button class="tag-chip" data-tag="Dungeon Synth">Dungeon Synth</button>
+        <button class="tag-chip" data-tag="Deconstructed Club">Deconstructed Club</button>
+        <button class="tag-chip" data-tag="Darkwave">Darkwave</button>
+        <button class="tag-chip" data-tag="Mallsoft">Mallsoft</button>
+        <button class="tag-chip" data-tag="Phonk">Phonk</button>
+        <button class="tag-chip" data-tag="Cyberpunk">Cyberpunk</button>
+        <button class="tag-chip" data-tag="Midwest Emo">Midwest Emo</button>
+        <button class="tag-chip" data-tag="Ambient Drone">Ambient Drone</button>
+        <button class="tag-chip" data-tag="HexD">HexD</button>
+        <button class="tag-chip" data-tag="Chiptune">Chiptune</button>
+        <button class="tag-chip" data-tag="Dream Pop">Dream Pop</button>
+      </div>
+    </div>
+
+    <!-- Album Sleeve Grid -->
+    <div id="albums-grid" class="albums-grid">
+      <!-- Injected via albums.js -->
+    </div>
+
+  </div>
+
+  <!-- "Discover Artist Through Album" Modal -->
+  <div id="vault-modal-backdrop" class="vault-modal-backdrop">
+    <div class="vault-modal-card">
+      <div class="vault-modal-header">
+        <h3 id="modal-header-title">
+          <i class="bi bi-disc-fill" style="color: var(--pastel-terracotta);"></i>
+          Album Archive &amp; Artist Story
+        </h3>
+        <button id="vault-modal-close" class="vault-modal-close">&times;</button>
+      </div>
+
+      <div class="vault-modal-body">
+        
+        <!-- Left: Sleeve Art & Direct Actions -->
+        <div class="modal-artwork-box">
+          <div class="modal-cover-wrapper">
+            <img id="modal-cover-img" class="modal-cover-img" src="" alt="Album Sleeve Cover">
+          </div>
+          
+          <div class="modal-action-btns">
+            <a id="modal-spotify-btn" class="btn-spotify-big" href="#" target="_blank" rel="noopener">
+              <i class="bi bi-spotify"></i> Listen Album on Spotify
+            </a>
+            <button id="modal-crate-all-btn" class="btn-crate-all">
+              <i class="bi bi-archive-fill"></i> Add All Tracks to Crate
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: The Artist Story, Tracklist & Lore -->
+        <div class="modal-details-box">
+          <div>
+            <h2 id="modal-album-title" class="modal-alb-title">Album Name</h2>
+            <div class="modal-artist-strip">
+              <span id="modal-artist-name" class="modal-art-name">Artist Name</span>
+              <a id="modal-galaxy-hop-link" class="btn-galaxy-hop" href="app.html">
+                <i class="bi bi-diagram-3-fill"></i> Explore in Galaxy Graph
+              </a>
+            </div>
+          </div>
+
+          <!-- Artist Bio & Lore -->
+          <div class="artist-bio-section" id="modal-artist-bio">
+            Loading underground artist biography and scene context...
+          </div>
+
+          <!-- Similar Underground Creators -->
+          <div class="similar-artists-strip">
+            <div class="similar-title">Similar Underground Creators:</div>
+            <div id="modal-similar-chips" class="similar-chips-container">
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+
+          <!-- Full Tracklist -->
+          <div class="tracklist-wrap">
+            <div class="tracklist-title">Official Album Tracklist &amp; Spotify Web Links:</div>
+            <table class="tracklist-table">
+              <thead>
+                <tr>
+                  <th style="width: 36px;">#</th>
+                  <th>Track Title</th>
+                  <th style="width: 70px;">Duration</th>
+                  <th style="width: 50px;">Play</th>
+                </tr>
+              </thead>
+              <tbody id="modal-tracklist-tbody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="vault-toast" class="vault-toast">
+    <i class="bi bi-check-circle-fill" style="color: var(--pastel-sage);"></i>
+    <span id="vault-toast-msg">Added to your Crate!</span>
+  </div>
+
+  <!-- Retro Footer -->
+  <footer style="background: #FFFFFF; border-top: 2px solid var(--border-ink); padding: 32px 24px; text-align: center; font-size: 13px; color: var(--ink-muted); margin-top: 48px;">
+    <div style="font-family: 'Outfit'; font-weight: 800; font-size: 16px; color: var(--ink-dark); margin-bottom: 6px;">Ob<span style="color: var(--pastel-terracotta);">Sound</span> // Underground Vinyl Vault</div>
+    <div>Live Last.fm Dynamic Discography Engine &bull; MongoDB Atlas Cloud Synced</div>
+    <div style="font-family: 'JetBrains Mono'; font-size: 11px; margin-top: 8px;">&copy; 2026 ObSound. Non-Commercial Academic Discovery Architecture.</div>
+  </footer>
+
+  <script type="module" src="albums.js"></script>
+</body>
+</html>

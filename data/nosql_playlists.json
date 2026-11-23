@@ -1,0 +1,120 @@
+[
+  {
+    "_id": "playlist_crate__analog_digger",
+    "name": "@analog_digger's Sonic Crate",
+    "curator": "@analog_digger",
+    "tracks": [
+      {
+        "id": "lsd_and_the_search_for_god_this_time",
+        "title": "This Time",
+        "artist": "LSD and the Search for God",
+        "album": "LSD and the Search for God - EP",
+        "coverArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/6a/af/24/6aaf249c-98ce-f1c2-faf4-a8a0eff35e9f/688981076421.jpg/600x600bb.jpg",
+        "previewAudioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6b/d6/24/6bd624d4-418f-cfd9-4d58-5ddfc30bc6c7/mzaf_111094434876352454.plus.aac.p.m4a",
+        "tags": [
+          "Shoegaze"
+        ],
+        "lastFmUrl": "https://www.last.fm/music/LSD+and+the+Search+for+God/_/This+Time",
+        "listeners": 120000,
+        "playcount": 850000,
+        "bio": "",
+        "addedAt": 1795427082515
+      },
+      {
+        "id": "blank_banshee_teen_pregnancy",
+        "title": "Teen Pregnancy",
+        "artist": "Blank Banshee",
+        "album": "Gaia",
+        "coverArt": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/af/f9/2d/aff92d04-83c3-6729-ebb3-a61c038d13ac/195448910636.jpg/600x600bb.jpg",
+        "previewAudioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/48/20/97/4820979f-50cf-e3d7-ac9e-19abdff8e801/mzaf_5550308977518922474.plus.aac.p.m4a",
+        "tags": [
+          "Vaporwave"
+        ],
+        "lastFmUrl": "https://www.last.fm/music/Blank+Banshee/_/Teen+Pregnancy",
+        "listeners": 120000,
+        "playcount": 850000,
+        "bio": "",
+        "addedAt": 1795430821339
+      },
+      {
+        "id": "the_mar_as_heavy",
+        "title": "Heavy",
+        "artist": "The Marías",
+        "album": "CINEMA",
+        "coverArt": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/0b/67/3f/0b673fd4-5e49-fccd-6193-3076bef03f53/075679792389.jpg/600x600bb.jpg",
+        "previewAudioUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/61/ad/89/61ad892b-2d80-2652-02bd-e0e4a9180998/mzaf_4328386032369668096.plus.aac.p.m4a",
+        "tags": [
+          "Artist Top"
+        ],
+        "lastFmUrl": "https://www.last.fm/music/The+Mar%C3%ADas/_/Heavy",
+        "listeners": 1136870,
+        "playcount": 0,
+        "bio": "",
+        "addedAt": 1795431755569
+      }
+    ],
+    "trackCount": 3,
+    "updatedAt": "2026-11-23T11:02:35.579Z",
+    "createdAt": "2026-11-23T09:40:00.977Z"
+  },
+  {
+    "_id": "6afaa8c40000000000000001",
+    "name": "Subterranean Master Crate",
+    "curator": "@adityaiche",
+    "genre": "Eclectic Underground",
+    "description": "Essential subterranean crate discoveries bridging HexD, Mallsoft, Dungeon Synth, and Darkwave.",
+    "trackIds": [
+      "6afaa8c40000000000000001",
+      "6afaa8c40000000000000007",
+      "6afaa8c4000000000000000c",
+      "6afaa8c40000000000000012",
+      "6afaa8c40000000000000018"
+    ],
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  },
+  {
+    "_id": "6afaa8c40000000000000002",
+    "name": "Liminal Mallsoft & Vapor Plaza",
+    "curator": "@adityaiche",
+    "genre": "Mallsoft",
+    "description": "Warm retro consumerist nostalgia and echoing retail shopping plaza anthems.",
+    "trackIds": [
+      "6afaa8c40000000000000007",
+      "6afaa8c40000000000000008",
+      "6afaa8c40000000000000009",
+      "6afaa8c4000000000000000a",
+      "6afaa8c4000000000000000b"
+    ],
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  },
+  {
+    "_id": "6afaa8c40000000000000003",
+    "name": "High-Velocity Breakcore & HexD",
+    "curator": "@adityaiche",
+    "genre": "Breakcore",
+    "description": "170+ BPM drill breaks, bitcrush distortion, and hyper-compressed glitch percussion.",
+    "trackIds": [
+      "6afaa8c40000000000000001",
+      "6afaa8c40000000000000002",
+      "6afaa8c40000000000000024",
+      "6afaa8c40000000000000025",
+      "6afaa8c40000000000000026"
+    ],
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  },
+  {
+    "_id": "6afaa8c40000000000000004",
+    "name": "Gothic Coldwave & Post-Soviet Darkwave",
+    "curator": "@adityaiche",
+    "genre": "Darkwave",
+    "description": "Driving drum machine claps, chorus-drenched guitars, and baritone melancholic poetry.",
+    "trackIds": [
+      "6afaa8c40000000000000018",
+      "6afaa8c40000000000000019",
+      "6afaa8c4000000000000001a",
+      "6afaa8c4000000000000001b",
+      "6afaa8c4000000000000001c"
+    ],
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  }
+]

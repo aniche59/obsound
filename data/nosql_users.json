@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "6afaa8c40000000000000101",
+    "handle": "@adityaiche",
+    "email": "adityaiche59@obsound.org",
+    "genre": "Shoegaze",
+    "avatar": "A",
+    "role": "Master Curator",
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  },
+  {
+    "_id": "6afaa8c40000000000000102",
+    "handle": "@mallsoft_digger",
+    "email": "mallsoft@obsound.org",
+    "genre": "Mallsoft",
+    "avatar": "M",
+    "role": "Curator",
+    "createdAt": "2026-11-23T12:00:00.000Z"
+  }
+]

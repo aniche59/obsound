@@ -126,12 +126,46 @@ export class MusicGraph {
       pulse: 0
     };
 
-    if (data.coverArt) {
+    const imgSrc = data.coverArt || data.image || data.avatar || data.img;
+    if (imgSrc && typeof imgSrc === 'string' && imgSrc.trim() !== '' && !imgSrc.includes('unsplash.com')) {
       const img = new Image();
-      img.src = data.coverArt;
-      img.crossOrigin = "anonymous";
-      img.onload = () => { node.img = img; };
-      node.img = img;
+      img.onload = () => { 
+        node.img = img; 
+      };
+      img.onerror = () => { 
+        node.img = null; 
+      };
+      img.src = imgSrc;
+    } else if (type === 'artist') {
+      // Automatically fetch genuine artist photo from Deezer / Wikipedia proxy
+      fetch(`/api/artist-image?artist=${encodeURIComponent(label)}`)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.imageUrl) {
+            const img = new Image();
+            img.onload = () => { node.img = img; };
+            img.src = resData.imageUrl;
+          }
+        }).catch(() => {});
+    } else if (type === 'track') {
+      // Query iTunes for genuine studio album cover
+      const searchQ = ((data.artist || '') + ' ' + label).trim();
+      if (searchQ) {
+        fetch(`/api/itunes?term=${encodeURIComponent(searchQ)}`)
+          .then(res => res.json())
+          .then(resData => {
+            if (resData.results && resData.results[0] && resData.results[0].artworkUrl100) {
+              const coverUrl = resData.results[0].artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg').replace('100x100.jpg', '600x600.jpg');
+              const img = new Image();
+              img.onload = () => { node.img = img; };
+              img.src = coverUrl;
+              node.data.coverArt = coverUrl;
+              if (resData.results[0].previewUrl) {
+                node.data.previewAudioUrl = resData.results[0].previewUrl;
+              }
+            }
+          }).catch(() => {});
+      }
     }
 
     this.nodes.push(node);
@@ -384,7 +418,7 @@ export class MusicGraph {
     const centerPull = 0.0015;
     const centerX = this.width / 2;
     const centerY = this.height / 2;
-    const friction = 0.82;
+    const friction = 0.88;
 
     for (const node of this.nodes) {
       if (node === this.draggedNode) continue;
@@ -401,6 +435,10 @@ export class MusicGraph {
       
       node.vx *= friction;
       node.vy *= friction;
+
+      // Settle nodes when velocity is small to stop distracting oscillations
+      if (Math.abs(node.vx) < 0.015) node.vx = 0;
+      if (Math.abs(node.vy) < 0.015) node.vy = 0;
     }
 
     // 4. Update data-packet particles traveling along links
@@ -506,26 +544,34 @@ export class MusicGraph {
 
   drawLinks() {
     this.ctx.save();
+    
+    // Rabbit Hole Focus Mode: Spotlight the selected node and its trail
     for (const link of this.links) {
       const nodeA = this.nodeMap.get(link.source);
       const nodeB = this.nodeMap.get(link.target);
       if (!nodeA || !nodeB) continue;
       
       const isSelected = link.source === this.selectedNodeId || link.target === this.selectedNodeId;
-      
-      // Dynamic link styling: glowing lines for selected relationships
+      const isDimmed = this.selectedNodeId && !isSelected;
+
       this.ctx.beginPath();
       this.ctx.moveTo(nodeA.x, nodeA.y);
       this.ctx.lineTo(nodeB.x, nodeB.y);
       
       if (isSelected) {
-        this.ctx.strokeStyle = '#10b981';
-        this.ctx.lineWidth = 2.0;
+        // Spotlight active branch of the rabbit hole
+        this.ctx.strokeStyle = '#E76F51';
+        this.ctx.lineWidth = 2.4;
         this.ctx.shadowBlur = 8;
-        this.ctx.shadowColor = '#10b981';
+        this.ctx.shadowColor = '#E76F51';
+      } else if (isDimmed) {
+        // Fade unrelated connections to reduce clutter
+        this.ctx.strokeStyle = 'rgba(209, 223, 216, 0.22)';
+        this.ctx.lineWidth = 0.8;
+        this.ctx.shadowBlur = 0;
       } else {
-        this.ctx.strokeStyle = '#d1dfd8';
-        this.ctx.lineWidth = 1.2;
+        this.ctx.strokeStyle = '#cad7d0';
+        this.ctx.lineWidth = 1.1;
         this.ctx.shadowBlur = 0;
       }
       this.ctx.stroke();
@@ -540,6 +586,12 @@ export class MusicGraph {
       const nodeB = this.nodeMap.get(p.target);
       if (!nodeA || !nodeB) continue;
 
+      const isFocused = !this.selectedNodeId || 
+                        p.source === this.selectedNodeId || 
+                        p.target === this.selectedNodeId;
+
+      if (!isFocused) continue; // Don't draw distracting particles on dimmed links
+
       const x = nodeA.x + (nodeB.x - nodeA.x) * p.progress;
       const y = nodeA.y + (nodeB.y - nodeA.y) * p.progress;
 
@@ -547,7 +599,6 @@ export class MusicGraph {
       this.ctx.arc(x, y, 2.5, 0, Math.PI * 2);
       this.ctx.fillStyle = '#ffffff';
       
-      // Determine glow color from source type
       const palette = this.typeColors[nodeA.type] || { glow: '#ff5500' };
       this.ctx.shadowColor = palette.glow;
       this.ctx.shadowBlur = 8;
@@ -556,105 +607,229 @@ export class MusicGraph {
     this.ctx.restore();
   }
 
+  drawHexagon(ctx, x, y, radius) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI / 3) * i - Math.PI / 6;
+      const hx = x + radius * Math.cos(angle);
+      const hy = y + radius * Math.sin(angle);
+      if (i === 0) ctx.moveTo(hx, hy);
+      else ctx.lineTo(hx, hy);
+    }
+    ctx.closePath();
+  }
+
+  drawRoundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
   drawNodes() {
+    // Build set of connected neighbors for Rabbit Hole Focus spotlight
+    const connectedNodeIds = new Set();
+    if (this.selectedNodeId) {
+      connectedNodeIds.add(this.selectedNodeId);
+      for (const link of this.links) {
+        if (link.source === this.selectedNodeId) connectedNodeIds.add(link.target);
+        if (link.target === this.selectedNodeId) connectedNodeIds.add(link.source);
+      }
+    }
+
     for (const node of this.nodes) {
-      const palette = this.typeColors[node.type];
+      const palette = this.typeColors[node.type] || { bg: '#fff', border: '#232533', glow: '#232533' };
       const isSelected = node.id === this.selectedNodeId;
       const isHovered = node === this.hoveredNode;
+      const isConnected = connectedNodeIds.has(node.id);
+      const isDimmed = this.selectedNodeId && !isConnected && !isHovered;
+
+      this.ctx.save();
+      // Rabbit Hole Focus Mode: Spotlight connected path and soften distant noise
+      if (isDimmed) {
+        this.ctx.globalAlpha = 0.28;
+      } else {
+        this.ctx.globalAlpha = 1.0;
+      }
       
-      // Compute beat pulse scaling for nodes
-      // Root tag nodes pulse slightly, artist nodes moderately, active track nodes pulse heavily!
+      // Beat pulse scaling
       let scale = 1.0;
       if (this.audioAmplitude > 0) {
         if (isSelected && node.type === 'track') {
-          scale += this.audioAmplitude * 0.22; // heavy pulse for current playing song
+          scale += this.audioAmplitude * 0.22;
         } else if (node.type === 'artist') {
-          scale += this.audioAmplitude * 0.10;
+          scale += this.audioAmplitude * 0.12;
         } else if (node.type === 'tag') {
-          scale += this.audioAmplitude * 0.05;
+          scale += this.audioAmplitude * 0.06;
         }
       }
       
       const currentRadius = node.radius * scale;
       
-      this.ctx.save();
-      
-      // Glowing shadow
-      this.ctx.shadowColor = palette.glow;
-      if (isSelected) {
-        this.ctx.shadowBlur = 18 + (this.audioAmplitude * 15);
-      } else if (isHovered) {
-        this.ctx.shadowBlur = 12;
-      } else {
-        this.ctx.shadowBlur = 6;
-      }
+      // 1. GENRE / TAG HUBS: Glowing Hexagonal Sanctuaries
+      if (node.type === 'tag') {
+        this.ctx.shadowColor = isSelected ? '#ffffff' : palette.glow;
+        this.ctx.shadowBlur = isSelected ? 22 : (isHovered ? 16 : 8);
 
-      // Draw outer glowing ring
-      this.ctx.beginPath();
-      this.ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
-      
-      if (isSelected) {
-        this.ctx.strokeStyle = '#ffffff';
-        this.ctx.lineWidth = 3.0;
-      } else {
+        // Hexagon Outer Ring
+        this.drawHexagon(this.ctx, node.x, node.y, currentRadius);
+        this.ctx.strokeStyle = isSelected ? '#ffffff' : palette.border;
+        this.ctx.lineWidth = isSelected ? 3.5 : 2.5;
+        this.ctx.stroke();
+
+        // Hexagon Fill
+        this.ctx.shadowBlur = 0;
+        this.ctx.fillStyle = isSelected ? 'rgba(16, 185, 129, 0.4)' : (isHovered ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.95)');
+        this.ctx.fill();
+
+        // Inner decorative hex ring
+        this.drawHexagon(this.ctx, node.x, node.y, currentRadius - 6);
         this.ctx.strokeStyle = palette.border;
-        this.ctx.lineWidth = 1.8;
-      }
-      this.ctx.stroke();
+        this.ctx.lineWidth = 1.0;
+        this.ctx.stroke();
 
-      // Node background/fill
-      this.ctx.shadowBlur = 0; // turn off shadow to draw crisp body
-      
-      if (node.type === 'track' && node.img && node.img.complete) {
-        // Draw album art inside track node
-        this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(node.x, node.y, currentRadius - 1.5, 0, Math.PI * 2);
-        this.ctx.clip();
-        this.ctx.drawImage(node.img, node.x - currentRadius, node.y - currentRadius, currentRadius * 2, currentRadius * 2);
-        this.ctx.restore();
-        
-        // Semi-transparent overlay to keep text/border readable
-        this.ctx.fillStyle = 'rgba(28, 35, 49, 0.2)';
-        this.ctx.beginPath();
-        this.ctx.arc(node.x, node.y, currentRadius - 1.5, 0, Math.PI * 2);
-        this.ctx.fill();
-      } else {
-        this.ctx.fillStyle = palette.bg;
-        this.ctx.fill();
-        
-        // Draw generic music/artist symbol icons inside nodes if empty
-        this.ctx.fillStyle = palette.border;
+        // Center Genre Tag Symbol
+        this.ctx.fillStyle = '#232533';
+        this.ctx.font = '900 15px Outfit, sans-serif';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        
-        if (node.type === 'tag') {
-          this.ctx.font = 'bold 16px Outfit';
-          this.ctx.fillText('#', node.x, node.y);
-        } else if (node.type === 'artist') {
-          this.ctx.font = '14px sans-serif';
-          this.ctx.fillText('👤', node.x, node.y - 1);
-        } else {
-          this.ctx.font = '12px sans-serif';
-          this.ctx.fillText('🎵', node.x, node.y);
-        }
+        this.ctx.fillText('#', node.x, node.y - 1);
+
+        // Label Badge Underneath
+        this.ctx.font = 'bold 12.5px Space Grotesk, sans-serif';
+        this.ctx.fillStyle = '#232533';
+        this.ctx.shadowColor = '#FAF7F2';
+        this.ctx.shadowBlur = 4;
+        this.ctx.fillText(node.label, node.x, node.y + currentRadius + 16);
       }
 
-      // Draw label (under node or inside if tag)
-      this.ctx.font = node.type === 'tag' ? 'bold 13px Outfit' : '11px Space Grotesk';
-      this.ctx.textAlign = 'center';
-      
-      if (node.type === 'tag') {
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.shadowBlur = 4;
-        this.ctx.shadowColor = '#000000';
-        this.ctx.fillText(node.label, node.x, node.y + currentRadius + 16);
-      } else {
-        this.ctx.fillStyle = '#9ca3af';
-        // Truncate long track/artist titles
-        let label = node.label;
-        if (label.length > 14) label = label.substring(0, 12) + '...';
-        this.ctx.fillText(label, node.x, node.y + currentRadius + 14);
+      // 2. ARTISTS: Circular Vinyl Disc Avatars with Authentic Portraits
+      else if (node.type === 'artist') {
+        this.ctx.shadowColor = isSelected ? '#ffffff' : (palette.glow || '#F4A261');
+        this.ctx.shadowBlur = isSelected ? 20 : (isHovered ? 14 : 7);
+
+        // Outer Double Vinyl Groove Ring
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
+        this.ctx.strokeStyle = isSelected ? '#ffffff' : '#232533';
+        this.ctx.lineWidth = isSelected ? 3.0 : 2.0;
+        this.ctx.stroke();
+
+        this.ctx.shadowBlur = 0;
+
+        // Clip and Draw Authentic Artist Image
+        if (node.img && node.img.complete && node.img.naturalWidth > 0) {
+          this.ctx.save();
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, currentRadius - 2, 0, Math.PI * 2);
+          this.ctx.clip();
+          this.ctx.drawImage(node.img, node.x - currentRadius, node.y - currentRadius, currentRadius * 2, currentRadius * 2);
+          
+          // Subtle circular gradient overlay
+          this.ctx.fillStyle = 'rgba(35, 37, 51, 0.15)';
+          this.ctx.fill();
+          this.ctx.restore();
+        } else {
+          // Stylized Initials Fallback (Vinyl Record Center)
+          this.ctx.fillStyle = '#FAF7F2';
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, currentRadius - 2, 0, Math.PI * 2);
+          this.ctx.fill();
+
+          // Concentric subtle vinyl grooves
+          this.ctx.strokeStyle = 'rgba(35, 37, 51, 0.15)';
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, currentRadius - 8, 0, Math.PI * 2);
+          this.ctx.stroke();
+
+          // Initials
+          const initials = (node.label || 'A').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+          this.ctx.fillStyle = '#E76F51';
+          this.ctx.font = 'bold 12px Space Grotesk, sans-serif';
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.fillText(initials, node.x, node.y);
+        }
+
+        // Artist Label with Persona Badge
+        this.ctx.font = '600 11.5px Space Grotesk, sans-serif';
+        this.ctx.fillStyle = '#232533';
+        this.ctx.textAlign = 'center';
+        let artLabel = node.label;
+        if (artLabel.length > 15) artLabel = artLabel.substring(0, 13) + '..';
+        this.ctx.fillText(`👤 ${artLabel}`, node.x, node.y + currentRadius + 14);
+      }
+
+      // 3. SONGS / TRACKS: Rounded Square Miniature LP Cardboard Sleeves
+      else {
+        const side = currentRadius * 2;
+        const half = currentRadius;
+        const rx = node.x - half;
+        const ry = node.y - half;
+
+        this.ctx.shadowColor = isSelected ? '#ffffff' : (palette.glow || '#4A90E2');
+        this.ctx.shadowBlur = isSelected ? 18 : (isHovered ? 12 : 5);
+
+        // Rounded Square LP Sleeve Outline
+        this.drawRoundRect(this.ctx, rx, ry, side, side, 6);
+        this.ctx.strokeStyle = isSelected ? '#ffffff' : '#232533';
+        this.ctx.lineWidth = isSelected ? 2.5 : 1.5;
+        this.ctx.stroke();
+
+        this.ctx.shadowBlur = 0;
+
+        // Clip and Draw Authentic Album Cover Art
+        if (node.img && node.img.complete && node.img.naturalWidth > 0) {
+          this.ctx.save();
+          this.drawRoundRect(this.ctx, rx + 1, ry + 1, side - 2, side - 2, 5);
+          this.ctx.clip();
+          this.ctx.drawImage(node.img, rx, ry, side, side);
+          
+          // Play indicator overlay if selected
+          if (isSelected) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+            this.ctx.fill();
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.font = 'bold 14px sans-serif';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('▶', node.x, node.y);
+          }
+          this.ctx.restore();
+        } else {
+          // Cardboard Sleeve Fallback
+          this.ctx.fillStyle = '#F4EFE6';
+          this.drawRoundRect(this.ctx, rx + 1, ry + 1, side - 2, side - 2, 5);
+          this.ctx.fill();
+
+          this.ctx.fillStyle = '#646A7E';
+          this.ctx.font = '12px sans-serif';
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          this.ctx.fillText('🎵', node.x, node.y);
+        }
+
+        // Track Title Label
+        this.ctx.font = '500 11px Space Grotesk, sans-serif';
+        this.ctx.fillStyle = isSelected ? '#E76F51' : '#646A7E';
+        this.ctx.textAlign = 'center';
+        let trkLabel = node.label;
+        if (trkLabel.length > 14) trkLabel = trkLabel.substring(0, 12) + '..';
+        this.ctx.fillText(trkLabel, node.x, node.y + currentRadius + 14);
+      }
+
+      // Rabbit-Hole Selected Node Focus Halo Ring
+      if (isSelected) {
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, currentRadius + 8, 0, Math.PI * 2);
+        this.ctx.strokeStyle = '#E76F51';
+        this.ctx.lineWidth = 2.5;
+        this.ctx.setLineDash([4, 4]);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
       }
 
       this.ctx.restore();

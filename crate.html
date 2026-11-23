@@ -262,23 +262,32 @@
   <div class="cyber-background"></div>
 
   <!-- Navbar -->
+  <!-- Unified Retro Header -->
   <header class="app-header">
-    <a href="index.html" class="logo-area" style="text-decoration: none; display: flex; align-items: baseline; gap: 10px;">
-      <span class="logo-glow"></span>
-      <h1 class="logo-text">obsound</h1>
-      <span class="logo-tagline">connected sounds</span>
+    <a href="index.html" class="brand-logo">
+      <i class="bi bi-disc-fill" style="color: #E76F51; font-size: 24px;"></i>
+      <h1 class="logo-text">Ob<span>Sound</span></h1>
+      <span class="retro-badge-pill">
+        <i class="bi bi-archive-fill"></i> CRATE &amp; PLAYLISTS
+      </span>
     </a>
     
-    <nav class="nav-links" style="display: flex; align-items: center; gap: 14px;">
+    <nav class="nav-links" style="margin-right: auto; margin-left: 28px;">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="app.html" class="nav-link">Explore Graph</a>
-      <a href="crate.html" class="nav-link active">Library</a>
+      <a href="app.html" class="nav-link">Galaxy Graph</a>
+      <a href="albums.html" class="nav-link">Vinyl Vault</a>
+      <a href="recommendations.html" class="nav-link">Taste Oracle</a>
+      <a href="crate.html" class="nav-link active">My Crate</a>
       <a href="react-studio.html" class="nav-link">React Studio</a>
-      <a href="login.html" id="curator-auth-link" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; background: var(--bg-secondary); border: 1.5px solid var(--border-color); color: var(--text-primary); font-size: 11px; font-weight: 700; box-shadow: var(--retro-shadow-sm);">
-        <span id="curator-avatar-icon" style="width: 18px; height: 18px; border-radius: 50%; background: var(--accent-terracotta); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">A</span>
+      <a href="login.html" class="nav-link">Curator Vault</a>
+    </nav>
+
+    <div class="status-area">
+      <a href="login.html" id="curator-auth-link" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 6px; background: #FAF7F2; border: 1.5px solid #232533; color: #232533; font-size: 11px; font-weight: 700; box-shadow: 2px 2px 0 #232533;">
+        <span id="curator-avatar-icon" style="width: 18px; height: 18px; border-radius: 50%; background: #E76F51; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800;">A</span>
         <span id="curator-handle-label">Vault (@adityaiche)</span>
       </a>
-    </nav>
+    </div>
   </header>
 
   <!-- Main Crate Panel -->
@@ -297,10 +306,16 @@
       <div class="control-box glass">
         <h3>Playlist Actions</h3>
         <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
-          Export query parameters to import your discoveries directly to Spotify or Apple Music.
+          Export your crate discoveries directly into Spotify, media players, or portable playlist files.
         </p>
-        <button id="copy-spotify-btn" class="btn btn-primary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px;">
-          📋 Copy Spotify Search list
+        <button id="open-spotify-btn" class="btn btn-primary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px; background: #1DB954; color: #fff; border: 1.5px solid #14833b; font-weight: 700;">
+          🎧 Open in Spotify Web Player
+        </button>
+        <button id="download-m3u-btn" class="btn btn-secondary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px; font-weight: 600;">
+          📥 Download .M3U8 Playlist
+        </button>
+        <button id="copy-spotify-btn" class="btn btn-secondary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px;">
+          📋 Copy Spotify Track List
         </button>
         <button id="export-library-btn" class="btn btn-secondary" style="width: 100%; margin-bottom: 8px; justify-content: center; font-size: 12px; height: 38px;">
           💾 Export JSON Crate

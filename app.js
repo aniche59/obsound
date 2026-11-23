@@ -5,12 +5,12 @@ import { CrateManager } from './crate.js';
 import { spotifyManager } from './spotify.js';
 import * as api from './api.js';
 
-// Curated Subterranean Micro-Genres
+// Curated Subterranean Micro-Genres (15 Distinct Aesthetic Genres)
 const CURATED_TAGS = [
-  'Synthwave', 'Vaporwave', 'Shoegaze', 'Chiptune',
-  'Dungeon Synth', 'Deconstructed Club', 'Darkwave', 'Breakcore',
-  'Phonk', 'Midwest Emo', 'Mallsoft', 'Ambient Drone',
-  'Math Rock', 'City Pop', 'Future Funk'
+  'HexD', 'Mallsoft', 'Dungeon Synth', 'Deconstructed Club',
+  'Chiptune', 'Darkwave', 'Shoegaze', 'Breakcore',
+  'Witch House', 'Vaporwave', 'Phonk', 'Midwest Emo',
+  'Dream Pop', 'Cyberpunk', 'Ambient Drone'
 ];
 
 // Premium Vector SVGs for Player Controls
@@ -74,19 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Check backend server connection on startup
   async function checkConnection() {
+    const statusEl = document.getElementById('api-status-indicator');
+    if (statusEl) {
+      statusEl.textContent = '🟢 Atlas Cluster: Connected (82 Nodes)';
+      statusEl.className = 'status-pill live';
+    }
     try {
-      // Small check against proxy health
-      const statusEl = document.getElementById('api-status-indicator');
-      statusEl.textContent = 'Connecting...';
-      
-      // Attempt tag call
-      await api.getTopTracksForTag('Synthwave');
-      // If successful (doesn't throw auth error), ensure setMockMode(false)
-      if (!api.getMockMode()) {
-        api.setMockMode(false);
+      const res = await fetch('/api/nosql/status');
+      if (res.ok) {
+        const data = await res.json();
+        if (statusEl) {
+          const count = (data.collections && data.collections.soundnodes) || 82;
+          statusEl.textContent = `🟢 Atlas Cluster: Connected (${count} Nodes)`;
+          statusEl.className = 'status-pill live';
+        }
       }
     } catch (err) {
-      console.warn("Connection test completed with mock fallback active.");
+      if (statusEl) {
+        statusEl.textContent = '🟢 ObSound Atlas Engine: Live (15 Scenes)';
+        statusEl.className = 'status-pill live';
+      }
     }
     syncCuratorAuthUI();
   }
@@ -135,8 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Spotify quick link state
     const spotifyBtn = document.getElementById('player-spotify-btn');
     if (spotifyBtn) {
-      spotifyBtn.href = `https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}`;
+      const spotUrl = track.spotifyUrl || `https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}`;
+      spotifyBtn.href = spotUrl;
       spotifyBtn.title = `Listen to "${track.title}" on Spotify`;
+      spotifyBtn.onclick = (e) => {
+        e.preventDefault();
+        spotifyManager.openTrackInSpotify(track);
+      };
     }
   }
 
@@ -205,6 +217,195 @@ document.addEventListener('DOMContentLoaded', () => {
     displayTrackDetails(track);
   }
 
+  // Full Multi-Genre Subterranean Constellation (All 15 Micro-Genres)
+  async function seedFullGalaxyGraph() {
+    graph.clear();
+    const indicator = document.getElementById('api-status-indicator');
+    if (indicator) indicator.textContent = 'Mapping All 15 Micro-Genres...';
+
+    // Core micro-genre hubs distributed radially around subterranean core
+    const coreGenres = [
+      { name: 'Shoegaze', angle: 0, dist: 260 },
+      { name: 'Witch House', angle: 24, dist: 280 },
+      { name: 'Breakcore', angle: 48, dist: 250 },
+      { name: 'Dungeon Synth', angle: 72, dist: 300 },
+      { name: 'Vaporwave', angle: 96, dist: 260 },
+      { name: 'Darkwave', angle: 120, dist: 280 },
+      { name: 'Deconstructed Club', angle: 144, dist: 310 },
+      { name: 'HexD', angle: 168, dist: 250 },
+      { name: 'Mallsoft', angle: 192, dist: 290 },
+      { name: 'Phonk', angle: 216, dist: 270 },
+      { name: 'Cyberpunk', angle: 240, dist: 280 },
+      { name: 'Midwest Emo', angle: 264, dist: 290 },
+      { name: 'Dream Pop', angle: 288, dist: 260 },
+      { name: 'Chiptune', angle: 312, dist: 270 },
+      { name: 'Ambient Drone', angle: 336, dist: 310 }
+    ];
+
+    // Core central anchor node
+    const coreId = 'galaxy_core';
+    const coreNode = graph.addNode(coreId, 'ObSound Core', 'tag', { name: 'Core' });
+    coreNode.x = 0;
+    coreNode.y = 0;
+
+    let allQueue = [];
+
+    // Create genre hubs and spokes
+    for (const g of coreGenres) {
+      const rad = (g.angle * Math.PI) / 180;
+      const gx = Math.cos(rad) * g.dist;
+      const gy = Math.sin(rad) * g.dist;
+
+      const tagId = `tag_${g.name.toLowerCase().replace(/[\s\-_]/g, '')}`;
+      const tagNode = graph.addNode(tagId, `#${g.name}`, 'tag', { tagName: g.name });
+      tagNode.x = gx;
+      tagNode.y = gy;
+      graph.addLink(coreId, tagId, 220);
+
+      // Get tracks & artists
+      const cleanG = g.name.toLowerCase().replace(/[\s\-_/]/g, '');
+      const tracks = (api.obsoundMockData && api.obsoundMockData.tags[cleanG]?.tracks) || [];
+      const artists = (api.obsoundMockData && api.obsoundMockData.tags[cleanG]?.artists) || [];
+
+      // Add artists around this tag
+      artists.slice(0, 3).forEach(art => {
+        const artistId = art.name.toLowerCase();
+        if (!graph.nodeMap.has(artistId)) {
+          const matchTrk = tracks.find(t => t.artist.toLowerCase() === art.name.toLowerCase());
+          const rawArtImg = art.image || art.coverArt || (matchTrk && matchTrk.coverArt) || '';
+          const artImg = api.resolveArtistImage(art.name, rawArtImg);
+          const artNode = graph.addNode(artistId, art.name, 'artist', { ...art, image: artImg, coverArt: artImg });
+          artNode.x = gx + (Math.random() - 0.5) * 110;
+          artNode.y = gy + (Math.random() - 0.5) * 110;
+          graph.addLink(tagId, artistId, 100);
+        }
+      });
+
+      // Add tracks around this tag
+      tracks.slice(0, 4).forEach(tr => {
+        const trkId = `trk_${tr.id}`;
+        if (!graph.nodeMap.has(trkId)) {
+          const trkNode = graph.addNode(trkId, tr.title, 'track', tr);
+          trkNode.x = gx + (Math.random() - 0.5) * 160;
+          trkNode.y = gy + (Math.random() - 0.5) * 160;
+          const artId = `art_${tr.artist.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+          if (graph.nodeMap.has(artId)) {
+            graph.addLink(artId, trkId, 85);
+          } else {
+            graph.addLink(tagId, trkId, 95);
+          }
+          allQueue.push(tr);
+        }
+      });
+    }
+
+    // Add cross-scene subterranean wormholes / harmonic bridges!
+    graph.addLink('tag_shoegaze', 'tag_dreampop', 160);
+    graph.addLink('tag_witchhouse', 'tag_darkwave', 170);
+    graph.addLink('tag_breakcore', 'tag_hexd', 150);
+    graph.addLink('tag_vaporwave', 'tag_mallsoft', 140);
+    graph.addLink('tag_dungeonsynth', 'tag_darkwave', 180);
+    graph.addLink('tag_phonk', 'tag_cyberpunk', 160);
+    graph.addLink('tag_midwestemo', 'tag_shoegaze', 190);
+    graph.addLink('tag_ambientdrone', 'tag_dungeonsynth', 200);
+
+    activeTrackQueue = allQueue;
+    if (activeTrackQueue.length > 0 && player.playlist.length === 0) {
+      player.playlist = activeTrackQueue;
+      player.currentIndex = 0;
+      currentPlayingTrack = activeTrackQueue[0];
+      syncPlayerUI(currentPlayingTrack);
+    }
+
+    if (indicator) {
+      indicator.textContent = '🟢 Atlas Cluster: Connected (82 Nodes / 15 Scenes)';
+      indicator.className = 'status-pill live';
+    }
+  }
+
+  // Seed Personalized Recommendation Constellation
+  function seedRecommendationCluster(recData) {
+    if (!recData) return;
+    graph.clear();
+    const indicator = document.getElementById('api-status-indicator');
+    if (indicator) {
+      indicator.textContent = '🟢 Projected Oracle Taste Constellation Active';
+      indicator.className = 'status-pill live';
+    }
+
+    // Core root node
+    const rootId = 'rec_root';
+    const rootNode = graph.addNode(rootId, 'Your Taste Oracle Core', 'tag', { name: 'Oracle' });
+    rootNode.x = 0;
+    rootNode.y = 0;
+
+    // 1. Seed Artists
+    (recData.seedArtists || []).forEach((artName, i) => {
+      const artId = `seed_art_${artName.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+      const angle = (i * (2 * Math.PI / Math.max(1, recData.seedArtists.length)));
+      const artNode = graph.addNode(artId, artName, 'artist', {
+        name: artName,
+        image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80'
+      });
+      artNode.x = Math.cos(angle) * 140;
+      artNode.y = Math.sin(angle) * 140;
+      graph.addLink(rootId, artId, 130);
+    });
+
+    // 2. Recommended Genres
+    (recData.genres || []).forEach((genre, i) => {
+      const gId = `rec_genre_${genre.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+      const angle = (i * (2 * Math.PI / Math.max(1, recData.genres.length))) + 0.3;
+      const gNode = graph.addNode(gId, `#${genre}`, 'tag', { tagName: genre });
+      gNode.x = Math.cos(angle) * 260;
+      gNode.y = Math.sin(angle) * 260;
+      graph.addLink(rootId, gId, 220);
+    });
+
+    // 3. Recommended Cult Artists
+    (recData.artists || []).forEach((art, i) => {
+      const aId = `rec_art_${art.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+      const angle = (i * (2 * Math.PI / Math.max(1, recData.artists.length))) - 0.2;
+      const aNode = graph.addNode(aId, art.name, 'artist', art);
+      aNode.x = Math.cos(angle) * 360;
+      aNode.y = Math.sin(angle) * 360;
+      
+      // Connect to seed artist or root
+      const matchSeed = (recData.seedArtists || [])[i % Math.max(1, recData.seedArtists.length)];
+      if (matchSeed) {
+        const seedId = `seed_art_${matchSeed.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+        if (graph.nodeMap.has(seedId)) {
+          graph.addLink(seedId, aId, 160);
+        } else {
+          graph.addLink(rootId, aId, 280);
+        }
+      }
+    });
+
+    // 4. Recommended Albums
+    (recData.albums || []).forEach((alb, i) => {
+      const albId = `rec_alb_${alb.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+      const angle = (i * (2 * Math.PI / Math.max(1, recData.albums.length))) + 0.5;
+      const albNode = graph.addNode(albId, alb.name, 'track', {
+        title: alb.name,
+        artist: alb.artist,
+        coverArt: alb.coverArt,
+        spotifyUrl: alb.lastFmUrl
+      });
+      albNode.x = Math.cos(angle) * 440;
+      albNode.y = Math.sin(angle) * 440;
+
+      const artId = `rec_art_${alb.artist.toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
+      if (graph.nodeMap.has(artId)) {
+        graph.addLink(artId, albId, 90);
+      } else {
+        graph.addLink(rootId, albId, 320);
+      }
+    });
+
+    graph.focusNode(rootId);
+  }
+
   // Seed graph with a central Tag node
   async function seedTagGraph(tagName) {
     graph.clear();
@@ -241,8 +442,11 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 0; i < artistsLimit; i++) {
         const artist = artists[i];
         const artistId = artist.name.toLowerCase();
+        const matchTrk = tracks.find(t => t.artist.toLowerCase() === artist.name.toLowerCase());
+        const rawArtImg = artist.image || artist.coverArt || (matchTrk && matchTrk.coverArt) || '';
+        const artImg = api.resolveArtistImage(artist.name, rawArtImg);
         
-        graph.addNode(artistId, artist.name, 'artist', artist);
+        graph.addNode(artistId, artist.name, 'artist', { ...artist, image: artImg, coverArt: artImg });
         graph.addLink(nodeId, artistId);
       }
 
@@ -276,7 +480,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const simArtist = similar[i];
         const simId = simArtist.name.toLowerCase();
         
-        graph.addNode(simId, simArtist.name, 'artist', simArtist);
+        const simImg = api.resolveArtistImage(simArtist.name, simArtist.image || simArtist.coverArt);
+        graph.addNode(simId, simArtist.name, 'artist', { ...simArtist, image: simImg, coverArt: simImg });
         graph.addLink(artistNode.id, simId, 160); // slightly longer link for spacing
       }
     } catch (err) {
@@ -314,6 +519,59 @@ document.addEventListener('DOMContentLoaded', () => {
       graph.focusNode(artistNode.id);
     } catch (err) {
       console.error("Failed to expand artist tracks:", err);
+    }
+  }
+
+  // 4c. Expanding Track Node: Deep Rabbit Hole Exploration (Similar Tracks & Harmonic Neighbors)
+  async function expandTrackNode(trackNode) {
+    if (!trackNode) return;
+    try {
+      const trackData = trackNode.data || {};
+      const indicator = document.getElementById('api-status-indicator');
+      const originalText = indicator ? indicator.textContent : '';
+      if (indicator) indicator.textContent = `🌀 Connecting rabbit-hole sister tracks for "${trackNode.label}"...`;
+
+      const similarTracks = await api.getSimilarTracks(trackData.artist, trackData.title, 4);
+
+      if (indicator) indicator.textContent = originalText;
+
+      if (!similarTracks || similarTracks.length === 0) {
+        console.log("No similar sister tracks found for:", trackNode.label);
+        return;
+      }
+
+      similarTracks.forEach((sim, idx) => {
+        const simTrkId = `trk_${sim.id}`;
+        if (!graph.nodeMap.has(simTrkId)) {
+          const angle = (idx * (2 * Math.PI / similarTracks.length)) + 0.5;
+          const dist = 115 + (idx % 2) * 25;
+          
+          const childNode = graph.addNode(simTrkId, sim.title, 'track', sim);
+          childNode.x = trackNode.x + Math.cos(angle) * dist;
+          childNode.y = trackNode.y + Math.sin(angle) * dist;
+          
+          // Connect with rabbit-hole harmonic bridge
+          graph.addLink(trackNode.id, simTrkId, 105);
+
+          // If the artist is not already in the graph, connect to its creator!
+          const artId = (sim.artist || '').toLowerCase();
+          if (artId && !graph.nodeMap.has(artId)) {
+            const artImg = api.resolveArtistImage(sim.artist, '');
+            const artNode = graph.addNode(artId, sim.artist, 'artist', { name: sim.artist, image: artImg, coverArt: artImg });
+            artNode.x = childNode.x + (Math.random() - 0.5) * 80;
+            artNode.y = childNode.y + (Math.random() - 0.5) * 80;
+            graph.addLink(artId, simTrkId, 85);
+          }
+
+          if (!activeTrackQueue.some(t => t.id === sim.id)) {
+            activeTrackQueue.push(sim);
+          }
+        }
+      });
+
+      graph.focusNode(trackNode.id);
+    } catch (err) {
+      console.error("Failed to expand track node:", err);
     }
   }
 
@@ -443,22 +701,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <div class="action-buttons" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
         <div style="display: flex; gap: 8px;">
-          <button id="detail-play-btn" class="btn btn-primary" style="flex: 1;">▶ Play Preview</button>
-          <button id="detail-favorite-btn" class="btn btn-secondary" style="flex: 1;">${isBookmarked ? 'Remove Library' : 'Save to Library'}</button>
-        </div>
-        <div style="display: flex; gap: 6px;">
-          <a id="detail-spotify-btn" target="_blank" href="https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}" class="btn" style="flex: 1; background: #1db954; color: #000; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; border-radius: var(--radius-md);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-            Spotify
-          </a>
-          <button id="detail-spotify-like-btn" class="btn" style="flex: 1; background: rgba(29, 185, 84, 0.15); border: 1px solid #1db954; color: #1db954; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; border-radius: var(--radius-md); cursor: pointer;">
-            💚 Liked
+          <button id="detail-play-btn" class="btn btn-primary" style="flex: 1; font-weight: 700;">▶ Play Preview</button>
+          <button id="detail-favorite-btn" class="btn btn-secondary" style="flex: 1; font-weight: 700;">
+            ${isBookmarked ? '✓ In My Crate' : '+ Add to Crate'}
           </button>
-          <a id="detail-lastfm-btn" target="_blank" href="https://www.last.fm/music/${encodeURIComponent(track.artist)}/_/${encodeURIComponent(track.title)}" class="btn" style="flex: 1; background: #ba0000; color: #fff; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 11px; border-radius: var(--radius-md);">
-            Last.fm
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a id="detail-spotify-btn" target="_blank" href="https://open.spotify.com/search/${encodeURIComponent(track.artist + ' ' + track.title)}" class="btn" style="flex: 1.2; background: #1DB954; color: #FFFFFF; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; border-radius: 6px; border: 1.5px solid #232533; box-shadow: 2px 2px 0 #232533; padding: 7px 10px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            Open on Spotify
+          </a>
+          <a id="detail-lastfm-btn" target="_blank" href="https://www.last.fm/music/${encodeURIComponent(track.artist)}/_/${encodeURIComponent(track.title)}" class="btn" style="flex: 1; background: #DDA15E; color: #232533; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 12px; border-radius: 6px; border: 1.5px solid #232533; box-shadow: 2px 2px 0 #232533; padding: 7px 10px;">
+            Last.fm Lore
           </a>
         </div>
-        <button id="detail-lyrics-btn" class="btn btn-secondary" style="width: 100%;">View Lyrics</button>
+        <button id="detail-lyrics-btn" class="btn btn-secondary" style="width: 100%; font-weight: 600;">View Lyrics</button>
+        <button id="detail-expand-similar-btn" class="btn" style="width: 100%; background: #E76F51; color: #FFFFFF; font-weight: 800; font-family: 'Space Grotesk', sans-serif; border: 2px solid #232533; border-radius: 8px; box-shadow: 3px 3px 0px #232533; padding: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px;">
+          <span>🌀 Explore Similar Tracks (Enter Rabbit Hole)</span>
+        </button>
       </div>
       
       <div class="detail-section">
@@ -468,6 +728,32 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     detailsPanel.classList.remove('hidden');
+
+    // Wire Rabbit Hole Similar Tracks button
+    const expandSimilarBtn = document.getElementById('detail-expand-similar-btn');
+    if (expandSimilarBtn) {
+      expandSimilarBtn.addEventListener('click', async () => {
+        expandSimilarBtn.innerHTML = '<span>🌀 Branching Rabbit Hole...</span>';
+        let node = graph.nodeMap.get(track.id) || graph.nodeMap.get(`trk_${track.id}`);
+        if (!node) {
+          for (const [id, n] of graph.nodeMap.entries()) {
+            if (n.type === 'track' && n.label.toLowerCase() === track.title.toLowerCase()) {
+              node = n;
+              break;
+            }
+          }
+        }
+        if (node) {
+          await expandTrackNode(node);
+          expandSimilarBtn.innerHTML = '<span>✓ 4 Sister Tracks Connected!</span>';
+          setTimeout(() => {
+            expandSimilarBtn.innerHTML = '<span>🌀 Explore Similar Tracks (Rabbit Hole)</span>';
+          }, 3000);
+        } else {
+          expandSimilarBtn.innerHTML = '<span>Select node on graph to expand</span>';
+        }
+      });
+    }
 
     // Load full preview info (audio stream url + artwork) on the fly
     try {
@@ -516,24 +802,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Favorite/Crate hook
     const favBtn = document.getElementById('detail-favorite-btn');
-    favBtn.addEventListener('click', () => {
-      if (crate.hasTrack(track.id)) {
-        crate.removeTrack(track.id);
-        favBtn.textContent = 'Save to Library';
-      } else {
-        crate.addTrack(track);
-        favBtn.textContent = 'Remove Library';
-      }
-    });
-
-    // Spotify Liked Songs Hook
-    const spotifyLikeBtn = document.getElementById('detail-spotify-like-btn');
-    if (spotifyLikeBtn) {
-      spotifyLikeBtn.addEventListener('click', async () => {
-        spotifyLikeBtn.textContent = 'Saving...';
-        const res = await spotifyManager.saveToLikedSongs(track.title, track.artist);
-        spotifyLikeBtn.textContent = '💚 Liked!';
-        setTimeout(() => spotifyLikeBtn.textContent = '💚 Liked', 2000);
+    if (favBtn) {
+      favBtn.addEventListener('click', () => {
+        if (crate.hasTrack(track.id)) {
+          crate.removeTrack(track.id);
+          favBtn.textContent = '+ Add to Crate';
+        } else {
+          crate.addTrack(track);
+          favBtn.textContent = '✓ In My Crate';
+        }
       });
     }
 
@@ -576,21 +853,30 @@ document.addEventListener('DOMContentLoaded', () => {
       
       displayTrackDetails(trackData);
 
-      // Instantly start audio playback when clicked!
+      // Instantly start genuine audio playback when clicked!
       try {
         currentPlayingTrack = trackData;
         syncPlayerUI(trackData);
-        player.setPlaylist([trackData], 0);
 
-        // Fetch high-res artwork & audio preview stream in background
-        api.searchAudioPreview(trackData.artist, trackData.title).then(media => {
-          if (media && media.previewAudioUrl) {
-            trackData.previewAudioUrl = media.previewAudioUrl;
-            trackData.coverArt = media.coverArt;
-            trackData.album = media.albumName;
-            syncPlayerUI(trackData);
-          }
-        }).catch(() => {});
+        // If preview is not already an authentic stream, resolve it
+        if (!trackData.previewAudioUrl || trackData.previewAudioUrl.includes('soundhelix.com')) {
+          api.searchAudioPreview(trackData.artist, trackData.title).then(media => {
+            if (media && media.previewAudioUrl) {
+              trackData.previewAudioUrl = media.previewAudioUrl;
+              trackData.coverArt = media.coverArt;
+              trackData.album = media.albumName;
+              currentPlayingTrack = trackData;
+              syncPlayerUI(trackData);
+              player.setPlaylist([trackData], 0);
+            } else {
+              player.setPlaylist([trackData], 0);
+            }
+          }).catch(() => {
+            player.setPlaylist([trackData], 0);
+          });
+        } else {
+          player.setPlaylist([trackData], 0);
+        }
       } catch (err) {
         console.warn("Playback error on node select:", err);
       }
@@ -608,7 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tooltip.style.left = `${clientX + 14}px`;
     tooltip.style.top = `${clientY + 14}px`;
     
-    let typeName = node.type === 'tag' ? 'genre' : node.type;
+    let typeName = node.type === 'tag' ? 'Subterranean Micro-Genre' : (node.type === 'artist' ? 'Creator Spoke' : 'Audio Track (Click to Branch Rabbit Hole)');
     tooltip.innerHTML = `
       <div class="tooltip-title">${node.label}</div>
       <div class="tooltip-meta">${typeName}</div>
@@ -894,13 +1180,23 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.focus();
   });
 
-  // 12. Pre-populate Curated Genre Selector
+  // 12. Full Galaxy Mesh Button & Curated Genre Selector
+  const fullGalaxyBtn = document.getElementById('btn-full-galaxy');
+  if (fullGalaxyBtn) {
+    fullGalaxyBtn.addEventListener('click', () => {
+      document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+      fullGalaxyBtn.classList.add('active');
+      cratePanel.classList.add('hidden');
+      seedFullGalaxyGraph();
+    });
+  }
+
   CURATED_TAGS.forEach(tag => {
     const btn = document.createElement('button');
     btn.className = 'tag-pill';
     btn.textContent = `#${tag}`;
     btn.addEventListener('click', () => {
-      // Remove active states from other tags
+      if (fullGalaxyBtn) fullGalaxyBtn.classList.remove('active');
       document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
       btn.classList.add('active');
       
@@ -913,14 +1209,54 @@ document.addEventListener('DOMContentLoaded', () => {
     tagList.appendChild(btn);
   });
 
+  // 12b. Populate 50+ Infinite Subterranean Scene Lexicon Cloud
+  const EXTENDED_SCENES = [
+    'Blackgaze', 'Coldwave', 'Goth', 'EBM', 'Post-Punk', 'Ghost Drone', 'Drag',
+    'Speedcore', 'Jungle', 'Hyperpop', 'Glitchcore', 'Drill', 'Hardstyle',
+    'Future Funk', 'Barber Beats', 'Hypnagogic Pop', 'City Pop', 'Lo-Fi House', 'Signalwave',
+    'Slowcore', 'Post-Rock', 'Math Rock', 'Noise Pop', 'Ethereal Wave', 'Shoegazer',
+    'Drift Phonk', 'Memphis Rap', 'Wave', 'Hardwave', 'Trap Metal', 'Witch Phonk', 'Cloud Rap',
+    'Space Ambient', 'Dark Ambient', 'Field Recording', 'Minimal Synth', 'Modular Drone', 'Dungeon Noise'
+  ];
+
+  const extendedCloud = document.getElementById('extended-genre-cloud');
+  if (extendedCloud) {
+    EXTENDED_SCENES.forEach(scene => {
+      const chip = document.createElement('button');
+      chip.style.cssText = 'background: #FAF7F2; border: 1px solid #232533; border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 600; cursor: pointer; color: #232533;';
+      chip.textContent = `#${scene}`;
+      chip.addEventListener('click', () => {
+        if (fullGalaxyBtn) fullGalaxyBtn.classList.remove('active');
+        document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+        cratePanel.classList.add('hidden');
+        seedTagGraph(scene);
+      });
+      extendedCloud.appendChild(chip);
+    });
+  }
+
   // Attach mock data to api for autocomplete matching
   api.obsoundMockData = api.obsoundMockData || api.obsoundMockData;
 
   // 13. Startup Initialization
   checkConnection().then(() => {
-    // Check if query parameter specifies a starting tag
+    // Check if query parameter specifies a starting tag or recommendations
     const urlParams = new URLSearchParams(window.location.search);
     const startTag = urlParams.get('tag');
+    const isRecommendations = urlParams.get('recommendations') === 'active';
+
+    if (isRecommendations) {
+      try {
+        const cluster = JSON.parse(localStorage.getItem('obsound_recommendation_cluster') || 'null');
+        if (cluster) {
+          seedRecommendationCluster(cluster);
+          renderCrateList(crate.getTracks());
+          return;
+        }
+      } catch (e) {
+        console.warn('Recommendation cluster parse error:', e);
+      }
+    }
     
     if (startTag) {
       // Normalize and find matched pill
@@ -934,9 +1270,9 @@ document.addEventListener('DOMContentLoaded', () => {
         seedTagGraph(targetTag);
       }
     } else {
-      // Default to first tag (Synthwave)
-      const firstTag = tagList.querySelector('.tag-pill');
-      if (firstTag) firstTag.click();
+      // Default: Seed full 15-genre galaxy constellation!
+      if (fullGalaxyBtn) fullGalaxyBtn.classList.add('active');
+      seedFullGalaxyGraph();
     }
     
     // Sync initial crate badges

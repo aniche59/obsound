@@ -3,7 +3,10 @@ OBSOUND — SUBTERRANEAN MUSIC DISCOVERY NETWORK
 LIVE DEPLOYMENT, REPOSITORY & DATABASE ACCESS MANIFEST
 ================================================================================
 
-Student: Aditya Iche (PRN: 202401100136)
+Project Team:
+1. Mohsin Khan (PRN: 202401100126)
+2. Aditya Iche (PRN: 202401100136)
+3. Anvith Shetty (PRN: 202401100138)
 Department: Department of Software Engineering
 Institute: MIT Academy of Engineering, Alandi (D), Pune
 Guide: Mr. Suhas Kothavle

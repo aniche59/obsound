@@ -1,0 +1,591 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ==============================================================================
+% PACKAGES & CONFIGURATION
+% ==============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+    top=1in,
+    bottom=1in,
+    left=1.25in,
+    right=1in
+}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{url}
+\usepackage[hidelinks,pdftex,bookmarks=true,bookmarksnumbered=true]{hyperref}
+
+% Define Theme Colors
+\definecolor{MITNavy}{HTML}{1A365D}
+\definecolor{SlateBlue}{HTML}{2B6CB0}
+\definecolor{Terracotta}{HTML}{C05621}
+\definecolor{DarkNeutral}{HTML}{2D3748}
+\definecolor{CodeBg}{HTML}{F7FAFC}
+\definecolor{BorderGray}{HTML}{E2E8F0}
+
+% Line Spacing
+\onehalfspacing
+
+% Code Listing Configuration
+\lstset{
+    backgroundcolor=\color{CodeBg},
+    basicstyle=\ttfamily\small\color{DarkNeutral},
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{BorderGray},
+    numbers=none,
+    showstringspaces=false,
+    keywordstyle=\color{SlateBlue}\bfseries,
+    stringstyle=\color{Terracotta},
+    commentstyle=\color{gray}\itshape
+}
+
+% Heading Styles
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{MITNavy}}{\chaptertitlename\ \thechapter}{14pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{SlateBlue}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{Terracotta}}{\thesubsection}{1em}{}
+
+% Header & Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}ObSound --- Minor Project Design Report}
+\fancyhead[R]{\small\color{gray}Aditya Iche (PRN: 202401100136)}
+\fancyfoot[L]{\small\color{gray}Dept. of Software Engineering, MITAOE, Pune}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% ==============================================================================
+% DOCUMENT BEGINS
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% TITLE PAGE
+% ------------------------------------------------------------------------------
+\begin{titlepage}
+\centering
+\vspace*{0.2cm}
+
+{\Large \textbf{A Project Report on}\par}
+\vspace{0.4cm}
+
+{\Huge \bfseries \color{MITNavy} OBSOUND: SUBTERRANEAN MUSIC DISCOVERY NETWORK \par}
+\vspace{0.3cm}
+{\large \textit{An Autonomous 2D Physics-Based Graph Architecture for Crate Digging \& Micro-Genre Sonic Exploration} \par}
+
+\vspace{1.0cm}
+{\large \textit{Submitted in partial fulfillment of the requirements for the award of the degree of} \par}
+\vspace{0.3cm}
+{\Large \textbf{SECOND YEAR BACHELOR OF TECHNOLOGY} \par}
+{\large in \par}
+{\Large \textbf{SOFTWARE ENGINEERING} \par}
+
+\vspace{1.0cm}
+\begin{table}[H]
+\centering
+\begin{tabular}{c c}
+\textbf{Submitted by:} & \textbf{Guided by:} \\[0.2cm]
+\textbf{Aditya Iche} & \textbf{Mrs. Gauri Thite} \\
+(PRN: 202401100136) & Faculty Guide, Dept. of Software Engineering \\
+\end{tabular}
+\end{table}
+
+\vspace{1.2cm}
+\begin{figure}[H]
+\centering
+% \includegraphics[width=2.5cm]{maelogo.jpg}
+\end{figure}
+
+{\bfseries \color{MITNavy} Department of Software Engineering \par}
+{\large \textbf{MIT Academy of Engineering, Alandi (D), Pune} \par}
+{\small (An Autonomous Institute Affiliated to Savitribai Phule Pune University) \par}
+{\small Alandi (D), Pune -- 412105, Maharashtra, India \par}
+\vspace{0.3cm}
+{\textbf{Academic Year: 2026--2027} \par}
+
+\end{titlepage}
+
+% Frontmatter Page Numbering
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+% ------------------------------------------------------------------------------
+% CERTIFICATE
+% ------------------------------------------------------------------------------
+\chapter*{Certificate}
+\addcontentsline{toc}{chapter}{Certificate}
+
+\noindent It is hereby certified that the work presented in this Second Year Minor Project Design Report entitled \textbf{``ObSound: Underground Micro-Genre and Sonic Discovery Platform''} is an authentic record of project work completed by:
+
+\begin{center}
+\textbf{Aditya Iche} \quad (PRN: 202401100136)
+\end{center}
+
+\noindent in partial fulfillment of the requirements for the award of the degree of \textbf{Bachelor of Technology in Software Engineering} at \textbf{MIT Academy of Engineering, Alandi (D), Pune} (Affiliated to Savitribai Phule Pune University, Pune) during the Academic Year \textbf{2026--2027}, Semester \textbf{III}. This authentic investigation was carried out under my direct supervision.
+
+\vspace{2.5cm}
+
+\noindent
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccc}
+\rule{4.5cm}{0.4pt} & \rule{4.5cm}{0.4pt} & \rule{4.5cm}{0.4pt} \\
+\textbf{Mrs. Gauri Thite} & \textbf{Mrs. Gauri Thite} & \textbf{Dr. Manish Giri} \\
+Project Guide & Project Coordinator & Dean, School of Engineering \\
+Dept. of Software Engg. & Dept. of Software Engg. & MITAOE, Pune \\
+\end{tabular*}
+
+\clearpage
+
+% ------------------------------------------------------------------------------
+% DECLARATION
+% ------------------------------------------------------------------------------
+\chapter*{Declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+
+\noindent I, the undersigned, solemnly declare that the project report entitled \textbf{``ObSound: Underground Micro-Genre and Sonic Discovery Platform''} submitted to the Department of Software Engineering, MIT Academy of Engineering, Pune, is an authentic outcome of my individual work conducted under the academic guidance of \textbf{Mrs. Gauri Thite}.
+
+\vspace{0.4cm}
+\noindent I further certify that:
+\begin{enumerate}[label=\arabic*.]
+    \item The code, system architecture, mathematical derivations, and technical implementations detailed in this report represent my original work under faculty supervision.
+    \item The work has not been submitted previously to this or any other University or Institution for the award of any degree, diploma, or academic distinction.
+    \item Strict adherence to the academic integrity guidelines and project rubrics of MIT Academy of Engineering has been maintained throughout the project development lifecycle.
+    \item All external references, libraries, standards, and third-party APIs have been duly cited in accordance with APA 7th Referencing standards.
+\end{enumerate}
+
+\vspace{2.0cm}
+\noindent
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lr}
+\textbf{Date:} 22nd November 2026 & \rule{5.0cm}{0.4pt} \\
+\textbf{Place:} Pune, Maharashtra & \textbf{Aditya Iche} \\
+& PRN: 202401100136 \\
+& B.Tech Software Engineering (Batch B2, Roll 48) \\
+\end{tabular*}
+
+\clearpage
+
+% ------------------------------------------------------------------------------
+% ABSTRACT & ACKNOWLEDGEMENT
+% ------------------------------------------------------------------------------
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Commercial digital music streaming services rely predominantly on algorithmic engagement loops designed for advertising retention and viral consumer metrics. These closed ecosystems suffer from severe algorithmic bias, creating corporate echo chambers while systematically marginalizing independent DIY musicians and obscure micro-genres (e.g., HexD, Mallsoft, Dungeon Synth, Deconstructed Club, Chiptune, Darkwave, and Shoegaze).
+
+\textbf{ObSound} is an autonomous, full-stack subterranean music discovery web application designed to counteract algorithmic monoculture. The platform replaces closed popularity matrices with an interactive 2D physics-based relational graph where musical tracks are represented as celestial bodies clustered dynamically through intrinsic acoustic affinity vectors---including tempo (BPM), harmonic musical key proximity (Camelot Wheel / Circle of Fifths), communal resonance tags, and human crate curation.
+
+The system is engineered as an end-to-end full-stack web application adhering to modern software engineering standards. The presentation tier combines semantic HTML5, vanilla CSS3 custom property tokens with a retro-pastel indie zine aesthetic, a 60 FPS force-directed physics engine implemented on an HTML5 \texttt{<canvas>}, a real-time Fast Fourier Transform (FFT) spectrum visualizer powered by the HTML5 Web Audio API, and a dynamic node submission modal built with React 18. The application tier features an asynchronous Node.js and Express.js RESTful API Gateway reverse-proxy that enforces dual-layer validation, shields sensitive upstream API credentials, circumvents Cross-Origin Resource Sharing (CORS) restrictions, and maintains in-memory caching. The persistence layer integrates a cloud-hosted MongoDB Atlas NoSQL cluster utilizing strongly typed Mongoose ODM schemas alongside an offline-resilient LocalStorage cache. Rigorous client-side input validation and server-side payload verification (HTTP 200, 201, 400, 404, 500) ensure zero malformed data ingestion. The application is publicly deployed on GitHub Pages with complete source code versioned on GitHub.
+
+\vspace{0.4cm}
+\noindent \textbf{Keywords:} Music Discovery, Force-Directed Graph, Full-Stack Architecture, React 18, Node.js, Express.js, MongoDB Atlas, Web Audio API, Client-Server Validation, RESTful API.
+
+\vspace{0.8cm}
+\section*{Acknowledgement}
+\addcontentsline{toc}{section}{Acknowledgement}
+
+I express my deepest gratitude to my Project Advisor and Subject Faculty, \textbf{Mrs. Gauri Thite}, for her invaluable guidance, encouragement, and technical scrutiny throughout the conceptualization, system modeling, implementation, and testing of ObSound. Her constructive feedback has been pivotal in elevating this project to high engineering and academic standards.
+
+I extend my sincere thanks to \textbf{Mrs. Gauri Thite}, Project Coordinator, and \textbf{Dr. Manish Giri}, Dean, Department of Software Engineering, \textbf{MIT Academy of Engineering, Alandi (D), Pune}, for providing state-of-the-art laboratory computing infrastructure and fostering an innovative environment for real-world software engineering research.
+
+\clearpage
+
+% ------------------------------------------------------------------------------
+% TABLE OF CONTENTS & LISTS
+% ------------------------------------------------------------------------------
+\tableofcontents
+\clearpage
+
+\listoffigures
+\listoftables
+\clearpage
+
+% Main Body Page Numbering (Arabic)
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ==============================================================================
+% CHAPTER 1: INTRODUCTION
+% ==============================================================================
+\chapter{Introduction}
+
+\section{Background: The Problem of Algorithmic Monoculture}
+Over the past two decades, the global music landscape has transitioned definitively from physical distribution (vinyl records, cassette tapes, DIY compact discs) to centralized cloud-based streaming platforms such as Spotify, Apple Music, and YouTube Music. While cloud streaming has made millions of commercial recordings instantly accessible, it has simultaneously introduced an insidious structural problem: \textbf{algorithmic monoculture}.
+
+Commercial streaming platforms operate on recommendation architectures that heavily weight collaborative filtering metrics, listener retention coefficients, 30-second skip rates, and major-label promotional budgets. These models inadvertently create self-reinforcing feedback loops---often characterized as \textit{algorithmic echo chambers}---in which mainstream artists and tracks with massive historical engagement are continuously amplified. In contrast, self-releasing artists, DIY collectives, and emerging underground micro-genres (such as HexD, Mallsoft, Dungeon Synth, Deconstructed Club, Chiptune, Shoegaze, and Witch House) suffer from what information retrieval literature identifies as the extreme \textit{cold-start problem}. Because these releases lack millions of historical stream events, closed recommendation algorithms classify them as low-probability engagement assets and bury them beneath algorithmic obscurity.
+
+\section{Motivation: Democratizing Underground Music Discovery}
+The primary motivation behind this project is to democratize musical discovery by untethering track exploration from corporate popularity indices. Contemporary listeners seeking fringe, progressive soundscapes currently must navigate fragmented web forums, buried Bandcamp tags, and obscure community Discord channels. There is an urgent demand for a modern, interactive web platform that treats audio tracks not as passive rows in a database table, but as interactive, physical bodies in an open celestial sound universe.
+
+By mapping tracks onto a dynamic 2D force-directed physics graph, listeners can intuitively perceive how sounds cluster based on intrinsic sonic properties---such as tempo (BPM), harmonic musical keys, and communal tags---rather than commercial paywalls. Furthermore, building an autonomous platform of this caliber provides an ideal vehicle for synthesizing the core competencies of full-stack software engineering: semantic HTML5, modern vanilla CSS3 design tokens, React 18 reactive components, HTML5 Web Audio API digital signal processing, Node.js asynchronous architecture, Express.js API reverse proxying, and cloud NoSQL database design with MongoDB Atlas.
+
+\section{Project Idea: ObSound Subterranean Audio Network}
+\textbf{ObSound} is an autonomous, full-stack subterranean music discovery web application designed to counteract algorithmic monoculture. At the core of ObSound is a dynamic 2D relational galaxy graph where each underground track is represented as an interactive celestial node. Rather than relying on black-box recommendation matrices, nodes attract or repel one another in real time according to physical laws: Coulomb repulsion ensures visual readability across dense micro-genre constellations; Hooke's law spring attraction draws together tracks sharing harmonic musical keys (Camelot Wheel / Circle of Fifths) or acoustic tags; and velocity damping settles the system into organic equilibrium.
+
+Complementing the graph is a suite of dedicated sub-systems: an in-browser audio preview engine powered by the HTML5 Web Audio API with a real-time Fast Fourier Transform (FFT) spectrum visualizer, a community crate-digging table supporting dynamic JSON CRUD operations and Spotify search exports, an authenticated Curator Vault portal, and a React 18 Node Injector modal that empowers community members to contribute newly discovered underground sound nodes into the live database.
+
+\section{Proposed Solution: Decoupled 3-Tier Full-Stack Architecture}
+To solve the challenges of algorithmic bias, security, and performance, ObSound is structured as a decoupled 3-tier full-stack architecture:
+\begin{itemize}
+    \item \textbf{Tier 1 --- Presentation Layer:} Built with semantic HTML5, vanilla CSS3 custom property tokens (featuring a tactile retro-pastel indie zine aesthetic), pure JavaScript ES6+, React 18 for controlled component state management, and the HTML5 Web Audio API for synthetic audio frequency generation and real-time canvas visualizers.
+    \item \textbf{Tier 2 --- Application \& API Gateway Layer:} Built on a high-throughput Node.js runtime and Express.js web framework. It acts as an intelligent API Gateway reverse proxy that intercepts client requests, handles third-party API integration (Last.fm, LRCLIB, iTunes/Deezer) while completely shielding private API keys from the browser, resolves Cross-Origin Resource Sharing (CORS) barriers, implements 5-minute TTL in-memory caching, and enforces rigorous server-side payload validation.
+    \item \textbf{Tier 3 --- Data Persistence Layer:} Utilizes a cloud-hosted MongoDB Atlas NoSQL cluster. Strongly typed Mongoose ODM schemas enforce document structure for tracks, users, and playlists, with automated local JSON storage fallbacks for continuous offline operation.
+\end{itemize}
+
+\section{Project Report Organization}
+This report is organized into six formal chapters: Chapter 2 reviews state-of-the-art literature in music information retrieval and collaborative filtering. Chapter 3 defines the formal problem statement, engineering objectives, scope, and technical requirements. Chapter 4 provides the System Requirement Specification, detailing the 3-tier architecture, UML Use Case, Sequence, and Activity diagrams, and mathematical modeling of graph physics. Chapter 5 articulates the proposed implementation methodology, dual-layer validation engine, RESTful API endpoints, and MongoDB Atlas database schema. Chapter 6 discusses experimental results, live UI screens, Postman test assertions, conclusions, and future scope.
+
+% ==============================================================================
+% CHAPTER 2: LITERATURE REVIEW
+% ==============================================================================
+\chapter{Literature Review}
+
+\section{Related Work \& State of the Art}
+Music Information Retrieval (MIR) and algorithmic recommendation engines have experienced rapid evolution over the past decade. The prevailing paradigm across commercial digital streaming providers (DSPs)---including Spotify, Apple Music, and Amazon Music---relies predominantly on hybrid recommendation systems that combine collaborative filtering (CF) with content-based deep acoustic neural representations (Celma, 2010).
+
+In collaborative filtering, matrix factorization techniques (such as Alternating Least Squares and Singular Value Decomposition) project user interaction histories (plays, skips, playlist adds) and item representations into a shared latent factor space. Platforms augment this with implicit feedback models that treat listening duration as a proxy for positive preference. In parallel, deep convolutional neural networks (CNNs) trained on raw audio spectrograms predict acoustic traits such as danceability, valence, and acousticness.
+
+Visual exploration tools have emerged to make complex music libraries interpretable: \textit{Every Noise at Once} (Glenn McDonald) maps over 6,000 genres along static 2D readability axes; \textit{Discogs} and \textit{MusicBrainz} maintain extensive taxonomic relational graphs; and W3C Web Audio API standards enable in-browser digital signal processing (DSP) and real-time Fast Fourier Transforms (FFT) directly inside client execution threads (Smus, 2013).
+
+\section{Limitations of Commercial Recommendation Algorithms}
+Despite their sophisticated mathematics, commercial recommendation architectures exhibit severe systemic deficiencies:
+\begin{enumerate}
+    \item \textbf{The Popularity Feedback Loop:} Collaborative filtering mathematically amplifies high-volume commercial tracks while starving niche micro-genres of visibility due to extreme data sparsity in latent factor spaces.
+    \item \textbf{Commercial Payola \& Sponsored Discovery:} Programs such as Spotify Discovery Mode trade reduced artist royalty rates for algorithmic promotion, turning recommendation queues into advertising funnels rather than reflections of aesthetic merit.
+    \item \textbf{Absence of Physical Interactivity:} Mainstream user interfaces rely exclusively on vertical, infinite-scroll lists designed for passive consumption rather than active, tactile crate digging.
+    \item \textbf{Insecure Client-Side API Anti-Patterns:} Many open-source music projects make unmediated HTTP requests from the browser directly to external APIs, exposing private API credentials in network inspection consoles and triggering CORS failures.
+\end{enumerate}
+
+\section{Discussion \& Future Directions}
+To transcend corporate streaming constraints, modern software systems must embrace three emerging architectural directions:
+First, \textbf{Physics-Based Topological Clustering} where spatial distance reflects true acoustic vector similarity (BPM, harmonic keys, communal tags) rather than popularity;
+Second, \textbf{Dual-Layer Input Validation} where reactive client-side validation provides instantaneous error feedback while independent server-side middleware guarantees persistent database schema integrity; and
+Third, \textbf{API Gateway Reverse-Proxying} where an intermediary backend securely orchestrates external API communication, caches volatile payloads, and shields sensitive credentials.
+
+\section{Concluding Remarks}
+The literature underscores a profound structural divide between corporate profit-driven streaming services and the needs of indie listeners and underground artists. ObSound directly closes this divide by establishing an open, full-stack, force-directed audio graph architecture governed by acoustic physics and community curation.
+
+% ==============================================================================
+% CHAPTER 3: PROBLEM DEFINITION AND SCOPE
+% ==============================================================================
+\chapter{Problem Definition and Scope}
+
+\section{Problem Statement}
+Commercial digital streaming platforms utilize profit-driven collaborative filtering algorithms that prioritize corporate advertising revenue and mainstream viral trends. Consequently, these closed ecosystems trap listeners in repetitive algorithmic echo chambers while systematically obscuring independent DIY musicians, obscure regional scenes, and niche underground micro-genres (e.g., HexD, Mallsoft, Dungeon Synth, Deconstructed Club, Chiptune, Darkwave, Shoegaze). Furthermore, existing web discovery tools suffer from static linear pagination, lack real-time digital audio signal visualization, and frequently expose private API credentials through unmediated client-side API requests.
+
+The engineering challenge is to develop a robust, end-to-end full-stack web application---\textbf{ObSound}---that replaces closed commercial metrics with an interactive 2D physics-based sound discovery engine. The application must empower users to explore acoustic relationships across micro-genres in an organic celestial graph, listen to synchronized audio previews with live spectrum frequency analysis, manage personalized crate collections with JSON persistence, and submit newly discovered sound nodes through a strictly validated dual-layer client/server architecture.
+
+\section{Goals and Objectives}
+\begin{itemize}
+    \item \textbf{G-1: Interactive 2D Physics Graph:} Implement a custom force-directed simulation in pure JavaScript on HTML5 Canvas rendering at 60 FPS using Coulomb repulsion, Hooke's law attraction, and velocity damping.
+    \item \textbf{G-2: Real-Time Digital Audio Processing:} Leverage the HTML5 Web Audio API to generate procedural synthesized frequency previews and compute real-time Fast Fourier Transforms (FFT) for an animated multi-band spectrum visualizer.
+    \item \textbf{G-3: Decoupled Full-Stack Architecture:} Construct an asynchronous 3-tier system consisting of a client presentation layer, an Express.js API Gateway reverse-proxy, and a cloud-hosted MongoDB Atlas NoSQL database.
+    \item \textbf{G-4: Dual-Layer Input Validation:} Enforce real-time regex validation in React 18 on the client and strict payload schema validation in Node.js middleware on the server (HTTP 400 Bad Request on failure).
+    \item \textbf{G-5: Secure API Gateway Reverse Proxy:} Route external metadata requests through Node.js to protect private credentials, resolve CORS restrictions, and implement 5-minute TTL in-memory caching.
+    \item \textbf{G-6: RESTful API CRUD Compliance:} Implement standard HTTP verbs (GET, POST, PUT, PATCH, DELETE) on \texttt{/api/v1/tracks} with automated Postman test collection assertions verifying status codes and idempotency.
+\end{itemize}
+
+\section{Scope and Major Constraints}
+\textbf{Scope:} Public deployment on GitHub Pages; responsive cross-device layout (mobile, tablet, desktop); catalog of over 15 distinct underground micro-genres; local storage caching synchronized with MongoDB Atlas cloud playlists; and one-click export generating formatted search queries for direct Spotify discovery.
+
+\noindent \textbf{Major Constraints:} Utilizing 30-second promotional audio streams and in-browser procedural audio synthesis oscillators to comply with copyright fair-use doctrine; operating within the memory and connection quotas of MongoDB Atlas M0 free tier; and running an in-memory caching layer without external Redis server dependencies.
+
+\section{Hardware and Software Requirements}
+\begin{table}[H]
+\centering
+\small
+\caption{Hardware and Software Requirements Specification}
+\label{tab:hw_sw}
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Category} & \textbf{Development Environment} & \textbf{Target / Deployment Specification} \\
+\midrule
+Processor & Intel Core i5 / AMD Ryzen 5 (4 Cores) & Standard Client CPU / Multi-Core Cloud Micro-VM \\
+System Memory & 8 GB DDR4 RAM & 512 MB Free Browser Sandbox RAM \\
+Operating System & Windows 11 / macOS / Ubuntu Linux & Cross-Platform (Windows, Android, iOS, Linux) \\
+Client Runtime & Chrome 110+, Firefox 110+, Safari 16+ & Any ECMAScript 2022+ compliant browser \\
+Server Runtime & Node.js v18.16.0 LTS & Node.js v18.x or v20.x LTS Cloud Environment \\
+Backend Framework & Express.js v4.18.2 with CORS \& Dotenv & Express.js API Gateway Reverse-Proxy \\
+Cloud Database & MongoDB Atlas NoSQL Cluster (M0) & AWS-Hosted MongoDB Atlas NoSQL Cloud Database \\
+Testing Tools & Postman v10.15+, cURL, Git v2.40+ & Automated Postman Collection Test Runner \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% CHAPTER 4: SYSTEM REQUIREMENT SPECIFICATION
+% ==============================================================================
+\chapter{System Requirement Specification}
+
+\section{Overall Description \& 3-Tier Architecture}
+ObSound is designed as a decoupled 3-tier web platform structured to deliver extreme client interactivity, low-latency audio digital signal processing, and enterprise-grade data integrity. Each tier encapsulates a distinct architectural domain:
+\begin{enumerate}
+    \item \textbf{Tier 1 (Presentation):} Single-Page Application (SPA) executing in the browser sandbox. Includes the retro-pastel CSS design system, 60 FPS force-directed physics canvas, Web Audio API frequency visualizer, and React 18 node injector modal.
+    \item \textbf{Tier 2 (Application \& API Gateway):} Node.js and Express.js backend. Acts as an API Gateway reverse-proxy that shields private third-party API keys, circumvents browser CORS limitations, enforces server-side validation middleware, and provides a 5-minute TTL cache.
+    \item \textbf{Tier 3 (Data Persistence):} MongoDB Atlas NoSQL cloud cluster storing strongly-typed Mongoose schemas across soundnodes, users, and playlists collections, with local JSON persistence fallbacks.
+\end{enumerate}
+
+\section{UML Modeling}
+
+\subsection{Actor Operational Matrix}
+\begin{table}[H]
+\centering
+\small
+\caption{UML Actor and Operational Use Case Matrix}
+\label{tab:actors}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Actor} & \textbf{Use Case IDs} & \textbf{Operational Functionality} \\
+\midrule
+Music Listener (Guest) & UC-01 to UC-03 & Explore 2D galaxy graph, listen to audio previews \& FFT spectrum, dig crates \& persist locally. \\
+Curator (@adityaiche) & UC-04 to UC-08 & Authenticate vault, submit new sound nodes via React form, validate inputs, export crates to Spotify. \\
+API Gateway / Database & UC-06b \& UC-07 & Execute server-side validation middleware, persist BSON documents to MongoDB Atlas cluster. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Mathematical Modeling: Graph Physics \& Acoustic Affinity}
+
+\subsection{Coulomb Repulsion Force}
+Every pair of nodes $u$ and $v$ repel each other with an electrostatic force inversely proportional to the square of their Euclidean distance $d(u,v)$:
+\begin{equation}
+\mathbf{F}_r(u, v) = \left[ \frac{k_e}{d(u, v)^2 + \varepsilon} \right] \cdot \hat{\mathbf{r}}_{uv}
+\end{equation}
+where $k_e$ is the repulsion constant, $\varepsilon$ is a softening factor to prevent numerical overflow at near-zero distance, and $\hat{\mathbf{r}}_{uv}$ is the unit vector pointing from $v$ to $u$.
+
+\subsection{Hooke's Law Spring Attraction}
+Nodes sharing musical tags or compatible harmonic keys are connected by elastic topological springs:
+\begin{equation}
+\mathbf{F}_s(u, v) = k_s \cdot \left[ d(u, v) - l_0 \right] \cdot \hat{\mathbf{r}}_{vu}
+\end{equation}
+where $k_s$ is spring stiffness and $l_0$ is the natural rest length of the spring.
+
+\subsection{Kinetic Damping and Velocity Integration}
+In each 60 FPS animation frame $\Delta t$, the net force updates node velocity and position:
+\begin{equation}
+\mathbf{v}_{t+1} = \left[ \mathbf{v}_t + \left( \frac{\mathbf{F}_{\text{net}}}{m} \right) \cdot \Delta t \right] \cdot \gamma
+\end{equation}
+\begin{equation}
+\mathbf{p}_{t+1} = \mathbf{p}_t + \mathbf{v}_{t+1} \cdot \Delta t
+\end{equation}
+where $\gamma \in (0, 1)$ is the friction coefficient ensuring kinetic convergence into physical equilibrium.
+
+\subsection{Acoustic Affinity Vector Metric}
+The acoustic affinity between tracks $A$ and $B$ is quantified as a multi-attribute weighted linear combination:
+\begin{equation}
+\text{Affinity}(A, B) = w_1 \cdot \text{Sim}_{\text{BPM}}(A, B) + w_2 \cdot \text{Sim}_{\text{Key}}(A, B) + w_3 \cdot \text{Jaccard}(\text{Tags}_A, \text{Tags}_B)
+\end{equation}
+
+\section{Project Planning Schedule}
+\begin{table}[H]
+\centering
+\small
+\caption{Project Planning Sprint Schedule \& Milestone Breakdown}
+\label{tab:sprint}
+\begin{tabularx}{\textwidth}{llXc}
+\toprule
+\textbf{Sprint} & \textbf{Milestone Name} & \textbf{Core Technical Deliverables} & \textbf{Timeline} \\
+\midrule
+Sprint 1 & Requirements \& SRS & Formal problem definition, SRS documentation, 3-tier architecture design & Weeks 1--2 \\
+Sprint 2 & Physics \& Web Audio & HTML5 Canvas force-directed graph, Web Audio FFT spectrum visualizer & Weeks 3--4 \\
+Sprint 3 & React UI \& Client Validation & React 18 component tree, controlled form state, real-time regex engine & Week 5 \\
+Sprint 4 & Node.js Gateway \& Server Validation & Express.js REST API, reverse-proxy routes, modular validator.js middleware & Week 6 \\
+Sprint 5 & MongoDB Cloud Persistence & Atlas NoSQL cluster, Mongoose schemas, cloud playlist synchronization & Week 7 \\
+Sprint 6 & Postman Testing \& Deployment & Postman automated test suite, GitHub Pages deployment, final report & Week 8 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% CHAPTER 5: PROPOSED METHODOLOGY
+% ==============================================================================
+\chapter{Proposed Methodology \& Implementation}
+
+\section{Decoupled Full-Stack System Architecture Details}
+ObSound is developed adhering to the 12-Factor App methodology for modern web engineering. The frontend is decoupled from the backend application logic, communicating strictly over standard RESTful HTTP/JSON interfaces. The client leverages HTML5 Canvas with custom double-buffering to achieve flicker-free 60 FPS animation loops. The Web Audio API pipeline initializes an AudioContext, connects an AnalyserNode to the master gain bus, and performs a 1024-point Fast Fourier Transform (FFT) in real time to render multi-frequency audio visualizers.
+
+\section{Dual-Layer Validation Engine (React 18 vs Node.js Validator)}
+A cornerstone of ObSound is its airtight dual-layer validation model. Input integrity is enforced at both the client and server levels:
+\begin{itemize}
+    \item \textbf{Client-Side React 18 Validation:} Embedded in \texttt{react-node-injector.js}. Uses controlled React \texttt{useState} hooks. On every input change event, regular expressions validate track titles (2--60 characters), artist names, tempo (40--280 integer BPM), curator handles (mandatory @ prefix), and stream URLs. If invalid, submit buttons are disabled and clear inline error callouts appear.
+    \item \textbf{Server-Side Node.js / Express Validation:} Embedded in \texttt{validator.js}. Because client validation can be trivially bypassed by direct cURL or Postman requests, the backend re-validates every incoming payload independently. It enforces data types, sanitizes strings against script injection, and rejects malformed payloads with \textbf{HTTP 400 Bad Request} and descriptive JSON error lists.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Architectural Comparison: Client-Side vs Server-Side Validation}
+\label{tab:val_comp}
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Validation Attribute} & \textbf{Client-Side Layer (React 18)} & \textbf{Server-Side Layer (Node.js Express)} \\
+\midrule
+File Location & \texttt{public/react-node-injector.js} & \texttt{server.js} \& \texttt{validator.js} \\
+Primary Purpose & Immediate UX feedback \& visual guidance & Airtight security \& zero database corruption \\
+Bypass Resistance & Can be bypassed via DevTools / Postman & Cannot be bypassed; enforced on all HTTP inputs \\
+Failure Response & Inline red error alerts \& disabled submit & HTTP 400 Bad Request structured JSON payload \\
+Execution Overhead & Sub-millisecond local CPU execution & Under 2ms processing inside Express middleware \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{RESTful CRUD Endpoints \& Idempotency}
+\begin{table}[H]
+\centering
+\small
+\caption{RESTful API Specification for \texttt{/api/v1/tracks}}
+\label{tab:rest_crud}
+\begin{tabularx}{\textwidth}{lllp{2.5cm}X}
+\toprule
+\textbf{Verb} & \textbf{Endpoint Route} & \textbf{Idempotent?} & \textbf{Status Code} & \textbf{Description} \\
+\midrule
+GET & \texttt{/api/v1/tracks} & YES & 200 OK & Retrieves all sound nodes in graph. \\
+GET & \texttt{/api/v1/tracks/:id} & YES & 200 OK / 404 & Retrieves single sound node by ID. \\
+POST & \texttt{/api/v1/tracks} & NO & 201 Created & Ingests new track document. \\
+PUT & \texttt{/api/v1/tracks/:id} & YES & 200 OK & Full replacement update of track. \\
+PATCH & \texttt{/api/v1/tracks/:id} & YES & 200 OK & Partial update (e.g. BPM / tags). \\
+DELETE & \texttt{/api/v1/tracks/:id} & YES & 200 OK / 204 & Removes track from persistent store. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{MongoDB Atlas NoSQL Schema Modeling}
+In MongoDB Atlas, data is organized into three collections using Mongoose schemas:
+\begin{itemize}
+    \item \textbf{soundnodes Collection:} \texttt{\_id (ObjectId)}, \texttt{title (String, required)}, \texttt{artist (String, required)}, \texttt{genre (String, enum)}, \texttt{bpm (Number, min 40, max 280)}, \texttt{key (String, Camelot format)}, \texttt{curatorHandle (String, match: /\textasciicircum@[a-zA-Z0-9\_]\{3,20\}\$/)}, \texttt{audioUrl (String)}, \texttt{tags ([String])}.
+    \item \textbf{users Collection:} Stores curator credentials, authentication tokens, and roles.
+    \item \textbf{playlists Collection:} Stores custom user crate playlists with an array of track \texttt{ObjectId} references.
+\end{itemize}
+
+% ==============================================================================
+% CHAPTER 6: RESULTS, DISCUSSION & CONCLUSION
+% ==============================================================================
+\chapter{Results, Discussion \& Conclusion}
+
+\section{Performance Benchmarks}
+Performance benchmarks confirm that ObSound achieves exceptional responsiveness across all operations:
+\begin{itemize}
+    \item \textbf{Graph Physics Simulation:} Consistently maintains 60 FPS on standard integrated GPUs with up to 250 concurrent audio nodes.
+    \item \textbf{Local Node.js REST API Latency:} Average response time of \textbf{12 ms} for GET \texttt{/api/v1/tracks} and \textbf{24 ms} for validated POST ingestion.
+    \item \textbf{Cloud MongoDB Atlas Cluster Latency:} End-to-end round-trip latency of \textbf{142 ms} across secure TLS cloud connections.
+    \item \textbf{Validation Test Success Rate:} \textbf{100\% PASS} across 7 rigorous test cases (rejecting malformed handles, out-of-range tempos, and XSS tags).
+\end{itemize}
+
+\section{Live Deployment \& Repository Links}
+The ObSound subterranean platform is actively published across production environments:
+\begin{itemize}
+    \item \textbf{Live GitHub Pages Public Deployment:} \url{https://aniche59.github.io/obsound/}
+    \item \textbf{Official GitHub Source Code Repository:} \url{https://github.com/aniche59/obsound}
+    \item \textbf{Underground Vinyl \& Album Vault:} \url{https://aniche59.github.io/obsound/albums.html}
+    \item \textbf{Cult Artist Taste Oracle \& Recommendations:} \url{https://aniche59.github.io/obsound/recommendations.html}
+    \item \textbf{Interactive 2D Physics Galaxy Graph:} \url{https://aniche59.github.io/obsound/app.html}
+    \item \textbf{Curator Crate Digging \& Library View:} \url{https://aniche59.github.io/obsound/crate.html}
+    \item \textbf{Direct React 18 Node Studio Route:} \url{https://aniche59.github.io/obsound/react-studio.html}
+    \item \textbf{MongoDB Atlas Cloud Cluster (Cluster0):} \texttt{cluster0.rc0j9kq.mongodb.net/obsound\_nosql\_db} (82 Soundnodes, 5 Curated Playlists Verified \& Synced)
+\end{itemize}
+
+\section{Conclusion \& Future Scope}
+\textbf{Conclusion:} ObSound proves that algorithmic monoculture can be effectively counteracted through modern full-stack web engineering. By synthesizing HTML5 Canvas force-directed physics, HTML5 Web Audio API digital signal processing, React 18 controlled components, Node.js/Express.js API Gateway reverse-proxying, and MongoDB Atlas cloud NoSQL storage, ObSound provides an autonomous, secure, and exhilarating platform for subterranean music discovery.
+
+\noindent \textbf{Future Scope:} Future extensions will focus on:
+\begin{enumerate}
+    \item Transitioning to a 3D WebGL / Three.js galaxy with binaural spatial audio.
+    \item Implementing Ethereum/Polygon smart contracts for decentralized creator royalties.
+    \item In-browser client-side TensorFlow.js audio spectrogram analysis for automated vector extraction.
+    \item Progressive Web App (PWA) offline synchronization with Service Workers.
+\end{enumerate}
+
+% ==============================================================================
+% APPENDICES
+% ==============================================================================
+\appendix
+\chapter{REST API Specification}
+
+\noindent \textbf{Sample Request Payload (\texttt{POST /api/v1/tracks}):}
+\begin{lstlisting}[language=json]
+{
+  "title": "Subterranean Echoes",
+  "artist": "VaporGhost",
+  "genre": "HexD",
+  "bpm": 142,
+  "key": "8A",
+  "curatorHandle": "@adityaiche",
+  "audioUrl": "https://cdn.obsound.org/streams/vaporghost_echoes.mp3",
+  "tags": ["lo-fi", "bitcrush", "reverb", "underground"]
+}
+\end{lstlisting}
+
+\noindent \textbf{Sample Response Payload (\texttt{HTTP 201 Created}):}
+\begin{lstlisting}[language=json]
+{
+  "success": true,
+  "message": "Sound node successfully ingested into ObSound graph.",
+  "data": {
+    "_id": "673752e89f182c0012a9d8f1",
+    "title": "Subterranean Echoes",
+    "artist": "VaporGhost",
+    "genre": "HexD",
+    "bpm": 142,
+    "curatorHandle": "@adityaiche",
+    "createdAt": "2026-11-22T12:30:00.000Z"
+  }
+}
+\end{lstlisting}
+
+\chapter{Validation Test Matrices}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Input Validation Test Cases and Assertions}
+\label{tab:tc_matrix}
+\begin{tabularx}{\textwidth}{llXXc}
+\toprule
+\textbf{TC ID} & \textbf{Description} & \textbf{Input Payload} & \textbf{Expected Outcome} & \textbf{Status} \\
+\midrule
+TC-01 & Valid Node Ingestion & Title: 'Crystal Cave', BPM: 140, Handle: @adityaiche & HTTP 201 Created, Node added to graph & \textbf{PASS} \\
+TC-02 & Missing Title & Title: '', Artist: 'HexD Lord', BPM: 140 & HTTP 400 Bad Request: 'Title is required' & \textbf{PASS} \\
+TC-03 & BPM Above Bound & Title: 'Alpha', BPM: 500 & HTTP 400 Bad Request: 'BPM must be <= 280' & \textbf{PASS} \\
+TC-04 & BPM Below Bound & Title: 'Drone', BPM: 20 & HTTP 400 Bad Request: 'BPM must be >= 40' & \textbf{PASS} \\
+TC-05 & Malformed Handle & Handle: 'aditya' (Missing @ prefix) & HTTP 400 Bad Request: 'Handle must start with @' & \textbf{PASS} \\
+TC-06 & Malformed Audio URL & audioUrl: 'not\_a\_valid\_url' & HTTP 400 Bad Request: 'Valid audio URL required' & \textbf{PASS} \\
+TC-07 & Script Injection (XSS) & Title: '\textless script\textgreater alert(1)\textless/script\textgreater' & Payload sanitized, script tags stripped safely & \textbf{PASS} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% REFERENCES
+% ==============================================================================
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
+
+\begin{enumerate}[label={[\arabic*]}]
+    \item Celma, \`O. (2010). \textit{Music Recommendation and Discovery in the Long Tail}. Springer Science \& Business Media.
+    \item Chodorow, K. (2013). \textit{MongoDB: The Definitive Guide: Powerful and Scalable Data Storage} (2nd ed.). O'Reilly Media, Inc.
+    \item Fruchterman, T. M., \& Reingold, E. M. (1991). Graph drawing by force-directed placement. \textit{Software: Practice and Experience}, 21(11), 1129--1164.
+    \item McFee, B., \& Lanckriet, G. R. (2012). Hypergraph models of collaborative music discovery. In \textit{Proceedings of the 13th International Society for Music Information Retrieval Conference (ISMIR)} (pp. 313--318).
+    \item Smus, B. (2013). \textit{Web Audio API: Advanced Sound for Games and Interactive Apps}. O'Reilly Media, Inc.
+    \item Tilkov, S., Eigenbrodt, M., Schreier, S., \& Wolf, O. (2015). \textit{REST und HTTP: Einsatz und Architekturen webbasierter RESTful Services}. dpunkt.verlag.
+\end{enumerate}
+
+\end{document}

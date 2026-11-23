@@ -1,0 +1,80 @@
+================================================================================
+OBSOUND — SUBTERRANEAN MUSIC DISCOVERY NETWORK
+LIVE DEPLOYMENT, REPOSITORY & DATABASE ACCESS MANIFEST
+================================================================================
+
+Student: Aditya Iche (PRN: 202401100136)
+Department: Department of Software Engineering
+Institute: MIT Academy of Engineering, Alandi (D), Pune
+Guide: Mr. Suhas Kothavle
+
+--------------------------------------------------------------------------------
+1. PRIMARY PRODUCTION DEPLOYMENT (NETLIFY CLOUD MESH)
+--------------------------------------------------------------------------------
+• Production App URL:
+  https://obsound.netlify.app/
+
+• Interactive 2D Physics Galaxy Graph:
+  https://obsound.netlify.app/app.html
+
+• Underground Vinyl & Album Vault:
+  https://obsound.netlify.app/albums.html
+
+• Cult Artist Taste Oracle & Subterranean Recommendations:
+  https://obsound.netlify.app/recommendations.html
+
+• Curator Crate Digging & Library View:
+  https://obsound.netlify.app/crate.html
+
+• Direct React 18 Node Studio:
+  https://obsound.netlify.app/react-studio.html
+
+• Netlify Serverless API & Live NoSQL Status Endpoint:
+  https://obsound.netlify.app/.netlify/functions/api/nosql/status
+
+--------------------------------------------------------------------------------
+2. SECONDARY PRODUCTION DEPLOYMENT (GITHUB PAGES)
+--------------------------------------------------------------------------------
+• GitHub Pages App URL:
+  https://aniche59.github.io/obsound/
+
+• Galaxy Graph:
+  https://aniche59.github.io/obsound/app.html
+
+• Vinyl Vault:
+  https://aniche59.github.io/obsound/albums.html
+
+• Recommendations:
+  https://aniche59.github.io/obsound/recommendations.html
+
+• Crate Digging:
+  https://aniche59.github.io/obsound/crate.html
+
+--------------------------------------------------------------------------------
+3. OFFICIAL SOURCE CODE REPOSITORY
+--------------------------------------------------------------------------------
+• GitHub Repository:
+  https://github.com/aniche59/obsound
+
+• Branch:
+  main (Production & Netlify Continuous Deployment)
+  gh-pages (Static GitHub Pages Hosting)
+
+--------------------------------------------------------------------------------
+4. LIVE CLOUD DATABASE (MONGODB ATLAS)
+--------------------------------------------------------------------------------
+• Cluster:
+  Cluster0 (cluster0.rc0j9kq.mongodb.net)
+
+• Database:
+  obsound_nosql_db
+
+• Live Document Counts:
+  - soundnodes: 164 documents
+  - playlists: 9 documents
+  - users: 4 documents
+
+• Live Database Monitoring Script:
+  Run in terminal: node obsound/monitor_atlas.js
+
+================================================================================

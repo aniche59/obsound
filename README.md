@@ -1,237 +1,280 @@
-# Web Technology Lab — Practical No. 3
-## ReactJS Web Application with Client-Side Validation & Interactive Functionality
+<div align="center">
+
+# 🪐 ObSound — Subterranean Music Discovery Network
+
+**An Autonomous 2D Physics-Based Graph Architecture for Crate Digging & Micro-Genre Sonic Exploration**
+
+[![Netlify Status](https://img.shields.io/badge/Netlify-Live%20Production-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://obsound.netlify.app)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-222222?style=for-the-badge&logo=github&logoColor=white)](https://aniche59.github.io/obsound/)
+[![Node.js](https://img.shields.io/badge/Node.js-v18.x%20LTS-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB Atlas](https://img.shields.io/badge/MongoDB%20Atlas-Cloud%20NoSQL-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+</div>
 
 ---
 
-### **Project Information**
-* **Project Title:** ObSound — Underground Micro-Genre & Sonic Discovery Platform
-* **Course:** Web Technology Laboratory
-* **Student GitHub Username:** `aniche59`
-* **Assignment Rubric Focus:** ReactJS components, client-side input validation, error/success messaging, interactive state handling, and live deployment.
+## 🌐 Live Deployments & Exploration Routes
+
+| Environment / Route | URL / Endpoint | Description |
+| :--- | :--- | :--- |
+| 🚀 **Primary Cloud Production** | [https://obsound.netlify.app/](https://obsound.netlify.app/) | Live production application mesh deployed on Netlify |
+| 🌐 **Secondary Public Mirror** | [https://aniche59.github.io/obsound/](https://aniche59.github.io/obsound/) | Static client mirror hosted on GitHub Pages |
+| 🌌 **2D Physics Galaxy Graph** | [https://obsound.netlify.app/app.html](https://obsound.netlify.app/app.html) | Force-directed constellation explorer & audio engine |
+| 💿 **Underground Vinyl Vault** | [https://obsound.netlify.app/albums.html](https://obsound.netlify.app/albums.html) | 24 Curated LP pressings & scene filter lexicon |
+| 🔮 **Cult Artist Taste Oracle** | [https://obsound.netlify.app/recommendations.html](https://obsound.netlify.app/recommendations.html) | Subterranean sonic proximity & similarity engine |
+| 📦 **Crate Digging & Library** | [https://obsound.netlify.app/crate.html](https://obsound.netlify.app/crate.html) | Interactive digital crate, JSON persistence & export |
+| ⚛️ **React 18 Node Studio** | [https://obsound.netlify.app/react-studio.html](https://obsound.netlify.app/react-studio.html) | Form validation studio & direct graph node injector |
+| ⚡ **Netlify Serverless API Status** | [https://obsound.netlify.app/.netlify/functions/api/nosql/status](https://obsound.netlify.app/.netlify/functions/api/nosql/status) | Real-time cloud cluster health & document statistics |
 
 ---
 
-## 🌐 Live Deployment Links
-
-| Resource | Link |
-| :--- | :--- |
-| 🚀 **Live GitHub Pages Deployment** | [https://aniche59.github.io/obsound/](https://aniche59.github.io/obsound/) |
-| 📦 **GitHub Source Repository** | [https://github.com/aniche59/obsound](https://github.com/aniche59/obsound) |
-| ⚛️ **Direct React Studio Route** | [https://aniche59.github.io/obsound/public/react-studio.html](https://aniche59.github.io/obsound/public/react-studio.html) |
-| 🗺️ **Interactive 2D Physics Graph** | [https://aniche59.github.io/obsound/public/app.html](https://aniche59.github.io/obsound/public/app.html) |
-| 📁 **Crate Digging Library (JSON CRUD)** | [https://aniche59.github.io/obsound/public/crate.html](https://aniche59.github.io/obsound/public/crate.html) |
-
----
-
-## 1. Problem Statement & Real-World Concept
-
-Commercial music streaming services (such as Spotify and Apple Music) rely on corporate engagement algorithms that repeatedly recycle the same mainstream Top-40 tracks into auto-play loops. Independent artists, niche DIY scenes, and underground micro-genres (*HexD*, *Mallsoft*, *Dungeon Synth*, *Shoegaze*, *Deconstructed Club*, *Chiptune*, *Darkwave*) are routinely obscured.
-
-**ObSound** is a graph-based crate-digging ecosystem that replaces closed commercial algorithms with **an interactive 2D physics graph** connecting acoustic vectors, harmonic keys, and human crate curation. Built as an interactive web application powered by **ReactJS**, ObSound allows users to explore micro-genre relationships, catalog discoveries into a digital crate, listen to generated audio frequency previews, and submit newly discovered underground audio nodes using a **strict client-side validation engine** that immediately injects verified tracks into the live physics simulation.
+## 📖 Table of Contents
+1. [The Problem: Algorithmic Monoculture](#-the-problem-algorithmic-monoculture)
+2. [The Solution: ObSound](#-the-solution-obsound)
+3. [Visual Walkthrough & Screenshots](#-visual-walkthrough--screenshots)
+4. [System Architecture](#-system-architecture)
+5. [Core Technical Features](#-core-technical-features)
+6. [Dual-Layer Validation Engine](#-dual-layer-validation-engine)
+7. [RESTful API Specification](#-restful-api-specification)
+8. [Local Development & Setup](#-local-development--setup)
+9. [Project Team & Contributors](#-project-team--contributors)
 
 ---
 
-## 2. Curriculum Synthesis (Integrating Practicals 1 through 7)
+## 🚨 The Problem: Algorithmic Monoculture
 
-This project synthesizes the core competencies of the entire Web Technology laboratory curriculum:
+Mainstream digital music streaming services (Spotify, Apple Music, YouTube Music) rely predominantly on closed collaborative filtering and listener-retention algorithms. These systems are mathematically tuned for commercial retention, corporate payola, and mainstream virality. 
+
+Consequently, they create self-reinforcing **algorithmic echo chambers**: high-visibility tracks with millions of historical plays are repeatedly amplified, while DIY artists, regional music collectives, and obscure underground micro-genres (*HexD, Mallsoft, Dungeon Synth, Deconstructed Club, Chiptune, Darkwave, and Shoegaze*) are buried beneath what data retrieval literature terms the severe **cold-start problem**.
+
+---
+
+## ⚡ The Solution: ObSound
+
+**ObSound** is an autonomous, open-source subterranean music discovery platform that counteracts algorithmic monoculture. It replaces closed commercial metrics with **an interactive 2D physics-based relational graph** rendered at 60 FPS on an HTML5 `<canvas>`. 
+
+In ObSound, music tracks are represented as celestial bodies clustered dynamically through intrinsic acoustic affinity vectors:
+* **Tempo (BPM Proximity):** Nodes with compatible tempos gravitate together.
+* **Harmonic Musical Key Compatibility:** Mathematical alignment along the Camelot Wheel / Circle of Fifths.
+* **Communal Resonance Tags:** Shared aesthetic descriptors bond nodes with elastic topological springs.
+* **Human Crate Curation:** Curators discover, catalog, and submit newly unearthed gems directly into the graph.
+
+---
+
+## 📸 Visual Walkthrough & Screenshots
+
+### 1. Celestial 2D Physics Galaxy Graph
+Interactive force-directed graph with subterranean micro-genre clusters, celestial physics, and synchronized Web Audio player.
+![ObSound Galaxy Graph](screenshots/obsound_galaxy_graph.jpg)
+
+---
+
+### 2. Underground Vinyl & Album Vault
+24 hand-picked underground full-length LP releases with scene filter lexicon, vinyl sleeve flip animations, and direct playback.
+![ObSound Vinyl Vault](screenshots/obsound_vinyl_vault.png)
+
+---
+
+### 3. Cult Artist Taste Oracle & Subterranean Sonic Proximity
+Acoustic proximity recommendation engine that surfaces obscure creators based on cult artist archetypes and micro-genre affinities.
+![ObSound Taste Oracle](screenshots/obsound_taste_oracle.jpg)
+
+---
+
+### 4. Decoupled 3-Tier Full-Stack Architecture
+Clear separation between Presentation Sandbox (Tier 1), Node.js/Express API Gateway Reverse-Proxy (Tier 2), and MongoDB Atlas Cloud Persistence (Tier 3).
+![3-Tier System Architecture](screenshots/fig1_architecture.png)
+
+---
+
+### 5. Automated RESTful API Testing & Cloud Database Persistence
+Automated Postman test suite validating HTTP status codes (200, 201, 400, 404) and live MongoDB Atlas cluster document persistence.
+<div align="center">
+  <img src="screenshots/p6_postman_crud_demo.png" width="48%" />
+  <img src="screenshots/p7_mongodb_atlas_demo.png" width="48%" />
+</div>
+
+---
+
+## 🏗️ System Architecture
+
+ObSound is engineered following the **12-Factor App methodology** and structured as a decoupled 3-tier system:
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                             ObSound Full-Stack Audio Platform                                    │
-├──────────────────────────────┬──────────────────────────────┬────────────────────────────────────┤
-│ Practical 1: HTML5 & CSS3    │ Practical 2: JS & JSON       │ Practical 3: ReactJS               │
-├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
-│ • Semantic HTML5 layout      │ • Array data structures      │ • React 18 component tree          │
-│ • Custom CSS3 design tokens  │ • JSON serialization (CRUD)  │ • Controlled form state            │
-│ • Responsive grid & flexbox  │ • Crate management table     │ • Client-side form validation      │
-│ • Glassmorphism & animations │ • LocalStorage persistence   │ • Dynamic 2D graph node inject     │
-├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
-│ Practical 4: NodeJS Server   │ Practical 5: ExpressJS       │ Practical 6: RESTful API & Mongo   │
-├──────────────────────────────┼──────────────────────────────┼────────────────────────────────────┤
-│ • Pure NodeJS HTTP server    │ • Express web framework      │ • REST CRUD (/api/v1/tracks)       │
-│ • Modular validator.js       │ • Middleware pipeline        │ • Status codes (200, 201, 400, 404)│
-│ • Server-side validation     │ • Curator route handling     │ • Postman test suite collection    │
-│ • HTTP 400/201 status codes  │ • Central error middleware   │ • MongoDB & Mongoose NoSQL store   │
-└──────────────────────────────┴──────────────────────────────┴────────────────────────────────────┘
-```
-
-* **Practical No. 1 (Responsive Design & UI Structure):**
-  * Responsive multi-section layout (`public/index.html`) featuring an app header, hero section, philosophy features grid, micro-genre gateway pills, and an accordion FAQ.
-  * Modern custom CSS styling with dark/light themes, Outfit and Space Grotesk typography, glassmorphism, and responsive breakpoints.
-* **Practical No. 2 (JavaScript Arrays & JSON Handling):**
-  * Underground track catalog stored dynamically in JavaScript arrays and structured JSON objects.
-  * Dedicated Crate Library view (`public/crate.html`) with live search, micro-genre folder filtering, and one-click JSON file export (`Blob` download).
-* **Practical No. 3 (ReactJS & Client-Side Validation):**
-  * Interactive **React Form Validator Modal** (`public/react-node-injector.js`) mounted into the live 2D graph explorer.
-  * Standalone **React Studio** view (`public/react-studio.html`) with live state inspection, CRUD table, and raw JSON preview.
-* **Practical No. 4 (Server-Side Validation using NodeJS):**
-  * Native Node.js HTTP server (`assignment4/server.js`) with request body stream buffer, modular validator (`validator.js`), storage layer (`storage.js`), and strict HTTP 400/201 error reporting.
-* **Practical No. 5 (Web Application Framework: ExpressJS):**
-  * ExpressJS web application (`assignment5/server.js`) with custom validation middleware (`validateCuratorSubmission`), routing, request body parsing, and centralized error handling.
-* **Practical No. 6 (RESTful API with Database & Postman):**
-  * Complete RESTful API (`assignment6/server.js`) implementing all CRUD operations on `/api/v1/tracks` with query filtering, file database persistence, and Postman Collection suite (`ObSound_REST_API.postman_collection.json`).
-* **Practical No. 7 (NoSQL Database: MongoDB & Mongoose):**
-  * MongoDB document database application (`assignment7/server.js`) with Mongoose ODM modeling, strict schema validation, 24-character BSON ObjectIds, CRUD queries (`find`, `create`, `findByIdAndUpdate`, `findByIdAndDelete`), and Postman test verification.
-
----
-
-## 3. Teacher's Evaluation & Testing Walkthrough
-
-Follow these step-by-step instructions to test and grade every requirement of Practical No. 3:
-
-### Step 1: Open the Application
-* **Online:** Visit the live deployment URL at [https://aniche59.github.io/obsound/](https://aniche59.github.io/obsound/)
-* **Offline / Local:** Open `public/index.html` or `public/app.html` directly in any web browser.
-
----
-
-### Step 2: Test Client-Side Form Validation (Invalid Inputs & Error Messages)
-1. Navigate to **Explore Graph** (`public/app.html`) or **React Studio** (`public/react-studio.html`).
-2. Click the orange **`+ Submit Node (React)`** button in the header or the left panel.
-3. Click the **"Test Error Validation"** helper button (or click *"Validate & Inject Track"* with empty inputs).
-4. **Observe the evaluation outcomes:**
-   * An **Error Alert Banner** appears at the top summarizing the failed validation criteria.
-   * Every invalid input field receives a distinct red border (`.is-invalid`).
-   * **Specific, meaningful error messages** are displayed directly below each invalid field:
-     * **Track Title:** *"Track title is required (min 2, max 60 chars)."*
-     * **Artist Alias:** *"Artist moniker or band alias is required (min 2, max 50 chars)."*
-     * **Micro-Genre:** *"Please select a valid micro-genre from the list."*
-     * **BPM (Tempo):** *"BPM must fall within the range 40 to 260."*
-     * **Release Year:** *"Release year must be between 1970 and current calendar year (2026)."*
-     * **Audio Stream URL:** *"Please enter a valid URL (e.g. https://artist.bandcamp.com)."*
-     * **Sonic Tags:** *"Provide at least one sonic tag or keyword."*
-
----
-
-### Step 3: Test Duplicate Detection Validation
-1. In the modal, enter a track that already exists in the graph database (e.g., Title: `Resonance`, Artist: `HOME`).
-2. Notice the real-time duplicate check triggers:
-   * *"A track with this title and artist already exists in the graph database!"*
-   * Form submission is blocked until unique metadata is provided.
-
----
-
-### Step 4: Test Valid Input Submission & Dynamic Graph Node Injection
-1. Click the **"Quick Fill Valid Data"** button to auto-populate the form with valid underground track data (e.g. *"Midnight City Glitch"* by *"Neon Phantom"*).
-2. Observe all inputs immediately transition to valid state with green borders (`.is-valid`).
-3. Click **"Validate & Inject Track"**.
-4. **Observe the interactive confirmation & live simulation:**
-   * A success alert confirms: *"Success! Midnight City Glitch by Neon Phantom validated and injected into the live graph!"*
-   * The React modal closes and dispatches an `obsound:injectTrack` custom event.
-   * **A brand-new glowing node appears live in the 2D Physics Canvas Graph!**
-   * Physics spring connections automatically link the new track to its corresponding micro-genre cluster.
-   * The camera smoothly pans to center the newly injected node, and synthetic audio tone playback begins automatically!
-
----
-
-### Step 5: Test Interactive Features
-1. **Interactive 2D Physics Graph (`public/graph.js`):**
-   * **Pan:** Click and drag the background canvas to pan around the graph space.
-   * **Zoom:** Scroll the mouse wheel up or down to zoom in and out.
-   * **Inspect:** Click any track node to slide open the right details inspector showing artwork, BPM, tags, and bio.
-   * **Physics Drag:** Click and hold any node to drag it around; observe Hooke's law spring physics pulling linked nodes along.
-2. **Sticky Bottom Audio Player (`public/player.js`):**
-   * Click Play/Pause on the bottom transport bar.
-   * Observe the **real-time 16-bar frequency spectrum visualizer** reacting in canvas.
-   * Drag the timeline scrubber slider and adjust volume controls.
-3. **Crate Digging & JSON Export (`public/crate.html`):**
-   * Click **"+ Add to Crate"** on any track node to bookmark it.
-   * Click the crate icon 📁 in the header to open the crate drawer.
-   * Navigate to the **Library** page (`public/crate.html`) to view the complete catalog table and click **"Export Crate (.JSON)"** to download the crate as a JSON file.
-
----
-
-## 4. How to Run Locally
-
-### Method A: Direct Browser Launch (Zero Installation)
-No Node.js or build steps required. The application loads React 18, ReactDOM, and Babel Standalone via CDN:
-1. Extract `obsound.zip` (or `assignment3.zip`).
-2. Double-click `index.html` (or `public/index.html`) to launch in Google Chrome, Microsoft Edge, or Mozilla Firefox.
-
-### Method B: VS Code Live Server
-1. Open the project folder in **Visual Studio Code**.
-2. Right-click `index.html` &rarr; click **"Open with Live Server"**.
-3. Access the web app at `http://127.0.0.1:5500`.
-
-### Method C: Node.js Express Gateway
-1. Open terminal in the project directory:
-   ```bash
-   node server.js
-   ```
-2. Open your browser and navigate to `http://localhost:3000`.
-
----
-
-## 5. GitHub Pages Deployment Instructions
-
-This application is deployed and hosted using **GitHub Pages**. To replicate or verify the deployment:
-
-1. **GitHub Repository Creation:**
-   * Repository Name: `obsound`
-   * Visibility: Public
-   * Owner: `aniche59`
-   * URL: `https://github.com/aniche59/obsound`
-
-2. **Git Commands Executed:**
-   ```bash
-   cd obsound
-   git init
-   git add .
-   git commit -m "Deploy ObSound ReactJS Web Application"
-   git branch -M main
-   git remote add origin https://github.com/aniche59/obsound.git
-   git push -u origin main
-   ```
-
-3. **Configuring GitHub Pages:**
-   * In GitHub, navigate to **Settings** &rarr; **Pages** (under Code and automation).
-   * Under **Build and deployment** &rarr; **Source**: Select `Deploy from a branch`.
-   * **Branch**: Select `main` &rarr; Folder: `/ (root)` &rarr; Click **Save**.
-   * Root routing is handled by `index.html`, which redirects directly to `public/index.html`.
-
-4. **Live URL:**
-   ```
-   https://aniche59.github.io/obsound/
-   ```
-
----
-
-## 6. Project File Directory
-
-```
-obsound/ (assignment3/)
-│
-├── index.html                   # Root entry point & GitHub Pages redirector
-├── package.json                 # Project manifest & metadata
-├── server.js                    # Node.js Express API & static gateway
-├── README.md                    # Academic lab report & evaluation manual
-│
-└── public/                      # Client-side web application bundle
-    ├── index.html               # Landing page (Assignment 1 layout & FAQ)
-    ├── app.html                 # Main 2D physics graph exploration environment
-    ├── react-studio.html        # Dedicated React 18 validation & CRUD studio
-    ├── crate.html               # Digging library & JSON catalog management
-    ├── react-node-injector.js   # React 18 client-side validation modal component
-    ├── app.js                   # State manager & bridge between React and canvas
-    ├── graph.js                 # Interactive 2D canvas physics simulation engine
-    ├── player.js                # Web Audio API tone synthesizer & canvas visualizer
-    ├── crate.js                 # In-memory array CRUD & JSON export/import handlers
-    ├── cratePage.js             # Table filtering and sorting engine for crate.html
-    ├── mockData.js              # Initial subterranean genre catalog dataset
-    ├── api.js                   # Fallback data fetching service
-    └── styles.css               # Design system, glassmorphism, & validation CSS
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             TIER 1: PRESENTATION LAYER                            │
+│  • Semantic HTML5 & Modern Vanilla CSS3 (Retro-Pastel Indie Zine Design Tokens)  │
+│  • Pure JavaScript ES6+ Force-Directed 2D Physics Canvas Engine (60 FPS)         │
+│  • HTML5 Web Audio API (Synthesizer Oscillators & 1024-Point FFT Spectrum Visual)│
+│  • React 18 Component Tree with Controlled State & Real-Time Client Validation   │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │ Standard RESTful HTTP/JSON (CORS Shielded)
+                                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                    TIER 2: APPLICATION & API GATEWAY LAYER                       │
+│  • Asynchronous Node.js Runtime & Express.js REST Framework                      │
+│  • Netlify Serverless Cloud Functions (AWS Lambda Architecture)                  │
+│  • Intelligent API Gateway Reverse-Proxy (Shields Last.fm, LRCLIB & iTunes Keys) │
+│  • Server-Side Validation Middleware (Regex & Type Verification with HTTP 400)   │
+│  • In-Memory Response Caching Layer (5-Minute TTL)                               │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │ Secure Mongoose ODM Driver (TLS Encrypted)
+                                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                         TIER 3: DATA PERSISTENCE LAYER                           │
+│  • MongoDB Atlas Cloud NoSQL Cluster (M0 Sandbox - cluster0.rc0j9kq.mongodb.net)│
+│  • Strongly Typed Collections: soundnodes (160+ tracks), playlists, and users    │
+│  • Automated Resilient LocalStorage & JSON File Fallbacks for Offline Continuity │
+└──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 7. Compliance Checklist for Practical No. 3 Rubric
+## 🌟 Core Technical Features
 
-| Requirement | Implementation Detail | Status |
-| :--- | :--- | :---: |
-| **ReactJS Application** | Built with React 18, functional components, hooks (`useState`, `useEffect`) | ✅ Pass |
-| **Accept User Input** | Form with 8 controlled inputs (Title, Artist, Genre, BPM, Year, Intensity, URL, Tags) | ✅ Pass |
-| **Client-Side Validation** | Type checking, character length, numeric bounds, URL regex, duplicate detection | ✅ Pass |
-| **Meaningful Error Messages** | Specific inline text under each invalid input + summary alert banner | ✅ Pass |
-| **Success / Confirmation** | Green input states (`.is-valid`), confirmation alerts, and instant graph injection | ✅ Pass |
-| **Interactive User Experience** | Force-directed 2D physics graph, audio spectrum visualizer, JSON export | ✅ Pass |
-| **Live Deployment** | Deployed on GitHub Pages at `https://aniche59.github.io/obsound/` | ✅ Pass |
+### 🌌 1. Custom 2D Force-Directed Physics Simulation
+* **Coulomb Repulsion:** Every node pair repels with force inversely proportional to distance squared ($\mathbf{F}_r \propto 1/d^2$), avoiding clutter.
+* **Hooke's Elastic Attraction:** Nodes sharing harmonic keys or micro-genre tags attract like physical springs ($\mathbf{F}_s = k(d - l_0)$).
+* **Kinetic Velocity Damping:** Friction coefficient ($\gamma = 0.92$) smoothly settles the galaxy into organic equilibrium.
+
+### 🎛️ 2. Digital Signal Processing (Web Audio API)
+* Custom in-browser synthesizer generates procedural harmonic audio frequency previews without external dependencies.
+* Connects an `AnalyserNode` to the master audio gain bus, computing a real-time **1024-point Fast Fourier Transform (FFT)** rendered as an animated multi-frequency spectrum bar visualizer.
+
+### 💿 3. Underground Vinyl Vault & Crate Digging
+* Browse 24 full-length vinyl LP pressings across 15+ subterranean micro-genres.
+* Scene filters: HexD, Dungeon Synth, Mallsoft, Barber Beats, Deconstructed Club, Chiptune, Darkwave, Shoegaze, and Witch House.
+* Interactive crate management table with real-time text searching, folder sorting, and one-click JSON crate backup exports.
+* One-click conversion to formatted search queries for instant discovery on Spotify.
+
+### 🔮 4. Cult Artist Taste Oracle
+* Input your favorite cult or obscure artist to calculate acoustic similarity vectors.
+* Recommends underground sound creators with percentage-based sonic proximity metrics.
+
+---
+
+## 🛡️ Dual-Layer Validation Engine
+
+To ensure persistent data integrity, ObSound implements an airtight dual-layer validation model:
+
+| Attribute | Client-Side Validation (Tier 1) | Server-Side Validation (Tier 2) |
+| :--- | :--- | :--- |
+| **Component / File** | `public/react-node-injector.js` (React 18) | `server.js` & `validator.js` (Node/Express) |
+| **Trigger Event** | Real-time `onChange` & modal form submit | Incoming HTTP `POST` / `PUT` payload stream |
+| **Primary Goal** | Instantaneous user feedback & visual guidance | Zero malformed data ingestion & injection defense |
+| **Bypass Resistance** | Client-level (can be bypassed via DevTools/cURL) | Absolute (cannot be bypassed; enforces HTTP 400) |
+| **Failure Feedback** | Red input border & inline text warning alert | Structured JSON list of errors with HTTP 400 code |
+| **Sanitization** | Strips dangerous script tags from UI | Escapes input strings and strips malicious XSS tags |
+
+---
+
+## 📡 RESTful API Specification
+
+The Node.js/Express API Gateway exposes standardized RESTful endpoints:
+
+| HTTP Verb | Endpoint Route | Idempotent | Expected Status | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/tracks` | Yes | `200 OK` | Retrieves all subterranean sound nodes |
+| `GET` | `/api/v1/tracks/:id` | Yes | `200 OK` / `404` | Retrieves a single sound node by ObjectId |
+| `POST` | `/api/v1/tracks` | No | `201 Created` | Ingests and validates a new sound node |
+| `PUT` | `/api/v1/tracks/:id` | Yes | `200 OK` | Replaces a sound node document |
+| `PATCH` | `/api/v1/tracks/:id` | Yes | `200 OK` | Partially updates a sound node (BPM/tags) |
+| `DELETE` | `/api/v1/tracks/:id` | Yes | `200 OK` / `204` | Removes track from persistent store |
+| `GET` | `/api/recommendations` | Yes | `200 OK` | Returns similarity clusters for cult artists |
+| `GET` | `/api/albums` | Yes | `200 OK` | Retrieves 24 curated underground LP vault pressings |
+| `GET` | `/api/nosql/status` | Yes | `200 OK` | Returns live MongoDB Atlas cluster document metrics |
+
+### Sample Request Payload (`POST /api/v1/tracks`):
+```json
+{
+  "title": "Subterranean Echoes",
+  "artist": "VaporGhost",
+  "genre": "HexD",
+  "bpm": 142,
+  "key": "8A",
+  "curatorHandle": "@adityaiche",
+  "audioUrl": "https://cdn.obsound.org/streams/vaporghost_echoes.mp3",
+  "tags": ["lo-fi", "bitcrush", "reverb", "underground"]
+}
+```
+
+### Sample Response (`HTTP 201 Created`):
+```json
+{
+  "success": true,
+  "message": "Sound node successfully ingested into ObSound graph.",
+  "data": {
+    "_id": "673752e89f182c0012a9d8f1",
+    "title": "Subterranean Echoes",
+    "artist": "VaporGhost",
+    "genre": "HexD",
+    "bpm": 142,
+    "curatorHandle": "@adityaiche",
+    "createdAt": "2026-11-23T12:30:00.000Z"
+  }
+}
+```
+
+---
+
+## 💻 Local Development & Setup
+
+### Prerequisites
+* **Node.js:** v18.16.0 LTS or higher
+* **npm:** v9.x or higher
+* Modern web browser (Chrome, Firefox, Safari, Edge)
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/aniche59/obsound.git
+cd obsound
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+Populate `.env` with your API credentials (optional for offline mode):
+```env
+PORT=3001
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.rc0j9kq.mongodb.net/obsound_nosql_db?retryWrites=true&w=majority
+LASTFM_API_KEY=your_lastfm_api_key
+```
+
+### 4. Run the Application
+```bash
+# Production server mode
+npm start
+
+# Development live-reload mode
+npm run dev
+```
+
+Open your browser to:
+```
+http://localhost:3001
+```
+
+---
+
+## 👥 Project Team & Contributors
+
+* **Aditya Iche** — *Lead Full-Stack Architecture, Graph Physics Engine & Web Audio DSP* — [GitHub (@aniche59)](https://github.com/aniche59) (PRN: 202401100136)
+* **Mohsin Khan** — *React 18 Node Studio & Dual-Layer Validation Engine* (PRN: 202401100126)
+* **Anvith Shetty** — *RESTful API Gateway, Postman Testing & MongoDB Cloud Persistence* (PRN: 202401100138)
+
+**Academic Advisor & Course Guide:** **Mr. Suhas Kothavle**, Department of Software Engineering, MIT Academy of Engineering, Alandi (D), Pune.
+
+---
+
+## 📄 License
+This project is open-source and released under the terms of the [MIT License](LICENSE).

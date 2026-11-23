@@ -106,16 +106,17 @@
 \centering
 \begin{tabular}{c c}
 \textbf{Submitted by:} & \textbf{Guided by:} \\[0.2cm]
-\textbf{Aditya Iche} & \textbf{Mrs. Gauri Thite} \\
-(PRN: 202401100136) & Faculty Guide, Dept. of Software Engineering \\
+\textbf{Aditya Iche} & \textbf{Mr. Suhas Kothavle} \\
+(PRN: 202401100136) & Course Instructor \\
 \end{tabular}
 \end{table}
 
-\vspace{1.2cm}
+\vspace{0.8cm}
 \begin{figure}[H]
 \centering
-% \includegraphics[width=2.5cm]{maelogo.jpg}
+\includegraphics[width=2.5cm]{maelogo.jpg}
 \end{figure}
+\vspace{0.2cm}
 
 {\bfseries \color{MITNavy} Department of Software Engineering \par}
 {\large \textbf{MIT Academy of Engineering, Alandi (D), Pune} \par}
@@ -149,8 +150,8 @@
 \noindent
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccc}
 \rule{4.5cm}{0.4pt} & \rule{4.5cm}{0.4pt} & \rule{4.5cm}{0.4pt} \\
-\textbf{Mrs. Gauri Thite} & \textbf{Mrs. Gauri Thite} & \textbf{Dr. Manish Giri} \\
-Project Guide & Project Coordinator & Dean, School of Engineering \\
+\textbf{Mr. Suhas Kothavle} & \textbf{Mr. Suhas Kothavle} & \textbf{Dr. Manish Giri} \\
+Project Guide & Course Instructor & Dean, School of Engineering \\
 Dept. of Software Engg. & Dept. of Software Engg. & MITAOE, Pune \\
 \end{tabular*}
 
@@ -162,7 +163,7 @@ Dept. of Software Engg. & Dept. of Software Engg. & MITAOE, Pune \\
 \chapter*{Declaration}
 \addcontentsline{toc}{chapter}{Declaration}
 
-\noindent I, the undersigned, solemnly declare that the project report entitled \textbf{``ObSound: Underground Micro-Genre and Sonic Discovery Platform''} submitted to the Department of Software Engineering, MIT Academy of Engineering, Pune, is an authentic outcome of my individual work conducted under the academic guidance of \textbf{Mrs. Gauri Thite}.
+\noindent I, the undersigned, solemnly declare that the project report entitled \textbf{``ObSound: Underground Micro-Genre and Sonic Discovery Platform''} submitted to the Department of Software Engineering, MIT Academy of Engineering, Pune, is an authentic outcome of my individual work conducted under the academic guidance of \textbf{Mr. Suhas Kothavle}.
 
 \vspace{0.4cm}
 \noindent I further certify that:
@@ -203,9 +204,9 @@ The system is engineered as an end-to-end full-stack web application adhering to
 \section*{Acknowledgement}
 \addcontentsline{toc}{section}{Acknowledgement}
 
-I express my deepest gratitude to my Project Advisor and Subject Faculty, \textbf{Mrs. Gauri Thite}, for her invaluable guidance, encouragement, and technical scrutiny throughout the conceptualization, system modeling, implementation, and testing of ObSound. Her constructive feedback has been pivotal in elevating this project to high engineering and academic standards.
+I express my deepest gratitude to my Project Advisor and Subject Faculty, \textbf{Mr. Suhas Kothavle}, for his invaluable guidance, encouragement, and technical scrutiny throughout the conceptualization, system modeling, implementation, and testing of ObSound. His constructive feedback has been pivotal in elevating this project to high engineering and academic standards.
 
-I extend my sincere thanks to \textbf{Mrs. Gauri Thite}, Project Coordinator, and \textbf{Dr. Manish Giri}, Dean, Department of Software Engineering, \textbf{MIT Academy of Engineering, Alandi (D), Pune}, for providing state-of-the-art laboratory computing infrastructure and fostering an innovative environment for real-world software engineering research.
+I extend my sincere thanks to \textbf{Mr. Suhas Kothavle}, Course Instructor, and \textbf{Dr. Manish Giri}, Dean, Department of Software Engineering, \textbf{MIT Academy of Engineering, Alandi (D), Pune}, for providing state-of-the-art laboratory computing infrastructure and fostering an innovative environment for real-world software engineering research.
 
 \clearpage
 
@@ -344,9 +345,23 @@ ObSound is designed as a decoupled 3-tier web platform structured to deliver ext
     \item \textbf{Tier 3 (Data Persistence):} MongoDB Atlas NoSQL cloud cluster storing strongly-typed Mongoose schemas across soundnodes, users, and playlists collections, with local JSON persistence fallbacks.
 \end{enumerate}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{fig1_architecture.png}
+\caption{ObSound 3-Tier System Architecture (Presentation, API Gateway, and Persistence)}
+\label{fig:architecture}
+\end{figure}
+
 \section{UML Modeling}
 
-\subsection{Actor Operational Matrix}
+\subsection{UML Use Case Modeling}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{fig2_usecase.png}
+\caption{UML Use Case Diagram of ObSound Subterranean Audio Network}
+\label{fig:usecase}
+\end{figure}
+
 \begin{table}[H]
 \centering
 \small
@@ -362,6 +377,22 @@ API Gateway / Database & UC-06b \& UC-07 & Execute server-side validation middle
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\subsection{UML Sequence Diagram: Node Ingestion Pipeline}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{fig3_sequence.png}
+\caption{UML Sequence Diagram: Node Ingestion and Dual-Layer Validation Flow}
+\label{fig:sequence}
+\end{figure}
+
+\subsection{UML Activity Diagram: Dual-Layer Validation Logic}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.90\textwidth]{fig4_activity.png}
+\caption{UML Activity Diagram: Dual-Layer Validation Decision Logic Flowchart}
+\label{fig:activity}
+\end{figure}
 
 \section{Mathematical Modeling: Graph Physics \& Acoustic Affinity}
 
@@ -480,6 +511,58 @@ In MongoDB Atlas, data is organized into three collections using Mongoose schema
 % CHAPTER 6: RESULTS, DISCUSSION & CONCLUSION
 % ==============================================================================
 \chapter{Results, Discussion \& Conclusion}
+
+\section{Screen-by-Screen Live Walkthrough \& Actual Project Screenshots}
+ObSound was thoroughly evaluated across its full interactive suite on both local Node.js and live cloud environments. Figures~\ref{fig:galaxy_screen} through \ref{fig:atlas_screen} showcase the verified system screens and live architectural execution of the project:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{obsound_galaxy_graph.jpg}
+\caption{ObSound Celestial 2D Physics Galaxy Graph with Subterranean Micro-Genre Constellations and Live Audio Player}
+\label{fig:galaxy_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{obsound_vinyl_vault.png}
+\caption{Underground Vinyl \& Album Vault Featuring 24 Curated LP Pressings and Scene Filter Lexicon}
+\label{fig:vault_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{obsound_taste_oracle.jpg}
+\caption{Cult Artist Taste Oracle \& Subterranean Sonic Proximity Recommendation Engine}
+\label{fig:oracle_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{p4_validation_demo.png}
+\caption{Dual-Layer Validation Engine (Client-Side React 18 Inline Error Alerts vs Node.js Server HTTP 400 Bad Request)}
+\label{fig:validation_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{p5_express_demo.png}
+\caption{Express.js API Gateway Architecture \& Reverse-Proxy Middleware Pipeline Execution}
+\label{fig:express_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{p6_postman_crud_demo.png}
+\caption{Automated Postman Test Suite Verifying RESTful CRUD Endpoints and Status Code Assertions}
+\label{fig:postman_screen}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{p7_mongodb_atlas_demo.png}
+\caption{MongoDB Atlas Live Cloud Cluster NoSQL Document Persistence (82 Soundnodes, 5 Curated Playlists Synced)}
+\label{fig:atlas_screen}
+\end{figure}
 
 \section{Performance Benchmarks}
 Performance benchmarks confirm that ObSound achieves exceptional responsiveness across all operations:
